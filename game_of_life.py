@@ -5,7 +5,7 @@ NEIGHBOR_STENCIL = np.ones((3,3), dtype=np.uint64)
 NEIGHBOR_STENCIL[1,1] = 0
 
 def make_poisson_mtx(stencil: np.ndarray, grid_shape: tuple[int, int]) -> np.ndarray:
-    # assume a square stencil
+    # assume a 3x3 stencil and a square grid
     num_cells = np.prod(grid_shape)
     num_nonzero = (stencil != 0).sum()
     diags = np.zeros(num_nonzero, dtype=np.uint64)
@@ -57,7 +57,7 @@ def make_poisson_mtx(stencil: np.ndarray, grid_shape: tuple[int, int]) -> np.nda
         data = new_data
 
     return sparse.dia_matrix((data, diags),
-                             shape=(num_cells, num_cells))
+                             shape=(num_cells, num_cells), dtype=np.uint8)
 
 if __name__ == '__main__':
     mtx = make_poisson_mtx(NEIGHBOR_STENCIL, (3, 3))
