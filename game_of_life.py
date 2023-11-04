@@ -100,9 +100,9 @@ if __name__ == '__main__':
     # grid = np.random.choice([True] + [False] * 249, grid_width**2)
     grid = embed(make_glider(), 50)
     fig, ax = plt.subplots()
-    result = run(grid, ax, max_iter=20)
+    result = run(grid, ax, max_iter=100)
 
-    ani = animation.ArtistAnimation(fig, result, interval=500, blit=True, repeat_delay=1000)
+    ani = animation.ArtistAnimation(fig, result, interval=100, blit=True, repeat_delay=1000)
     ani.save('gol.mp4')
     # plt.show()
 
