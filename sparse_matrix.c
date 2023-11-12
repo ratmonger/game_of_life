@@ -7,6 +7,16 @@ struct COOBooleanMatrix {
     unsigned capacity;
 }
 
+COOBooleanMatrix* init_COO_mtx(unsigned init_capacity) {
+    COOBooleanMatrix* mtx = malloc(sizeof(COOBooleanMatrix));
+    mtx->rows = malloc(init_capacity*sizeof(unsigned));
+    mtx->cols = malloc(init_capacity*sizeof(unsigned));
+    mtx->num_nonzero = 0;
+    mtx->capacity = init_capacity;
+
+    return mtx;
+}
+
 int find_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     for (int i; i < mtx->num_nonzero; ++i) {
         if ((mtx->rows)[i] == row && (mtx->cols)[i] == col) {
@@ -23,7 +33,6 @@ void copy_array(unsigned* a, unsigned* b, unsigned n) {
     }
 }
 
-
 void double_size(COOBooleanMatrix* mtx) {
     rows_doubled = malloc(2*capacity*sizeof(unsigned));
     cols_doubled = malloc(2*capacity*sizeof(unsigned));
@@ -38,7 +47,6 @@ void double_size(COOBooleanMatrix* mtx) {
     mtx->cols = cols_doubled;
     mtx->capacity *= 2;
 }
-
 
 void add_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     unsigned nnz = mtx->num_nonzero;
