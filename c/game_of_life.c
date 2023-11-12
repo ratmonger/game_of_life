@@ -458,7 +458,6 @@ int main( int argc, char *argv[] )  {
             // remove comments in this block to use pointer neighbor indice structure
             //generate_Neighbors();
             //run_Neighbor_Array(ticks);
-            run_Naive(ticks);
 
             // remove comments in this block to perform multiplication
             //generate_C();
