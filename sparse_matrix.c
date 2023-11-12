@@ -36,7 +36,7 @@ void double_size(COOBooleanMatrix* mtx) {
 
     mtx->rows = rows_doubled;
     mtx->cols = cols_doubled;
-    mtx->capacity *= 2
+    mtx->capacity *= 2;
 }
 
 
