@@ -15,7 +15,7 @@ struct SparseBooleanVector {
 
 struct SparseCharVector {
     unsigned* indices;
-    char* values;
+    unsigned char* values;
     unsigned num_nonzero;
     unsigned capacity;
 };
@@ -79,14 +79,14 @@ int find_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
     return -1;
 }
 
-char get_value_charvec(struct SparseCharVector* vec, unsigned idx) {
+unsigned char get_value_charvec(struct SparseCharVector* vec, unsigned idx) {
     for (int i = 0; i < vec->num_nonzero; ++i) {
         if ((vec->indices)[i] == idx) {
             return (vec->values)[i];
         }
     }
 
-    return -1;
+    return 0;
 }
 
 void copy_array_unsigned(unsigned* a, unsigned* b, unsigned n) {
@@ -95,7 +95,7 @@ void copy_array_unsigned(unsigned* a, unsigned* b, unsigned n) {
     }
 }
 
-void copy_array_char(char* a, char* b, unsigned n) {
+void copy_array_char(unsigned char* a, unsigned char* b, unsigned n) {
     for (int i = 0; i < n; ++i) {
         b[i] = a[i];
     }
@@ -130,7 +130,7 @@ void double_size_boolvec(struct SparseBooleanVector* vec) {
 
 void double_size_charvec(struct SparseCharVector* vec) {
     unsigned* indices_doubled = malloc(2*(vec->capacity)*sizeof(unsigned));
-    char* values_doubled = malloc(2*(vec->capacity)*sizeof(char));
+    unsigned char* values_doubled = malloc(2*(vec->capacity)*sizeof(char));
 
     copy_array_unsigned(vec->indices, indices_doubled, vec->num_nonzero);
     copy_array_char(vec->values, values_doubled, vec->num_nonzero);
@@ -197,10 +197,10 @@ void set_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, char val) {
     ++(vec->num_nonzero);
 }
 
-void add_at_idx(struct SparseCharVector* vec, unsigned idx, char val) {
+void add_at_idx(struct SparseCharVector* vec, unsigned idx, unsigned char val) {
     int old_val = get_value_charvec(vec, idx);
 
-    if (old_val < 0) {
+    if (old_val == 0) {
         set_nonzero_charvec(vec, idx, val);
     } else {
         set_nonzero_charvec(vec, idx, old_val + val);

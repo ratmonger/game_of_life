@@ -13,7 +13,7 @@ struct SparseBooleanVector {
 
 struct SparseCharVector {
     unsigned* indices;
-    char* values;
+    unsigned char* values;
     unsigned num_nonzero;
     unsigned capacity;
 };
@@ -34,7 +34,7 @@ int get_value_charvec(struct SparseCharVector* vec, unsigned idx);
 
 void copy_array_unsigned(unsigned* a, unsigned* b, unsigned n);
 
-void copy_array_char(char* a, char* b, unsigned n);
+void copy_array_char(unsigned char* a, unsigned char* b, unsigned n);
 
 void double_size_boolmat(struct COOBooleanMatrix* mtx);
 
@@ -46,9 +46,9 @@ void set_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned co
 
 void set_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
 
-void set_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, char val);
+void set_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, unsigned char val);
 
-void add_at_idx(struct SparseCharVector* vec, unsigned idx, char val);
+void add_at_idx(struct SparseCharVector* vec, unsigned idx, unsigned char val);
 
 void unset_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col);
 

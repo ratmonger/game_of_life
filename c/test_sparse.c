@@ -107,6 +107,107 @@ unsigned test_boolmat() {
     return result;
 }
 
+unsigned test_matvec_identity() {
+    struct COOBooleanMatrix* A = init_COO_boolmat(2);
+    struct SparseBooleanVector* b = init_boolvec(2);
+    struct SparseCharVector* c = init_charvec(2);
+
+    // Make a 2x2 identity matrix
+    set_nonzero_boolmat(A, 0, 0);
+    set_nonzero_boolmat(A, 1, 1);
+
+    set_nonzero_boolvec(b, 0);
+    set_nonzero_boolvec(b, 1);
+
+    matvec_mult(A, b, c);
+
+    if (get_value_charvec(c, 0) == 1 && get_value_charvec(c, 1) == 1) {
+        free_COO_boolmat(A);
+        free_boolvec(b);
+        free_charvec(c);
+        return TRUE;
+    } else {
+        free_COO_boolmat(A);
+        free_boolvec(b);
+        free_charvec(c);
+        return FALSE;
+    }
+}
+
+unsigned test_matvec_zero() {
+    struct COOBooleanMatrix* A = init_COO_boolmat(2);
+    struct SparseBooleanVector* b = init_boolvec(2);
+    struct SparseCharVector* c = init_charvec(2);
+
+    set_nonzero_boolvec(b, 0);
+    set_nonzero_boolvec(b, 1);
+
+    matvec_mult(A, b, c);
+
+    if (get_value_charvec(c, 0) == 0 && get_value_charvec(c, 1) == 0) {
+        free_COO_boolmat(A);
+        free_boolvec(b);
+        free_charvec(c);
+        return TRUE;
+    } else {
+        free_COO_boolmat(A);
+        free_boolvec(b);
+        free_charvec(c);
+        return FALSE;
+    }
+}
+
+unsigned test_matvec_general() {
+    struct COOBooleanMatrix* A = init_COO_boolmat(2);
+    struct SparseBooleanVector* b = init_boolvec(2);
+    struct SparseCharVector* c = init_charvec(2);
+
+    set_nonzero_boolmat(A, 0, 0);
+    set_nonzero_boolmat(A, 0, 1);
+    set_nonzero_boolmat(A, 1, 0);
+    set_nonzero_boolmat(A, 1, 1);
+
+    set_nonzero_boolvec(b, 0);
+    set_nonzero_boolvec(b, 1);
+
+    matvec_mult(A, b, c);
+
+    if (get_value_charvec(c, 0) == 2 && get_value_charvec(c, 1) == 2) {
+        free_COO_boolmat(A);
+        free_boolvec(b);
+        free_charvec(c);
+        return TRUE;
+    } else {
+        free_COO_boolmat(A);
+        free_boolvec(b);
+        free_charvec(c);
+        return FALSE;
+    }
+}
+
+unsigned test_matvec() {
+    printf("Testing matvec multiply...\n");
+
+    unsigned id_res = test_matvec_identity();
+    unsigned zero_res = test_matvec_zero();
+    unsigned gen_res = test_matvec_general();
+
+    printf("\tIdentity: %d\n", id_res);
+    printf("\tZero: %d\n", zero_res);
+    printf("\tGeneral Case: %d\n", gen_res);
+
+    unsigned result = id_res * zero_res;
+
+    if (result) {
+        printf("matvec tests passed!\n");
+    } else {
+        printf("matvec tests failed\n");
+    }
+
+    return result;
+}
+
 int main() {
     test_boolmat();
+    test_matvec();
 }
