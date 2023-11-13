@@ -24,13 +24,15 @@ struct SparseBooleanVector* init_boolvec(unsigned init_capacity);
 
 struct SparseCharVector* init_charvec(unsigned init_capacity);
 
-int find_nonzero_boomat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col);
+int find_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col);
 
 int find_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
 
 int find_nonzero_charvec(struct SparseCharVector* vec, unsigned idx);
 
-void copy_array(unsigned* a, unsigned* b, unsigned n);
+void copy_array_unsigned(unsigned* a, unsigned* b, unsigned n);
+
+void copy_array_char(char* a, char* b, unsigned n);
 
 void double_size_boolmat(struct COOBooleanMatrix* mtx);
 
