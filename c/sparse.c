@@ -222,8 +222,9 @@ void unset_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned 
 }
 
 void unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
+    // There appears to be some sort of memory bug in this function
     int i = find_nonzero_boolvec(vec, idx);
-    int n = vec->num_nonzero - idx;
+    int n = vec->num_nonzero - i;
 
     if (i < 0) {
         return;
@@ -236,7 +237,7 @@ void unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
 
 void unset_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
     int i = find_nonzero_charvec(vec, idx);
-    int n = vec->num_nonzero - idx;
+    int n = vec->num_nonzero - i;
 
     if (i < 0) {
         return;

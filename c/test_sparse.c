@@ -55,6 +55,21 @@ unsigned test_set_boolmat() {
     }
 }
 
+unsigned test_set_boolvec() {
+    struct SparseBooleanVector* vec = init_boolvec(1);
+
+    set_nonzero_boolvec(vec, 0);
+
+    if (vec->num_nonzero == 1 && find_nonzero_boolvec(vec, 0) == 0) {
+        free_boolvec(vec);
+        return TRUE;
+    } else {
+        free_boolvec(vec);
+        return FALSE;
+    }
+    return FALSE;
+}
+
 unsigned test_unset_boolmat() {
     struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
 
@@ -66,6 +81,21 @@ unsigned test_unset_boolmat() {
         return TRUE;
     } else {
         free_COO_boolmat(mtx);
+        return FALSE;
+    }
+}
+
+unsigned test_unset_boolvec() {
+    struct SparseBooleanVector* vec = init_boolvec(1);
+
+    set_nonzero_boolvec(vec, 0);
+    unset_nonzero_boolvec(vec, 0);
+
+    if (vec->num_nonzero == 0 && find_nonzero_boolvec(vec, 0) == -1) {
+        free_boolvec(vec);
+        return TRUE;
+    } else {
+        free_boolvec(vec);
         return FALSE;
     }
 }
@@ -85,6 +115,21 @@ unsigned test_double_size_boolmat() {
     }
 }
 
+unsigned test_double_size_boolvec() {
+    struct SparseBooleanVector* vec = init_boolvec(1);
+
+    set_nonzero_boolvec(vec, 0);
+    set_nonzero_boolvec(vec, 1);
+
+    if (vec->capacity == 2) {
+        free_boolvec(vec);
+        return TRUE;
+    } else {
+        free_boolvec(vec);
+        return FALSE;
+    }
+}
+
 unsigned test_boolmat() {
     printf("Testing sparse boolean matrix...\n");
     unsigned init_res = test_init_boolmat();
@@ -100,9 +145,31 @@ unsigned test_boolmat() {
     unsigned result = init_res * set_res * unset_res * dbl_res;
 
     if (result)
-        printf("Sparse boolean matrix tests passed!\n");
+        printf("Sparse boolean matrix tests PASSED!\n");
     else
-        printf("Sparse boolean matrix tests failed\n");
+        printf("Sparse boolean matrix tests FAILED!\n");
+
+    return result;
+}
+
+unsigned test_boolvec() {
+    printf("Testing sparse boolean vector...\n");
+    unsigned init_res = test_init_boolvec();
+    unsigned set_res = test_set_boolvec();
+    unsigned unset_res = test_unset_boolvec();
+    unsigned dbl_res = test_double_size_boolvec();
+
+    printf("\tInitialization: %d\n", init_res);
+    printf("\tSet nonzero: %d\n", set_res);
+    printf("\tUnset nonzero: %d\n", unset_res);
+    printf("\tDouble size: %d\n", dbl_res);
+
+    unsigned result = init_res * set_res * unset_res * dbl_res;
+
+    if (result)
+        printf("Sparse boolean vector tests PASSED!\n");
+    else
+        printf("Sparse boolean vector tests FAILED!\n");
 
     return result;
 }
@@ -199,15 +266,17 @@ unsigned test_matvec() {
     unsigned result = id_res * zero_res;
 
     if (result) {
-        printf("matvec tests passed!\n");
+        printf("matvec tests PASSED!\n");
     } else {
-        printf("matvec tests failed\n");
+        printf("matvec tests FAILED!\n");
     }
 
     return result;
 }
 
+
 int main() {
     test_boolmat();
+    test_boolvec();
     test_matvec();
 }
