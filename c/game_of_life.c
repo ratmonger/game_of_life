@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+// this file has multiple implementations
+// 1. naive
+// 2. very dense matrix mult using the coefficient matrix corresponding to the stencil
+//     this is very inefficient and consumes memory because its not sparse encoded
+// 3. a custom built hierarchy of pointers to neighbor indices
+// see the main() function for how to toggle these on/off
+
+
 char *grid;
 char *copy;
 char *C;
