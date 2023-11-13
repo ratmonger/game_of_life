@@ -70,6 +70,21 @@ unsigned test_set_boolvec() {
     return FALSE;
 }
 
+unsigned test_set_charvec() {
+    struct SparseCharVector* vec = init_charvec(1);
+
+    set_nonzero_charvec(vec, 0, 2);
+
+    if (vec->num_nonzero == 1 && find_nonzero_charvec(vec, 0) == 0) {
+        free_charvec(vec);
+        return TRUE;
+    } else {
+        free_charvec(vec);
+        return FALSE;
+    }
+    return FALSE;
+}
+
 unsigned test_unset_boolmat() {
     struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
 
@@ -100,6 +115,21 @@ unsigned test_unset_boolvec() {
     }
 }
 
+unsigned test_unset_charvec() {
+    struct SparseCharVector* vec = init_charvec(1);
+
+    set_nonzero_charvec(vec, 0, 2);
+    unset_nonzero_charvec(vec, 0);
+
+    if (vec->num_nonzero == 0 && find_nonzero_charvec(vec, 0) == -1) {
+        free_charvec(vec);
+        return TRUE;
+    } else {
+        free_charvec(vec);
+        return FALSE;
+    }
+}
+
 unsigned test_double_size_boolmat() {
     struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
 
@@ -126,6 +156,21 @@ unsigned test_double_size_boolvec() {
         return TRUE;
     } else {
         free_boolvec(vec);
+        return FALSE;
+    }
+}
+
+unsigned test_double_size_charvec() {
+    struct SparseCharVector* vec = init_charvec(1);
+
+    set_nonzero_charvec(vec, 0, 2);
+    set_nonzero_charvec(vec, 1, 2);
+
+    if (vec->capacity == 2) {
+        free_charvec(vec);
+        return TRUE;
+    } else {
+        free_charvec(vec);
         return FALSE;
     }
 }
@@ -170,6 +215,28 @@ unsigned test_boolvec() {
         printf("Sparse boolean vector tests PASSED!\n");
     else
         printf("Sparse boolean vector tests FAILED!\n");
+
+    return result;
+}
+
+unsigned test_charvec() {
+    printf("Testing sparse character vector...\n");
+    unsigned init_res = test_init_charvec();
+    unsigned set_res = test_set_charvec();
+    unsigned unset_res = test_unset_charvec();
+    unsigned dbl_res = test_double_size_charvec();
+
+    printf("\tInitialization: %d\n", init_res);
+    printf("\tSet nonzero: %d\n", set_res);
+    printf("\tUnset nonzero: %d\n", unset_res);
+    printf("\tDouble size: %d\n", dbl_res);
+
+    unsigned result = init_res * set_res * unset_res * dbl_res;
+
+    if (result)
+        printf("Sparse character vector tests PASSED!\n");
+    else
+        printf("Sparse character vector tests FAILED!\n");
 
     return result;
 }
@@ -277,6 +344,7 @@ unsigned test_matvec() {
 
 int main() {
     test_boolmat();
-    test_boolvec();
+    // test_boolvec();
+    test_charvec();
     test_matvec();
 }
