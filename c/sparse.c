@@ -20,7 +20,7 @@ struct SparseCharVector {
     unsigned capacity;
 }
 
-COOBooleanMatrix* init_COO_bool_mtx(unsigned init_capacity) {
+COOBooleanMatrix* init_COO_boolmat(unsigned init_capacity) {
     COOBooleanMatrix* mtx = malloc(sizeof(COOBooleanMatrix));
     mtx->rows = malloc(init_capacity*sizeof(unsigned));
     mtx->cols = malloc(init_capacity*sizeof(unsigned));
@@ -30,7 +30,7 @@ COOBooleanMatrix* init_COO_bool_mtx(unsigned init_capacity) {
     return mtx;
 }
 
-SparseBooleanVector* init_bool_vec(unsigned init_capacity) {
+SparseBooleanVector* init_boolvec(unsigned init_capacity) {
     SparseBooleanVector* vec = malloc(sizeof(SparseBooleanVector));
     vec->indices = malloc(init_capacity*sizeof(unsigned));
     vec->num_nonzero = 0;
@@ -39,7 +39,7 @@ SparseBooleanVector* init_bool_vec(unsigned init_capacity) {
     return vec;
 }
 
-SparseCharVector* init_char_vec(unsigned init_capacity) {
+SparseCharVector* init_charvec(unsigned init_capacity) {
     SparseBooleanVector* vec = malloc(sizeof(SparseCharVector));
     vec->indices = malloc(init_capacity*sizeof(unsigned));
     vec->values = malloc(init_capacity*sizeof(char));
@@ -49,7 +49,7 @@ SparseCharVector* init_char_vec(unsigned init_capacity) {
     return vec;
 }
 
-int find_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+int find_nonzero_boolmat(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     for (int i; i < mtx->num_nonzero; ++i) {
         if ((mtx->rows)[i] == row && (mtx->cols)[i] == col) {
             return i;
@@ -59,7 +59,7 @@ int find_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     return -1;
 }
 
-int find_nonzero(COOBooleanVector* vec, unsigned idx) {
+int find_nonzero_boolvec(SparseBooleanVector* vec, unsigned idx) {
     for (int i; i < vec->num_nonzero; ++i) {
         if ((vec->indices)[i] == idx) {
             return i;
@@ -69,7 +69,7 @@ int find_nonzero(COOBooleanVector* vec, unsigned idx) {
     return -1;
 }
 
-int find_nonzero(COOCharVector* vec, unsigned idx) {
+int find_nonzero_charvec(SparseCharVector* vec, unsigned idx) {
     for (int i; i < vec->num_nonzero; ++i) {
         if ((vec->indices)[i] == idx) {
             return i;
@@ -85,7 +85,7 @@ void copy_array(unsigned* a, unsigned* b, unsigned n) {
     }
 }
 
-void double_size(COOBooleanMatrix* mtx) {
+void double_size_boolmat(COOBooleanMatrix* mtx) {
     rows_doubled = malloc(2*capacity*sizeof(unsigned));
     cols_doubled = malloc(2*capacity*sizeof(unsigned));
 
@@ -100,7 +100,7 @@ void double_size(COOBooleanMatrix* mtx) {
     mtx->capacity *= 2;
 }
 
-void double_size(SparseBooleanVector* vec) {
+void double_size_boolvec(SparseBooleanVector* vec) {
     indices_doubled = malloc(2*capacity*sizeof(unsigned));
 
     copy_array(vec->indices, indices_doubled, vec->num_nonzero);
@@ -112,7 +112,7 @@ void double_size(SparseBooleanVector* vec) {
     vec->capacity *= 2;
 }
 
-void double_size(SparseCharVector* vec) {
+void double_size_charvec(SparseCharVector* vec) {
     indices_doubled = malloc(2*capacity*sizeof(unsigned));
     values_doubled = malloc(2*capacity*sizeof(char));
 
@@ -128,7 +128,7 @@ void double_size(SparseCharVector* vec) {
     vec->capacity *= 2;
 }
 
-void add_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+void add_nonzero_boolmat(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     unsigned nnz = mtx->num_nonzero;
 
     if (find_nonzero(mtx, row, col) > -1) {
@@ -145,7 +145,7 @@ void add_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     ++(mtx->num_nonzero);
 }
 
-void add_nonzero(SparseBooleanVector* vec, unsigned idx) {
+void add_nonzero_boolvec(SparseBooleanVector* vec, unsigned idx) {
     unsigned nnz = vec->num_nonzero;
 
     if (find_nonzero(vec, idx) > -1) {
@@ -161,7 +161,7 @@ void add_nonzero(SparseBooleanVector* vec, unsigned idx) {
     ++(vec->num_nonzero);
 }
 
-void add_nonzero(SparseCharVector* vec, unsigned idx, char val) {
+void add_nonzero_charvec(SparseCharVector* vec, unsigned idx, char val) {
     unsigned nnz = vec->num_nonzero;
 
     int i = find_nonzero(vec, idx);
@@ -182,7 +182,7 @@ void add_nonzero(SparseCharVector* vec, unsigned idx, char val) {
 }
 
 
-void remove_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+void remove_nonzero_boolmat(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     int idx = find_nonzero(mtx, row, col);
 
     if (idx < 0) {
@@ -195,7 +195,7 @@ void remove_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     --(mtx->num_nonzero);
 }
 
-void remove_nonzero(SparseBooleanVector* vec, unsigned idx) {
+void remove_nonzero_boolvec(SparseBooleanVector* vec, unsigned idx) {
     int i = find_nonzero(vec, idx);
 
     if (i < 0) {
@@ -207,7 +207,7 @@ void remove_nonzero(SparseBooleanVector* vec, unsigned idx) {
     --(vec->num_nonzero);
 }
 
-void remove_nonzero(SparseCharVector* vec, unsigned idx) {
+void remove_nonzero_charvec(SparseCharVector* vec, unsigned idx) {
     int i = find_nonzero(vec, idx);
 
     if (i < 0) {
