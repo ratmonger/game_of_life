@@ -7,7 +7,20 @@ struct COOBooleanMatrix {
     unsigned capacity;
 }
 
-COOBooleanMatrix* init_COO_mtx(unsigned init_capacity) {
+struct SparseBooleanVector {
+    unsigned* indices;
+    unsigned num_nonzero;
+    unsigned capacity;
+}
+
+struct SparseCharVector {
+    unsigned* indices;
+    char* values;
+    unsigned num_nonzero;
+    unsigned capacity;
+}
+
+COOBooleanMatrix* init_COO_bool_mtx(unsigned init_capacity) {
     COOBooleanMatrix* mtx = malloc(sizeof(COOBooleanMatrix));
     mtx->rows = malloc(init_capacity*sizeof(unsigned));
     mtx->cols = malloc(init_capacity*sizeof(unsigned));
@@ -17,9 +30,48 @@ COOBooleanMatrix* init_COO_mtx(unsigned init_capacity) {
     return mtx;
 }
 
+SparseBooleanVector* init_bool_vec(unsigned init_capacity) {
+    SparseBooleanVector* vec = malloc(sizeof(SparseBooleanVector));
+    vec->indices = malloc(init_capacity*sizeof(unsigned));
+    vec->num_nonzero = 0;
+    vec->capacity = init_capacity;
+
+    return vec;
+}
+
+SparseCharVector* init_char_vec(unsigned init_capacity) {
+    SparseBooleanVector* vec = malloc(sizeof(SparseCharVector));
+    vec->indices = malloc(init_capacity*sizeof(unsigned));
+    vec->values = malloc(init_capacity*sizeof(char));
+    vec->num_nonzero = 0;
+    vec->capacity = init_capacity;
+
+    return vec;
+}
+
 int find_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     for (int i; i < mtx->num_nonzero; ++i) {
         if ((mtx->rows)[i] == row && (mtx->cols)[i] == col) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int find_nonzero(COOBooleanVector* vec, unsigned idx) {
+    for (int i; i < vec->num_nonzero; ++i) {
+        if ((vec->indices)[i] == idx) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int find_nonzero(COOCharVector* vec, unsigned idx) {
+    for (int i; i < vec->num_nonzero; ++i) {
+        if ((vec->indices)[i] == idx) {
             return i;
         }
     }
@@ -48,6 +100,34 @@ void double_size(COOBooleanMatrix* mtx) {
     mtx->capacity *= 2;
 }
 
+void double_size(SparseBooleanVector* vec) {
+    indices_doubled = malloc(2*capacity*sizeof(unsigned));
+
+    copy_array(vec->indices, indices_doubled, vec->num_nonzero);
+
+    free(vec->indices);
+
+    vec->indices = indices_doubled;
+
+    vec->capacity *= 2;
+}
+
+void double_size(SparseCharVector* vec) {
+    indices_doubled = malloc(2*capacity*sizeof(unsigned));
+    values_doubled = malloc(2*capacity*sizeof(char));
+
+    copy_array(vec->indices, indices_doubled, vec->num_nonzero);
+    copy_array(vec->values, values_doubled, vec->num_nonzero);
+
+    free(vec->indices);
+    free(vec->values);
+
+    vec->indices = indices_doubled;
+    vec->values = values_doubled;
+
+    vec->capacity *= 2;
+}
+
 void add_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     unsigned nnz = mtx->num_nonzero;
 
@@ -65,6 +145,42 @@ void add_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     ++(mtx->num_nonzero);
 }
 
+void add_nonzero(SparseBooleanVector* vec, unsigned idx) {
+    unsigned nnz = vec->num_nonzero;
+
+    if (find_nonzero(vec, idx) > -1) {
+        return;
+    }
+
+    if (nnz == capacity) {
+        double_size(vec);
+    }
+
+    (vec->indices)[nnz] = idx;
+
+    ++(vec->num_nonzero);
+}
+
+void add_nonzero(SparseCharVector* vec, unsigned idx, char val) {
+    unsigned nnz = vec->num_nonzero;
+
+    int i = find_nonzero(vec, idx);
+
+    if (i > -1) {
+        (vec->values)[i] = val;
+        return
+    }
+
+    if (nnz == capacity) {
+        double_size(vec);
+    }
+
+    (vec->indices)[nnz] = idx;
+    (vec->values)[nnz] = val;
+
+    ++(vec->num_nonzero);
+}
+
 
 void remove_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     int idx = find_nonzero(mtx, row, col);
@@ -77,4 +193,28 @@ void remove_nonzero(COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     copy(mtx->cols + i*sizeof(unsigned), mtx->cols + (i - 1)*sizeof(unsigned));
 
     --(mtx->num_nonzero);
+}
+
+void remove_nonzero(SparseBooleanVector* vec, unsigned idx) {
+    int i = find_nonzero(vec, idx);
+
+    if (i < 0) {
+        return;
+    }
+
+    copy(vec->indices + i*sizeof(unsigned), vec->indices + (i - 1)*sizeof(unsigned));
+
+    --(vec->num_nonzero);
+}
+
+void remove_nonzero(SparseCharVector* vec, unsigned idx) {
+    int i = find_nonzero(vec, idx);
+
+    if (i < 0) {
+        return;
+    }
+
+    copy(vec->indices + i*sizeof(unsigned), vec->indices + (i - 1)*sizeof(unsigned));
+
+    --(vec->num_nonzero);
 }
