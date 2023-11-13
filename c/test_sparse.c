@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "sparse.h"
 
-void main() {
+int main() {
     printf("Hello, world!");
 }
