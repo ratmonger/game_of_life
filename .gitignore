@@ -1,3 +1,9 @@
+# Ignore Python artifacts
 __pycache__
+
+# Ignore C artifacts
 *.o
+
+# Ignore Slurm artifacts
+*.out
 
