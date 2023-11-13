@@ -41,10 +41,10 @@ unsigned test_init_charvec() {
     }
 }
 
-unsigned test_add_boolmat() {
+unsigned test_set_boolmat() {
     struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
 
-    add_nonzero_boolmat(mtx, 0, 0);
+    set_nonzero_boolmat(mtx, 0, 0);
 
     if (mtx->num_nonzero == 1 && find_nonzero_boolmat(mtx, 0, 0) == 0) {
         free_COO_boolmat(mtx);
@@ -55,11 +55,11 @@ unsigned test_add_boolmat() {
     }
 }
 
-unsigned test_remove_boolmat() {
+unsigned test_unset_boolmat() {
     struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
 
-    add_nonzero_boolmat(mtx, 0, 0);
-    remove_nonzero_boolmat(mtx, 0, 0);
+    set_nonzero_boolmat(mtx, 0, 0);
+    unset_nonzero_boolmat(mtx, 0, 0);
 
     if (mtx->num_nonzero == 0 && find_nonzero_boolmat(mtx, 0, 0) == -1) {
         free_COO_boolmat(mtx);
@@ -73,8 +73,8 @@ unsigned test_remove_boolmat() {
 unsigned test_double_size_boolmat() {
     struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
 
-    add_nonzero_boolmat(mtx, 0, 0);
-    add_nonzero_boolmat(mtx, 0, 1);
+    set_nonzero_boolmat(mtx, 0, 0);
+    set_nonzero_boolmat(mtx, 0, 1);
 
     if (mtx->capacity == 2) {
         free_COO_boolmat(mtx);
@@ -88,16 +88,16 @@ unsigned test_double_size_boolmat() {
 unsigned test_boolmat() {
     printf("Testing sparse boolean matrix...\n");
     unsigned init_res = test_init_boolmat();
-    unsigned add_res = test_add_boolmat();
-    unsigned rmv_res = test_remove_boolmat();
+    unsigned set_res = test_set_boolmat();
+    unsigned unset_res = test_unset_boolmat();
     unsigned dbl_res = test_double_size_boolmat();
 
     printf("\tInitialization: %d\n", init_res);
-    printf("\tAdd nonzero: %d\n", add_res);
-    printf("\tRemove nonzero: %d\n", rmv_res);
+    printf("\tSet nonzero: %d\n", set_res);
+    printf("\tUnset nonzero: %d\n", unset_res);
     printf("\tDouble size: %d\n", dbl_res);
 
-    unsigned result = init_res * add_res * rmv_res * dbl_res;
+    unsigned result = init_res * set_res * unset_res * dbl_res;
 
     if (result)
         printf("Sparse boolean matrix tests passed!\n");

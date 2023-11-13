@@ -30,6 +30,8 @@ int find_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
 
 int find_nonzero_charvec(struct SparseCharVector* vec, unsigned idx);
 
+int get_value_charvec(struct SparseCharVector* vec, unsigned idx);
+
 void copy_array_unsigned(unsigned* a, unsigned* b, unsigned n);
 
 void copy_array_char(char* a, char* b, unsigned n);
@@ -40,20 +42,24 @@ void double_size_boolvec(struct SparseBooleanVector* vec);
 
 void double_size_charvec(struct SparseCharVector* vec);
 
-void add_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col);
+void set_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col);
 
-void add_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
+void set_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
 
-void add_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, char val);
+void set_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, char val);
 
-void remove_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col);
+void add_at_idx(struct SparseCharVector* vec, unsigned idx, char val);
 
-void remove_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
+void unset_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col);
 
-void remove_nonzero_charvec(struct SparseCharVector* vec, unsigned idx);
+void unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
+
+void unset_nonzero_charvec(struct SparseCharVector* vec, unsigned idx);
 
 void free_COO_boolmat(struct COOBooleanMatrix* mtx);
 
 void free_boolvec(struct SparseBooleanVector* vec);
 
 void free_charvec(struct SparseCharVector* vec);
+
+void matvec_mult(struct COOBooleanMatrix* A, struct SparseBooleanVector* b, struct SparseCharVector* c);
