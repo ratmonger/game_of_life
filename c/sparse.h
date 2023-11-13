@@ -51,3 +51,9 @@ void remove_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned
 void remove_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx);
 
 void remove_nonzero_charvec(struct SparseCharVector* vec, unsigned idx);
+
+void free_COO_boolmat(struct COOBooleanMatrix* mtx);
+
+void free_boolvec(struct SparseBooleanVector* vec);
+
+void free_charvec(struct SparseCharVector* vec);

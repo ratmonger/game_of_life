@@ -7,28 +7,38 @@
 unsigned test_init_boolmat() {
     struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
 
-    if (mtx->capacity == 1 && mtx->num_nonzero == 0)
+    if (mtx->capacity == 1 && mtx->num_nonzero == 0) {
+        free_COO_boolmat(mtx);
         return TRUE;
-    else
+    } else {
+        free_COO_boolmat(mtx);
         return FALSE;
+    }
+
 }
 
 unsigned test_init_boolvec() {
     struct SparseBooleanVector* vec = init_boolvec(1);
 
-    if (vec->capacity == 1 && vec->num_nonzero == 0)
+    if (vec->capacity == 1 && vec->num_nonzero == 0) {
+        free_boolvec(vec); 
         return TRUE;
-    else
+    } else {
+        free_boolvec(vec); 
         return FALSE;
+    }
 }
 
 unsigned test_init_charvec() {
     struct SparseCharVector* vec = init_charvec(1);
 
-    if (vec->capacity == 1 && vec->num_nonzero == 0)
+    if (vec->capacity == 1 && vec->num_nonzero == 0) {
+        free_charvec(vec); 
         return TRUE;
-    else
+    } else {
+        free_charvec(vec); 
         return FALSE;
+    }
 }
 
 unsigned test_add_boolmat() {
@@ -36,10 +46,13 @@ unsigned test_add_boolmat() {
 
     add_nonzero_boolmat(mtx, 0, 0);
 
-    if (mtx->num_nonzero == 1 && find_nonzero_boolmat(mtx, 0, 0) == 0)
+    if (mtx->num_nonzero == 1 && find_nonzero_boolmat(mtx, 0, 0) == 0) {
+        free_COO_boolmat(mtx);
         return TRUE;
-    else
+    } else {
+        free_COO_boolmat(mtx);
         return FALSE;
+    }
 }
 
 unsigned test_remove_boolmat() {
@@ -48,10 +61,13 @@ unsigned test_remove_boolmat() {
     add_nonzero_boolmat(mtx, 0, 0);
     remove_nonzero_boolmat(mtx, 0, 0);
 
-    if (mtx->num_nonzero == 0 && find_nonzero_boolmat(mtx, 0, 0) == -1)
+    if (mtx->num_nonzero == 0 && find_nonzero_boolmat(mtx, 0, 0) == -1) {
+        free_COO_boolmat(mtx);
         return TRUE;
-    else
+    } else {
+        free_COO_boolmat(mtx);
         return FALSE;
+    }
 }
 
 unsigned test_double_size_boolmat() {
@@ -60,10 +76,13 @@ unsigned test_double_size_boolmat() {
     add_nonzero_boolmat(mtx, 0, 0);
     add_nonzero_boolmat(mtx, 0, 1);
 
-    if (mtx->capacity == 2)
+    if (mtx->capacity == 2) {
+        free_COO_boolmat(mtx);
         return TRUE;
-    else
+    } else {
+        free_COO_boolmat(mtx);
         return FALSE;
+    }
 }
 
 unsigned test_boolmat() {

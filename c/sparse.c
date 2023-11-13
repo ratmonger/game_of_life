@@ -228,3 +228,20 @@ void remove_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
 
     --(vec->num_nonzero);
 }
+
+void free_COO_boolmat(struct COOBooleanMatrix* mtx) {
+    free(mtx->rows);
+    free(mtx->cols);
+    free(mtx);
+}
+
+void free_boolvec(struct SparseBooleanVector* vec) {
+    free(vec->indices);
+    free(vec);
+}
+
+void free_charvec(struct SparseCharVector* vec) {
+    free(vec->indices);
+    free(vec->values);
+    free(vec);
+}
