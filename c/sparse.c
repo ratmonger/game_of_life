@@ -177,9 +177,27 @@ void set_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
     ++(vec->num_nonzero);
 }
 
-void set_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, char val) {
-    unsigned nnz = vec->num_nonzero;
+void unset_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
+    int i = find_nonzero_charvec(vec, idx);
+    int n = vec->num_nonzero - i;
 
+    if (i < 0) {
+        return;
+    }
+
+    copy_array_unsigned(vec->indices + i*sizeof(unsigned), vec->indices + (i - 1)*sizeof(unsigned), n);
+    copy_array_char(vec->values + i*sizeof(char), vec->values + (i - 1)*sizeof(char), n);
+
+    --(vec->num_nonzero);
+}
+
+void set_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, char val) {
+    if (val == 0) {
+        unset_nonzero_charvec(vec, idx);
+        return;
+    }
+
+    unsigned nnz = vec->num_nonzero;
     int i = find_nonzero_charvec(vec, idx);
 
     if (i > -1) {
@@ -231,20 +249,6 @@ void unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
     }
 
     copy_array_unsigned(vec->indices + i*sizeof(unsigned), vec->indices + (i - 1)*sizeof(unsigned), n);
-
-    --(vec->num_nonzero);
-}
-
-void unset_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
-    int i = find_nonzero_charvec(vec, idx);
-    int n = vec->num_nonzero - i;
-
-    if (i < 0) {
-        return;
-    }
-
-    copy_array_unsigned(vec->indices + i*sizeof(unsigned), vec->indices + (i - 1)*sizeof(unsigned), n);
-    copy_array_char(vec->values + i*sizeof(char), vec->values + (i - 1)*sizeof(char), n);
 
     --(vec->num_nonzero);
 }
