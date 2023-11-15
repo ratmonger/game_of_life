@@ -10,3 +10,9 @@ __pycache__
 # Ignore animations
 *.mp4
 
+# Ignore pdflatex artifacts
+*.aux
+*.log
+
+# Ignore minted artifacts
+_minted-*
