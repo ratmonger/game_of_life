@@ -95,9 +95,21 @@ void copy_array_unsigned(unsigned* a, unsigned* b, unsigned n) {
     }
 }
 
+void left_shift_array_unsigned(unsigned* arr, unsigned int n, unsigned idx) {
+    for (int i = idx; i < n - 1; ++i) {
+	arr[i] = arr[i+1];
+    }
+}
+
 void copy_array_char(unsigned char* a, unsigned char* b, unsigned n) {
     for (int i = 0; i < n; ++i) {
         b[i] = a[i];
+    }
+}
+
+void left_shift_array_char(unsigned char* arr, unsigned int n, unsigned idx) {
+    for (int i = idx; i < n - 1; ++i) {
+	arr[i] = arr[i+1];
     }
 }
 
@@ -185,8 +197,8 @@ void unset_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
         return;
     }
 
-    copy_array_unsigned(vec->indices + i*sizeof(unsigned), vec->indices + (i - 1)*sizeof(unsigned), n);
-    copy_array_char(vec->values + i*sizeof(char), vec->values + (i - 1)*sizeof(char), n);
+    left_shift_array_unsigned(vec->indices, n, i);
+    left_shift_array_char(vec->values, n, i);
 
     --(vec->num_nonzero);
 }
@@ -233,14 +245,13 @@ void unset_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned 
         return;
     }
 
-    copy_array_unsigned(mtx->rows + idx*sizeof(unsigned), mtx->rows + (idx - 1)*sizeof(unsigned), n);
-    copy_array_unsigned(mtx->cols + idx*sizeof(unsigned), mtx->cols + (idx - 1)*sizeof(unsigned), n);
+    left_shift_array_unsigned(mtx->rows, n, idx);
+    left_shift_array_unsigned(mtx->cols, n, idx);
 
     --(mtx->num_nonzero);
 }
 
 void unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
-    // There appears to be some sort of memory bug in this function
     int i = find_nonzero_boolvec(vec, idx);
     int n = vec->num_nonzero - i;
 
@@ -248,7 +259,7 @@ void unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
         return;
     }
 
-    copy_array_unsigned(vec->indices + i*sizeof(unsigned), vec->indices + (i - 1)*sizeof(unsigned), n);
+    left_shift_array_unsigned(vec->indices, n, i);
 
     --(vec->num_nonzero);
 }

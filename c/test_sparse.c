@@ -344,7 +344,7 @@ unsigned test_matvec() {
 
 int main() {
     test_boolmat();
-    // test_boolvec();
+    test_boolvec();
     test_charvec();
     test_matvec();
 }
