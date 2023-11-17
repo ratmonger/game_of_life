@@ -130,9 +130,29 @@ struct SparseCharVector {
 
 \section{Preliminary CARC Testing}
 
+\section{Significant Changes from Initial Proposal}
+
+The project remains largely unchanged from the initial proposal, with one exception: due in part to time constraints, and due in part to the challenges of one-to-one translation between C and Python code, we have decided to focus exlusively on the C implementation of the project. \\
+
+In addition, we have narrowed our initial pool of experiments down to three:
+
+\begin{enumerate}
+    \item Performance analysis of matrix-vector multiplication vs. nested for loop for updating state
+    \item Analysis of communication time performance as matrix partition size changes
+    \item Performance analysis of threaded vs. MPI implementations
+\end{enumerate}
+
 \section{Next Steps}
 
-\section{Open Questions}
+\section{Feedback Requested from Dr. Bienz}
+
+We would like feedback on the following questions:
+
+\begin{enumerate}
+    \item Which of the three experiments listed above would be the most appropriate/fruitful to focus on?
+    \item What might be causing the error from \texttt{malloc} when attempting to allocate large blocks of memory, and how might we address this?
+    \item When working with problem domains too large to fit in memory on a single node, how would we go about setting up the problem such that each node has the appropriate section of domain?
+\end{enumerate}
 
 \printbibliography[
 heading=bibintoc,

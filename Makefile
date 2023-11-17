@@ -13,3 +13,8 @@ clean:
 	rm -f latex/*.aux
 	rm -f latex/*.log
 	rm -f latex/*.out
+	rm -f latex/*.bbl
+	rm -f latex/*.bcf
+	rm -f latex/*.blg
+	rm -f latex/*.run.xml
+	rm -rf _minted-progress
