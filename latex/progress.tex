@@ -80,7 +80,7 @@ The project code can be found \href{https://lobogit.unm.edu/hwikle/game-of-life}
 
 \section{Python Prototype}
 
-We began by creating a simple serial Python prototype. The code represents the entire domain as a boolean vector, with \texttt{True} values corresponding to alive cells, and \texttt{False} values corresponding to dead cells. The core of the update functionality is a matrix-vector multiplication, in which the state vector is multiplied by a stencil matrix that computes the number of neighbors for each cell. This approach is inspired by 2-dimensional finite differencing methods discussed in Dr. Jacob Schroder's Scientific Computing course \cite{cs471}, and this initial prototype uses a modified version of code provided by Dr. Schroder to generate the stencil matrix.
+We began by creating a simple serial Python prototype. The code represents the entire domain as a boolean vector, with \texttt{True} values corresponding to alive cells, and \texttt{False} values corresponding to dead cells. The core of the update functionality is a matrix-vector multiplication, in which the state vector is multiplied by a stencil matrix that computes the number of neighbors for each cell. This approach is inspired by 2-dimensional finite differencing methods discussed in Dr. Jacob Schroder's Scientific Computing course \cite{cs471}, and this initial prototype uses a modified version of code provided by Dr. Schroder, originally developed for the PyAMG project \cite{pyamg2023}, to generate the stencil matrix.
 
 \section{Stencil Matrix Generation}
 
