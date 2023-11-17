@@ -80,21 +80,59 @@ The project code can be found \href{https://lobogit.unm.edu/hwikle/game-of-life}
 
 \section{Python Prototype}
 
-We began by creating a simple serial Python prototype. The code represents the entire domain as a boolean vector, with \texttt{True} values corresponding to alive cells, and \texttt{False} values corresponding to dead cells. The core of the update functionality is a matrix-vector multiplication, in which the state vector is multiplied by a stencil matrix that computes the number of neighbors for each cell. This approach is inspired by 2-dimensional finite differencing methods discussed in Dr. Jacob Schroder's Scientific Computing course \cite{cs471}, and this initial prototype uses a modified version of code provided by Dr. Schroder, originally developed for the PyAMG project \cite{pyamg2023}, to generate the stencil matrix.
+We began by creating a simple serial Python prototype. The code represents the entire domain as a boolean vector, with \texttt{True} values corresponding to alive cells, and \texttt{False} values corresponding to dead cells. The core of the update functionality is a matrix-vector multiplication, in which the state vector is multiplied by a stencil matrix, that computes the number of neighbors for each cell. This approach is inspired by 2-dimensional finite differencing methods discussed in Dr. Jacob Schroder's Scientific Computing course \cite{cs471}, and this initial prototype uses a modified version of code provided by Dr. Schroder, originally developed for the PyAMG project \cite{pyamg2023}, to generate the stencil matrix.
 
 \section{Stencil Matrix Generation}
 
-Our next task was simplifying the logic that generates the stencil matrix and translating it into C.
+We found that the algorithm used to compute the stencil matrix was more complex than was necessary for our use case, so our next task was simplifying the logic and translating it into C.
 
 \section{Sparse Matrix and Vector Implementation}
 
-We implemented three different sparse data structrues in C for use in the project. The first implements a sparse boolean matrix. This data structure implements the COO sparse matrix format, with the modification that no values are stored; if a row and column exist in the structure, its value is assumed to be \texttt{True}, otherwise it is assumed to be \texttt{False}. The structure begins with a set capacity and uses table doubling \cite{mit} to increase capacity as necessary when new entries are added. \\
+We implemented three different sparse data structrues in C for use in the project:
+ 
+\subsection{Sparse Boolean Matrix}
 
-The second data structure, which represents the state vector, is a vector of boolean values. This sparse boolean vector was implemented in much the same way as described above, with the exception that instead of storing separate indices for rows and columns, it stores a single set of indices. \\
+This data structure implements the COO sparse matrix format, with the modification that no values are stored; if a row and column exist in the structure, its value is assumed to be \texttt{True}, otherwise it is assumed to be \texttt{False}. The structure begins with a set capacity and uses table doubling \cite{mit} to increase capacity as necessary when new entries are added. The basic structure appears below: \\
 
-Finally, we implemented a sparse vector of \texttt{char}, which is intended to be used for the intermediate step of counting neighbors. The decision to use \texttt{char} rather than another integral type is motivated by the desire to conserve space in memory, together with the observation that since a cell can have at most 8 neighbors, there is no need to represent values larger than 8. This data structure is implemented similarly to the sparse boolean vector, with an additional member that stores the value of each element.
+\begin{lstlisting}[language=C]
+struct COOBooleanMatrix {
+    unsigned* rows;
+    unsigned* cols;
+    unsigned num_nonzero;
+    unsigned capacity;
+};
+\end{lstlisting}
+
+\subsection{Sparse Boolean Vector}
+
+The second data structure, which represents the state vector, is a vector of boolean values. This sparse boolean vector was implemented in much the same way as described above, with the exception that instead of storing separate indices for rows and columns, it stores a single set of indices. The structure is reproduced below: \\
+
+\begin{lstlisting}[language=C]
+struct SparseBooleanVector {
+    unsigned* indices;
+    unsigned num_nonzero;
+    unsigned capacity;
+};
+\end{lstlisting}
+
+\subsection{Sparse \texttt{char} Vector}
+
+Finally, we implemented a sparse vector of \texttt{char}, which is intended to be used for the intermediate step of counting neighbors. The decision to use \texttt{char} rather than another integral type is motivated by the desire to conserve space in memory, together with the observation that since a cell can have at most 8 neighbors, there is no need to represent values larger than 8. This data structure is implemented similarly to the sparse boolean vector, with an additional member that stores the value of each element. The structure appears below: \\
+
+\begin{lstlisting}[language=C]
+struct SparseCharVector {
+    unsigned* indices;
+    unsigned char* values;
+    unsigned num_nonzero;
+    unsigned capacity;
+};
+\end{lstlisting}
 
 \section{Preliminary CARC Testing}
+
+\section{Next Steps}
+
+\section{Open Questions}
 
 \printbibliography[
 heading=bibintoc,
