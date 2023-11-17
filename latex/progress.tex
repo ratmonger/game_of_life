@@ -14,6 +14,14 @@
 
 \usepackage[inputlanglinenos]{minted}
 
+\usepackage[
+backend=biber,
+style=ieee,
+sorting=none
+]{biblatex}
+
+\addbibresource{progress.bib}
+
 \usepackage{caption}
 \captionsetup[figure]{font=small, labelfont=small}
 \setlength\parindent{0pt}
@@ -66,12 +74,31 @@
 \maketitle
 \clearpage
 
+\section{Overview}
+
+The project code can be found \href{https://lobogit.unm.edu/hwikle/game-of-life}{on Lobogit}.
+
 \section{Python Prototype}
+
+We began by creating a simple serial Python prototype. The code represents the entire domain as a boolean vector, with \texttt{True} values corresponding to alive cells, and \texttt{False} values corresponding to dead cells. The core of the update functionality is a matrix-vector multiplication, in which the state vector is multiplied by a stencil matrix that computes the number of neighbors for each cell. This approach is inspired by 2-dimensional finite differencing methods discussed in Dr. Jacob Schroder's Scientific Computing course \cite{cs471}, and this initial prototype uses a modified version of code provided by Dr. Schroder to generate the stencil matrix.
 
 \section{Stencil Matrix Generation}
 
+Our next task was simplifying the logic that generates the stencil matrix and translating it into C.
+
 \section{Sparse Matrix and Vector Implementation}
 
+We implemented three different sparse data structrues in C for use in the project. The first implements a sparse boolean matrix. This data structure implements the COO sparse matrix format, with the modification that no values are stored; if a row and column exist in the structure, its value is assumed to be \texttt{True}, otherwise it is assumed to be \texttt{False}. The structure begins with a set capacity and uses table doubling \cite{mit} to increase capacity as necessary when new entries are added. \\
+
+The second data structure, which represents the state vector, is a vector of boolean values. This sparse boolean vector was implemented in much the same way as described above, with the exception that instead of storing separate indices for rows and columns, it stores a single set of indices. \\
+
+Finally, we implemented a sparse vector of \texttt{char}, which is intended to be used for the intermediate step of counting neighbors. The decision to use \texttt{char} rather than another integral type is motivated by the desire to conserve space in memory, together with the observation that since a cell can have at most 8 neighbors, there is no need to represent values larger than 8. This data structure is implemented similarly to the sparse boolean vector, with an additional member that stores the value of each element.
+
 \section{Preliminary CARC Testing}
+
+\printbibliography[
+heading=bibintoc,
+title={References}
+]
 
 \end{document}

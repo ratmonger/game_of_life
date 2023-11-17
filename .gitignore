@@ -16,3 +16,9 @@ __pycache__
 
 # Ignore minted artifacts
 _minted-*
+
+# Ignore Bibtex artifacts
+*.bbl
+*.bcf
+*.blg
+*.run.xml

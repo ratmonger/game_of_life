@@ -4,6 +4,7 @@ test_sparse:
 	cd c && gcc test_sparse.c sparse.c -o test_sparse -Werror -Wall
 progress.pdf:
 	pdflatex --shell-escape --jobname=progress --output-directory=latex latex/progress.tex
+	biber latex/progress.bcf
 	pdflatex --shell-escape --jobname=progress --output-directory=latex latex/progress.tex
 clean:
 	rm -f c/test_sparse
