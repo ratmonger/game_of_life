@@ -130,6 +130,12 @@ struct SparseCharVector {
 
 \section{Preliminary CARC Testing}
 
+\noindent Initial testing of the serial implementation revealed memory allocation was the fundamental
+obstacle for large scale experimentation. The naive implementation without any sparse encoding could 
+allocate at least 10,000,000,000 bytes while an order beyond that incurred a segmentation fault. 
+Performance declined immensely with large allocations. But fortunately, all serial implementations are
+functional. \par
+
 \section{Significant Changes from Initial Proposal}
 
 The project remains largely unchanged from the initial proposal, with one exception: due in part to time constraints, and due in part to the challenges of one-to-one translation between C and Python code, we have decided to focus exlusively on the C implementation of the project. \\
@@ -143,16 +149,26 @@ In addition, we have narrowed our initial pool of experiments down to three:
 \end{enumerate}
 
 \section{Next Steps}
+$\bullet$ Integrate already written data structures and methods 
+related to sparse matrix multiplication into the existing C code. \\
+$\bullet$ Determine best partitioning for each matrix for communication. \\
+$\bullet$ Start the process of implementing parallelism within the serial code for the
+naive and sparse matrix implementations. \\
+$\bullet$ Implement threading in the existing code as an additional comparison between threading and MPI. \\
+$\bullet$ Add timings to both the serial and parallel versions of the code to determine 
+calculation and communication differences between the implementations. \\
 
-\section{Feedback Requested from Dr. Bienz}
+The current C code for our Game of Life implementation is written serially but does not include the 
+method of using sparse matrix communication, which is the goal. We plan to integrate that code into the 
+current code then partition the matrices and utilize parallelism.\\ \par
+Additionally, we need to add methods of timing the outcomes and measuring the speed of each of our implementations for comparison, and potentially add threading to the code if we
+have enough time. \par
 
-We would like feedback on the following questions:
-
-\begin{enumerate}
-    \item Which of the three experiments listed above would be the most appropriate/fruitful to focus on?
-    \item What might be causing the error from \texttt{malloc} when attempting to allocate large blocks of memory, and how might we address this?
-    \item When working with problem domains too large to fit in memory on a single node, how would we go about setting up the problem such that each node has the appropriate section of domain?
-\end{enumerate}
+\section{Open Questions}
+$\bullet$ Should we simplify our plans and focus more on a single topic rather than multiple experiments?\\
+$\bullet$ If so, which of the topics seems to be the most fruitful for the project?
+$\bullet$ We are encountering a malloc issue for large large blocks of memory and would like input on how to address this problem. \\
+$\bullet$ When we are working with domains with large memory demands that exceed the capacity of a single node, how would we set up a problem such that each node has the appropriate section of domain?
 
 \printbibliography[
 heading=bibintoc,
