@@ -14,6 +14,6 @@ module load gcc
 
 
 cd $SLURM_SUBMIT_DIR
-gcc ../c/game_of_life.c -o ../c/life.out
+gcc ../c/game_of_life.c -O3 -o ../c/life.out
 
-srun  -n 1  ../c/life.out 10 10 8
+srun  -n 1  ../c/life.out 10 10 100
