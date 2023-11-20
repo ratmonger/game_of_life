@@ -71,6 +71,19 @@ int find_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned co
     return -1;
 }
 
+int get_value_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+    if (row >= mtx->num_rows || col >= mtx->num_cols)
+        return -1;
+
+    for (int i = 0; i < mtx->num_nonzero; ++i) {
+        if ((mtx->row_indices)[i] == row && (mtx->col_indices)[i] == col) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int find_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
     if (idx >= vec->length)
         return -1;
@@ -82,6 +95,19 @@ int find_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
     }
 
     return -1;
+}
+
+int get_value_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
+    if (idx >= vec->length)
+        return -1;
+
+    for (int i = 0; i < vec->num_nonzero; ++i) {
+        if ((vec->indices)[i] == idx) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 int find_value_charvec(struct SparseCharVector* vec, unsigned idx) {
@@ -344,7 +370,7 @@ void matvec_mult(struct COOBooleanMatrix* A, struct SparseBooleanVector* b, stru
         row = (A->row_indices)[i];
         col = (A->col_indices)[i];
 
-        if (find_nonzero_boolvec(b, col) > -1) {
+        if (get_value_boolvec(b, col) == 1) {
             add_at_idx(c, row, 1);
         }
     }
@@ -410,4 +436,17 @@ struct COOBooleanMatrix* generate_COO_stencil_matrix(unsigned n) {
     }
 
     return mtx;
+}
+
+void print_COO_boolmat(struct COOBooleanMatrix* mtx) {
+    for (unsigned i = 0; i < mtx->num_rows; ++i) {
+        for (unsigned j = 0; j < mtx->num_cols; ++j) {
+            if (find_nonzero_boolmat(mtx, i, j) > -1)
+                putchar('1');
+            else
+                putchar('0');
+            putchar(' ');
+        }
+        putchar('\n');
+    }
 }

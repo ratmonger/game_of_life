@@ -1,7 +1,7 @@
 game_of_life:
 	cd c && gcc game_of_life.c -o game_of_life -Werror -Wall
 test_sparse:
-	cd c && gcc test_sparse.c sparse.c -o test_sparse -Werror -Wall
+	cd c && gcc test_sparse.c sparse.c gol_util.c -o test_sparse -Werror -Wall
 progress.pdf:
 	pdflatex --shell-escape --jobname=progress --output-directory=latex latex/progress.tex
 	biber latex/progress.bcf

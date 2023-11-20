@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "sparse.h"
+#include "gol_util.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -46,7 +47,7 @@ unsigned test_set_boolmat() {
 
     set_nonzero_boolmat(mtx, 0, 0);
 
-    if (mtx->num_nonzero == 1 && find_nonzero_boolmat(mtx, 0, 0) == 0) {
+    if (mtx->num_nonzero == 1 && (mtx->row_indices)[0] == 0 && (mtx->col_indices)[0] == 0) {
         free_COO_boolmat(mtx);
         return TRUE;
     } else {
@@ -60,7 +61,7 @@ unsigned test_set_boolvec() {
 
     set_nonzero_boolvec(vec, 0);
 
-    if (vec->num_nonzero == 1 && find_nonzero_boolvec(vec, 0) == 0) {
+    if (vec->num_nonzero == 1 && (vec->indices)[0] == 0) {
         free_boolvec(vec);
         return TRUE;
     } else {
@@ -75,7 +76,7 @@ unsigned test_set_charvec() {
 
     set_value_charvec(vec, 0, 2);
 
-    if (vec->num_nonzero == 1 && find_value_charvec(vec, 0) == 0) {
+    if (vec->num_nonzero == 1 && (vec->indices)[0] == 0) {
         free_charvec(vec);
         return TRUE;
     } else {
@@ -91,7 +92,7 @@ unsigned test_unset_boolmat() {
     set_nonzero_boolmat(mtx, 0, 0);
     unset_nonzero_boolmat(mtx, 0, 0);
 
-    if (mtx->num_nonzero == 0 && find_nonzero_boolmat(mtx, 0, 0) == -1) {
+    if (mtx->num_nonzero == 0 && get_value_boolmat(mtx, 0, 0) == 0) {
         free_COO_boolmat(mtx);
         return TRUE;
     } else {
@@ -106,7 +107,7 @@ unsigned test_unset_boolvec() {
     set_nonzero_boolvec(vec, 0);
     unset_nonzero_boolvec(vec, 0);
 
-    if (vec->num_nonzero == 0 && find_nonzero_boolvec(vec, 0) == -1) {
+    if (vec->num_nonzero == 0 && get_value_boolvec(vec, 0) == 0) {
         free_boolvec(vec);
         return TRUE;
     } else {
@@ -121,7 +122,7 @@ unsigned test_unset_charvec() {
     set_value_charvec(vec, 0, 2);
     unset_value_charvec(vec, 0);
 
-    if (vec->num_nonzero == 0 && find_value_charvec(vec, 0) == -1) {
+    if (vec->num_nonzero == 0 && get_value_charvec(vec, 0) == 0) {
         free_charvec(vec);
         return TRUE;
     } else {
@@ -342,9 +343,73 @@ unsigned test_matvec() {
 }
 
 
+unsigned test_stencil_matrix() {
+    unsigned rows = 5;
+    unsigned result = TRUE;
+    struct COOBooleanMatrix* stencil = generate_COO_stencil_matrix(rows);
+    struct SparseBooleanVector* cells = init_boolvec(rows*rows, rows*rows);
+    struct SparseCharVector* neighbors = init_charvec(rows*rows, rows*rows);
+
+    // print_COO_boolmat(stencil);
+
+    for (unsigned i = 0; i < rows*rows; ++i) {
+        set_nonzero_boolvec(cells, i);
+    }
+
+    matvec_mult(stencil, cells, neighbors);
+
+    // print_neighbors(neighbors);
+
+    unsigned on_left_edge, on_right_edge, on_top_edge, on_bottom_edge;
+    unsigned char expected;
+
+    for (unsigned i = 0; i < rows*rows; ++i) {
+        if (i % rows == 0)
+            on_left_edge = TRUE;
+        else if (i % rows == rows - 1)
+            on_right_edge = TRUE;
+        if (i / rows == 0)
+            on_bottom_edge = TRUE;
+        else if (i / rows == rows - 1)
+            on_top_edge = TRUE;
+
+        if (on_left_edge && on_top_edge)
+            expected  = 3;
+        else if (on_left_edge && on_bottom_edge)
+            expected  = 3;
+        else if (on_right_edge && on_top_edge)
+            expected  = 3;
+        else if (on_right_edge && on_bottom_edge)
+            expected  = 3;
+        else if (on_left_edge || on_right_edge || on_top_edge || on_bottom_edge)
+            expected = 5;
+        else
+            expected = 8;
+
+        if (expected != get_value_charvec(neighbors, i)) {
+            printf("\tIndex: %d; Expected %d neighbors but found %d\n", i, expected, get_value_charvec(neighbors, i));
+            result = FALSE;
+            break;
+        }
+    }
+
+    free_COO_boolmat(stencil);
+    free_boolvec(cells);
+    free_charvec(neighbors);
+
+    return result;
+}
+
 int main() {
     test_boolmat();
     test_boolvec();
     test_charvec();
     test_matvec();
+
+    printf("Testing stencil generation...\n");
+
+    if (test_stencil_matrix())
+        printf("Stencil generation PASSED!\n");
+    else
+        printf("Stencil generation FAILED!\n");
 }
