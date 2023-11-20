@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "sparse.h"
 
 // this file has multiple implementations
 // 1. naive
@@ -14,7 +15,6 @@ char *grid;
 char *copy;
 char *C;
 unsigned long rows,cols;
-
 
 
 //generate the coefficient matrix for the input dimensions
@@ -71,6 +71,54 @@ void generate_C(){
     }
 
     return;
+}
+
+struct COOBooleanMatrix* generate_COO_stencil_matrix(unsigned n) {
+    /* Initializes a stencil matrix for an n x n grid. Note that the
+     * dimensions of the matrix are n*n x n*n.
+    */
+    unsigned rows = n*n;
+    unsigned on_left_edge, on_righ_edge, on_top_edge, on_bottom_edge;
+    unsigned row, col;
+
+    struct COOBooleanMatrix mtx* = init_COO_boolmat(8*rows);
+
+    for (int i = 0; i < n*n; i++){
+        cell_row = i / n;
+        cell_col = i % n;
+
+        on_left_edge = (cell_col == 0);
+        on_right_edge = (cell_col == n - 1);
+        on_top_edge = (cell_row == 0);
+        on_bottom_edge = (cell_row == n - 1);
+
+        // straight neighbors
+        if (!on_left_edge)
+            set_non_zero_boolmat(mtx, i, i-1);
+
+        if (!on_right_edge)
+            set_non_zero_boolmat(mtx, i, i+1);
+
+        if (!on_top_edge)
+            set_non_zero_boolmat(mtx, i, i - n);
+
+        if (!on_bottom_edge)
+            set_non_zero_boolmat(mtx, i, i + n);
+
+        // diagonal neighbors
+        if ((!on_left_edge) && (!on_top_edge))
+            set_non_zero_boolmat(mtx, i, i - n - 1);
+
+        if ((!on_left_edge) && (!on_bottom_edge))
+            set_non_zero_boolmat(mtx, i, i + n - 1);
+
+        if ((!on_right_edge) && (!on_top_edge))
+            set_non_zero_boolmat(mtx, i, i - n + 1);
+
+        if ((!on_right_edge) && (!on_bottom_edge))
+            set_non_zero_boolmat(mtx, i, i + n + 1);
+
+        return mtx;
 }
 
 
