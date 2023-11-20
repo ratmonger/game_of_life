@@ -1,37 +1,45 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 struct COOBooleanMatrix {
-    unsigned* rows;
-    unsigned* cols;
+    unsigned num_rows;
+    unsigned num_cols;
+    unsigned* row_indices;
+    unsigned* col_indices;
     unsigned num_nonzero;
     unsigned capacity;
 };
 
 struct SparseBooleanVector {
+    unsigned length;
     unsigned* indices;
     unsigned num_nonzero;
     unsigned capacity;
 };
 
 struct SparseCharVector {
+    unsigned length;
     unsigned* indices;
     unsigned char* values;
     unsigned num_nonzero;
     unsigned capacity;
 };
 
-struct COOBooleanMatrix* init_COO_boolmat(unsigned init_capacity) {
+struct COOBooleanMatrix* init_COO_boolmat(unsigned rows, unsigned cols, unsigned init_capacity) {
     struct COOBooleanMatrix* mtx = malloc(sizeof(struct COOBooleanMatrix));
-    mtx->rows = malloc(init_capacity*sizeof(unsigned));
-    mtx->cols = malloc(init_capacity*sizeof(unsigned));
+    mtx->num_rows = rows;
+    mtx->num_cols = cols;
+    mtx->row_indices = malloc(init_capacity*sizeof(unsigned));
+    mtx->col_indices = malloc(init_capacity*sizeof(unsigned));
     mtx->num_nonzero = 0;
     mtx->capacity = init_capacity;
 
     return mtx;
 }
 
-struct SparseBooleanVector* init_boolvec(unsigned init_capacity) {
+struct SparseBooleanVector* init_boolvec(unsigned length, unsigned init_capacity) {
     struct SparseBooleanVector* vec = malloc(sizeof(struct SparseBooleanVector));
+    vec->length = length;
     vec->indices = malloc(init_capacity*sizeof(unsigned));
     vec->num_nonzero = 0;
     vec->capacity = init_capacity;
@@ -39,8 +47,9 @@ struct SparseBooleanVector* init_boolvec(unsigned init_capacity) {
     return vec;
 }
 
-struct SparseCharVector* init_charvec(unsigned init_capacity) {
+struct SparseCharVector* init_charvec(unsigned length, unsigned init_capacity) {
     struct SparseCharVector* vec = malloc(sizeof(struct SparseCharVector));
+    vec->length = length;
     vec->indices = malloc(init_capacity*sizeof(unsigned));
     vec->values = malloc(init_capacity*sizeof(char));
     vec->num_nonzero = 0;
@@ -50,8 +59,11 @@ struct SparseCharVector* init_charvec(unsigned init_capacity) {
 }
 
 int find_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+    if (row >= mtx->num_rows || col >= mtx->num_cols)
+        return -1;
+
     for (int i = 0; i < mtx->num_nonzero; ++i) {
-        if ((mtx->rows)[i] == row && (mtx->cols)[i] == col) {
+        if ((mtx->row_indices)[i] == row && (mtx->col_indices)[i] == col) {
             return i;
         }
     }
@@ -60,6 +72,9 @@ int find_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned co
 }
 
 int find_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
+    if (idx >= vec->length)
+        return -1;
+
     for (int i = 0; i < vec->num_nonzero; ++i) {
         if ((vec->indices)[i] == idx) {
             return i;
@@ -69,7 +84,10 @@ int find_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
     return -1;
 }
 
-int find_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
+int find_value_charvec(struct SparseCharVector* vec, unsigned idx) {
+    if (idx >= vec->length)
+        return -1;
+
     for (int i = 0; i < vec->num_nonzero; ++i) {
         if ((vec->indices)[i] == idx) {
             return i;
@@ -79,7 +97,10 @@ int find_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
     return -1;
 }
 
-unsigned char get_value_charvec(struct SparseCharVector* vec, unsigned idx) {
+char get_value_charvec(struct SparseCharVector* vec, unsigned idx) {
+    if (idx >= vec->length)
+        return -1;
+
     for (int i = 0; i < vec->num_nonzero; ++i) {
         if ((vec->indices)[i] == idx) {
             return (vec->values)[i];
@@ -113,22 +134,22 @@ void left_shift_array_char(unsigned char* arr, unsigned int n, unsigned idx) {
     }
 }
 
-void double_size_boolmat(struct COOBooleanMatrix* mtx) {
+void double_capacity_boolmat(struct COOBooleanMatrix* mtx) {
     unsigned* rows_doubled = malloc(2*(mtx->capacity)*sizeof(unsigned));
     unsigned* cols_doubled = malloc(2*(mtx->capacity)*sizeof(unsigned));
 
-    copy_array_unsigned(mtx->rows, rows_doubled, mtx->num_nonzero);
-    copy_array_unsigned(mtx->cols, cols_doubled, mtx->num_nonzero);
+    copy_array_unsigned(mtx->row_indices, rows_doubled, mtx->num_nonzero);
+    copy_array_unsigned(mtx->col_indices, cols_doubled, mtx->num_nonzero);
 
-    free(mtx->rows);
-    free(mtx->cols);
+    free(mtx->row_indices);
+    free(mtx->col_indices);
 
-    mtx->rows = rows_doubled;
-    mtx->cols = cols_doubled;
+    mtx->row_indices = rows_doubled;
+    mtx->col_indices = cols_doubled;
     mtx->capacity *= 2;
 }
 
-void double_size_boolvec(struct SparseBooleanVector* vec) {
+void double_capacity_boolvec(struct SparseBooleanVector* vec) {
     unsigned* indices_doubled = malloc(2*(vec->capacity)*sizeof(unsigned));
 
     copy_array_unsigned(vec->indices, indices_doubled, vec->num_nonzero);
@@ -140,7 +161,7 @@ void double_size_boolvec(struct SparseBooleanVector* vec) {
     vec->capacity *= 2;
 }
 
-void double_size_charvec(struct SparseCharVector* vec) {
+void double_capacity_charvec(struct SparseCharVector* vec) {
     unsigned* indices_doubled = malloc(2*(vec->capacity)*sizeof(unsigned));
     unsigned char* values_doubled = malloc(2*(vec->capacity)*sizeof(char));
 
@@ -156,117 +177,152 @@ void double_size_charvec(struct SparseCharVector* vec) {
     vec->capacity *= 2;
 }
 
-void set_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+int set_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+    if (row >= (mtx->num_rows) || col >= (mtx->num_cols))
+        return -1;
+
     unsigned nnz = mtx->num_nonzero;
 
     if (find_nonzero_boolmat(mtx, row, col) > -1) {
-        return;
+        return 0;
     }
 
     if (nnz == mtx->capacity) {
-        double_size_boolmat(mtx);
+        double_capacity_boolmat(mtx);
     }
 
-    (mtx->rows)[nnz] = row;
-    (mtx->cols)[nnz] = col;
+    (mtx->row_indices)[nnz] = row;
+    (mtx->col_indices)[nnz] = col;
 
     ++(mtx->num_nonzero);
+
+    return 0;
 }
 
-void set_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
+int set_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
+    if (idx >= vec->length)
+        return -1;
+
     unsigned nnz = vec->num_nonzero;
 
     if (find_nonzero_boolvec(vec, idx) > -1) {
-        return;
+        return 0;
     }
 
     if (nnz == vec->capacity) {
-        double_size_boolvec(vec);
+        double_capacity_boolvec(vec);
     }
 
     (vec->indices)[nnz] = idx;
 
     ++(vec->num_nonzero);
+
+    return 0;
 }
 
-void unset_nonzero_charvec(struct SparseCharVector* vec, unsigned idx) {
-    int i = find_nonzero_charvec(vec, idx);
+int unset_value_charvec(struct SparseCharVector* vec, unsigned idx) {
+    if (idx >= vec->length)
+        return -1;
+
+    int i = find_value_charvec(vec, idx);
     int n = vec->num_nonzero - i;
 
     if (i < 0) {
-        return;
+        return 0;
     }
 
     left_shift_array_unsigned(vec->indices, n, i);
     left_shift_array_char(vec->values, n, i);
 
     --(vec->num_nonzero);
+
+    return 0;
 }
 
-void set_nonzero_charvec(struct SparseCharVector* vec, unsigned idx, char val) {
+int set_value_charvec(struct SparseCharVector* vec, unsigned idx, char val) {
+    if (idx >= vec->length)
+        return -1;
+
     if (val == 0) {
-        unset_nonzero_charvec(vec, idx);
-        return;
+        unset_value_charvec(vec, idx);
+        return 0;
     }
 
     unsigned nnz = vec->num_nonzero;
-    int i = find_nonzero_charvec(vec, idx);
+    int i = find_value_charvec(vec, idx);
 
     if (i > -1) {
         (vec->values)[i] = val;
-        return;
+        return 0;
     }
 
     if (nnz == vec->capacity) {
-        double_size_charvec(vec);
+        double_capacity_charvec(vec);
     }
 
     (vec->indices)[nnz] = idx;
     (vec->values)[nnz] = val;
 
     ++(vec->num_nonzero);
+
+    return 0;
 }
 
-void add_at_idx(struct SparseCharVector* vec, unsigned idx, unsigned char val) {
+int add_at_idx(struct SparseCharVector* vec, unsigned idx, unsigned char val) {
+    if (idx >= vec->length)
+        return -1;
+
     int old_val = get_value_charvec(vec, idx);
 
     if (old_val == 0) {
-        set_nonzero_charvec(vec, idx, val);
+        set_value_charvec(vec, idx, val);
     } else {
-        set_nonzero_charvec(vec, idx, old_val + val);
+        set_value_charvec(vec, idx, old_val + val);
     }
+
+    return 0;
 }
 
-void unset_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+int unset_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
+    if (row >= mtx->num_rows || col >= mtx->num_cols)
+        return -1;
+
     int idx = find_nonzero_boolmat(mtx, row, col);
     int n = mtx->num_nonzero - idx;
 
     if (idx < 0) {
-        return;
+        return 0;
     }
 
-    left_shift_array_unsigned(mtx->rows, n, idx);
-    left_shift_array_unsigned(mtx->cols, n, idx);
+    left_shift_array_unsigned(mtx->row_indices, n, idx);
+    left_shift_array_unsigned(mtx->col_indices, n, idx);
 
     --(mtx->num_nonzero);
+
+    return 0;
 }
 
-void unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
+int unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
+    if (idx >= vec->length)
+        return -1;
+
     int i = find_nonzero_boolvec(vec, idx);
     int n = vec->num_nonzero - i;
 
     if (i < 0) {
-        return;
+        return 0;
     }
 
     left_shift_array_unsigned(vec->indices, n, i);
 
     --(vec->num_nonzero);
+
+    return 0;
 }
 
 void free_COO_boolmat(struct COOBooleanMatrix* mtx) {
-    free(mtx->rows);
-    free(mtx->cols);
+    free(mtx->row_indices);
+    free(mtx->col_indices);
     free(mtx);
 }
 
@@ -285,11 +341,73 @@ void matvec_mult(struct COOBooleanMatrix* A, struct SparseBooleanVector* b, stru
     unsigned row, col;
 
     for (int i = 0; i < A->num_nonzero; ++i) {
-        row = (A->rows)[i];
-        col = (A->cols)[i];
+        row = (A->row_indices)[i];
+        col = (A->col_indices)[i];
 
         if (find_nonzero_boolvec(b, col) > -1) {
             add_at_idx(c, row, 1);
         }
     }
+}
+
+void save_boolvec(struct SparseBooleanVector* vec, char* fname) {
+    FILE *fptr;
+
+    fptr = fopen(fname, "w");
+
+    for (int i = 0; i < vec->num_nonzero; ++i) {
+        fputc((vec->indices)[i], fptr);
+        fputc(' ', fptr);
+    }
+
+    fclose(fptr);
+}
+
+struct COOBooleanMatrix* generate_COO_stencil_matrix(unsigned n) {
+    /* Initializes a stencil matrix for an n x n grid. Note that the
+     * dimensions of the matrix are n*n x n*n.
+    */
+    unsigned on_left_edge, on_right_edge, on_top_edge, on_bottom_edge;
+    unsigned cell_row, cell_col;
+    unsigned rows = n*n;
+
+    struct COOBooleanMatrix* mtx = init_COO_boolmat(rows, rows, 8*rows);
+
+    for (unsigned i = 0; i < rows; i++){
+        cell_row = i / n;
+        cell_col = i % n;
+
+        on_left_edge = (cell_col == 0);
+        on_right_edge = (cell_col == n - 1);
+        on_top_edge = (cell_row == 0);
+        on_bottom_edge = (cell_row == n - 1);
+
+        // straight neighbors
+        if (!on_left_edge)
+            set_nonzero_boolmat(mtx, i, i-1);
+
+        if (!on_right_edge)
+            set_nonzero_boolmat(mtx, i, i+1);
+
+        if (!on_top_edge)
+            set_nonzero_boolmat(mtx, i, i - n);
+
+        if (!on_bottom_edge)
+            set_nonzero_boolmat(mtx, i, i + n);
+
+        // diagonal neighbors
+        if ((!on_left_edge) && (!on_top_edge))
+            set_nonzero_boolmat(mtx, i, i - n - 1);
+
+        if ((!on_left_edge) && (!on_bottom_edge))
+            set_nonzero_boolmat(mtx, i, i + n - 1);
+
+        if ((!on_right_edge) && (!on_top_edge))
+            set_nonzero_boolmat(mtx, i, i - n + 1);
+
+        if ((!on_right_edge) && (!on_bottom_edge))
+            set_nonzero_boolmat(mtx, i, i + n + 1);
+    }
+
+    return mtx;
 }

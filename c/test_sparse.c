@@ -5,7 +5,7 @@
 #define FALSE 0
 
 unsigned test_init_boolmat() {
-    struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
+    struct COOBooleanMatrix* mtx = init_COO_boolmat(1, 1, 1);
 
     if (mtx->capacity == 1 && mtx->num_nonzero == 0) {
         free_COO_boolmat(mtx);
@@ -18,7 +18,7 @@ unsigned test_init_boolmat() {
 }
 
 unsigned test_init_boolvec() {
-    struct SparseBooleanVector* vec = init_boolvec(1);
+    struct SparseBooleanVector* vec = init_boolvec(1, 1);
 
     if (vec->capacity == 1 && vec->num_nonzero == 0) {
         free_boolvec(vec); 
@@ -30,7 +30,7 @@ unsigned test_init_boolvec() {
 }
 
 unsigned test_init_charvec() {
-    struct SparseCharVector* vec = init_charvec(1);
+    struct SparseCharVector* vec = init_charvec(1, 1);
 
     if (vec->capacity == 1 && vec->num_nonzero == 0) {
         free_charvec(vec); 
@@ -42,7 +42,7 @@ unsigned test_init_charvec() {
 }
 
 unsigned test_set_boolmat() {
-    struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
+    struct COOBooleanMatrix* mtx = init_COO_boolmat(1, 1, 1);
 
     set_nonzero_boolmat(mtx, 0, 0);
 
@@ -56,7 +56,7 @@ unsigned test_set_boolmat() {
 }
 
 unsigned test_set_boolvec() {
-    struct SparseBooleanVector* vec = init_boolvec(1);
+    struct SparseBooleanVector* vec = init_boolvec(1, 1);
 
     set_nonzero_boolvec(vec, 0);
 
@@ -71,11 +71,11 @@ unsigned test_set_boolvec() {
 }
 
 unsigned test_set_charvec() {
-    struct SparseCharVector* vec = init_charvec(1);
+    struct SparseCharVector* vec = init_charvec(1, 1);
 
-    set_nonzero_charvec(vec, 0, 2);
+    set_value_charvec(vec, 0, 2);
 
-    if (vec->num_nonzero == 1 && find_nonzero_charvec(vec, 0) == 0) {
+    if (vec->num_nonzero == 1 && find_value_charvec(vec, 0) == 0) {
         free_charvec(vec);
         return TRUE;
     } else {
@@ -86,7 +86,7 @@ unsigned test_set_charvec() {
 }
 
 unsigned test_unset_boolmat() {
-    struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
+    struct COOBooleanMatrix* mtx = init_COO_boolmat(1, 1, 1);
 
     set_nonzero_boolmat(mtx, 0, 0);
     unset_nonzero_boolmat(mtx, 0, 0);
@@ -101,7 +101,7 @@ unsigned test_unset_boolmat() {
 }
 
 unsigned test_unset_boolvec() {
-    struct SparseBooleanVector* vec = init_boolvec(1);
+    struct SparseBooleanVector* vec = init_boolvec(1, 1);
 
     set_nonzero_boolvec(vec, 0);
     unset_nonzero_boolvec(vec, 0);
@@ -116,12 +116,12 @@ unsigned test_unset_boolvec() {
 }
 
 unsigned test_unset_charvec() {
-    struct SparseCharVector* vec = init_charvec(1);
+    struct SparseCharVector* vec = init_charvec(1, 1);
 
-    set_nonzero_charvec(vec, 0, 2);
-    unset_nonzero_charvec(vec, 0);
+    set_value_charvec(vec, 0, 2);
+    unset_value_charvec(vec, 0);
 
-    if (vec->num_nonzero == 0 && find_nonzero_charvec(vec, 0) == -1) {
+    if (vec->num_nonzero == 0 && find_value_charvec(vec, 0) == -1) {
         free_charvec(vec);
         return TRUE;
     } else {
@@ -130,8 +130,8 @@ unsigned test_unset_charvec() {
     }
 }
 
-unsigned test_double_size_boolmat() {
-    struct COOBooleanMatrix* mtx = init_COO_boolmat(1);
+unsigned test_double_capacity_boolmat() {
+    struct COOBooleanMatrix* mtx = init_COO_boolmat(2, 2, 1);
 
     set_nonzero_boolmat(mtx, 0, 0);
     set_nonzero_boolmat(mtx, 0, 1);
@@ -145,8 +145,8 @@ unsigned test_double_size_boolmat() {
     }
 }
 
-unsigned test_double_size_boolvec() {
-    struct SparseBooleanVector* vec = init_boolvec(1);
+unsigned test_double_capacity_boolvec() {
+    struct SparseBooleanVector* vec = init_boolvec(2, 1);
 
     set_nonzero_boolvec(vec, 0);
     set_nonzero_boolvec(vec, 1);
@@ -160,11 +160,11 @@ unsigned test_double_size_boolvec() {
     }
 }
 
-unsigned test_double_size_charvec() {
-    struct SparseCharVector* vec = init_charvec(1);
+unsigned test_double_capacity_charvec() {
+    struct SparseCharVector* vec = init_charvec(2, 1);
 
-    set_nonzero_charvec(vec, 0, 2);
-    set_nonzero_charvec(vec, 1, 2);
+    set_value_charvec(vec, 0, 2);
+    set_value_charvec(vec, 1, 2);
 
     if (vec->capacity == 2) {
         free_charvec(vec);
@@ -180,7 +180,7 @@ unsigned test_boolmat() {
     unsigned init_res = test_init_boolmat();
     unsigned set_res = test_set_boolmat();
     unsigned unset_res = test_unset_boolmat();
-    unsigned dbl_res = test_double_size_boolmat();
+    unsigned dbl_res = test_double_capacity_boolmat();
 
     printf("\tInitialization: %d\n", init_res);
     printf("\tSet nonzero: %d\n", set_res);
@@ -202,7 +202,7 @@ unsigned test_boolvec() {
     unsigned init_res = test_init_boolvec();
     unsigned set_res = test_set_boolvec();
     unsigned unset_res = test_unset_boolvec();
-    unsigned dbl_res = test_double_size_boolvec();
+    unsigned dbl_res = test_double_capacity_boolvec();
 
     printf("\tInitialization: %d\n", init_res);
     printf("\tSet nonzero: %d\n", set_res);
@@ -224,7 +224,7 @@ unsigned test_charvec() {
     unsigned init_res = test_init_charvec();
     unsigned set_res = test_set_charvec();
     unsigned unset_res = test_unset_charvec();
-    unsigned dbl_res = test_double_size_charvec();
+    unsigned dbl_res = test_double_capacity_charvec();
 
     printf("\tInitialization: %d\n", init_res);
     printf("\tSet nonzero: %d\n", set_res);
@@ -242,9 +242,9 @@ unsigned test_charvec() {
 }
 
 unsigned test_matvec_identity() {
-    struct COOBooleanMatrix* A = init_COO_boolmat(2);
-    struct SparseBooleanVector* b = init_boolvec(2);
-    struct SparseCharVector* c = init_charvec(2);
+    struct COOBooleanMatrix* A = init_COO_boolmat(2, 2, 2);
+    struct SparseBooleanVector* b = init_boolvec(2, 2);
+    struct SparseCharVector* c = init_charvec(2, 2);
 
     // Make a 2x2 identity matrix
     set_nonzero_boolmat(A, 0, 0);
@@ -269,9 +269,9 @@ unsigned test_matvec_identity() {
 }
 
 unsigned test_matvec_zero() {
-    struct COOBooleanMatrix* A = init_COO_boolmat(2);
-    struct SparseBooleanVector* b = init_boolvec(2);
-    struct SparseCharVector* c = init_charvec(2);
+    struct COOBooleanMatrix* A = init_COO_boolmat(2, 2, 2);
+    struct SparseBooleanVector* b = init_boolvec(2, 2);
+    struct SparseCharVector* c = init_charvec(2, 2);
 
     set_nonzero_boolvec(b, 0);
     set_nonzero_boolvec(b, 1);
@@ -292,9 +292,9 @@ unsigned test_matvec_zero() {
 }
 
 unsigned test_matvec_general() {
-    struct COOBooleanMatrix* A = init_COO_boolmat(2);
-    struct SparseBooleanVector* b = init_boolvec(2);
-    struct SparseCharVector* c = init_charvec(2);
+    struct COOBooleanMatrix* A = init_COO_boolmat(2, 2, 2);
+    struct SparseBooleanVector* b = init_boolvec(2, 2);
+    struct SparseCharVector* c = init_charvec(2, 2);
 
     set_nonzero_boolmat(A, 0, 0);
     set_nonzero_boolmat(A, 0, 1);
