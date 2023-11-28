@@ -478,7 +478,7 @@ void inspect_boolvec(struct SparseBooleanVector* vec) {
 
 void inspect_charvec(struct SparseCharVector* vec) {
 /* Print the actual contents of vector struct, rather than the vector it represents */
-    printf("SparseBooleanVector:\n");
+    printf("SparseCharVector:\n");
     printf("\tlength: %d\n", vec->length);
     printf("\tindices: ");
     print_array_unsigned(vec->indices, vec->capacity);
