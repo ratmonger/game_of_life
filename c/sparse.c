@@ -454,3 +454,30 @@ void print_COO_boolmat(struct COOBooleanMatrix* mtx) {
 void zero_out(struct SparseCharVector* vec) {
     vec->num_nonzero = 0;
 }
+
+void print_array(unsigned* arr, unsigned len) {
+    for (unsigned i = 0; i < len; ++i)
+        printf("%d ", arr[i]);	
+}
+
+void inspect_boolvec(struct SparseBooleanVector* vec) {
+/* Print the actual contents of vector struct, rather than the vector it represents */
+    printf("SparseBooleanVector:\n");
+    printf("\tlength: %d\n", vec->length);
+    printf("\tindices: ");
+    print_array(vec->indices, vec->capacity);
+    printf("\n");
+    printf("\tnum_nonzero: %d", vec->num_nonzero);
+    printf("\tcapacity: %d", vec->capacity);
+}
+
+void inspect_charvec(struct SparseCharVector* vec) {
+/* Print the actual contents of vector struct, rather than the vector it represents */
+    printf("SparseBooleanVector:\n");
+    printf("\tlength: %d\n", vec->length);
+    printf("\tindices: ");
+    print_array(vec->indices, vec->capacity);
+    printf("\n");
+    printf("\tnum_nonzero: %d", vec->num_nonzero);
+    printf("\tcapacity: %d", vec->capacity);
+}
