@@ -351,16 +351,11 @@ int unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
         return 0;
     }
 
-    print_array_unsigned(vec->indices, vec->num_nonzero);
-    printf("Unsetting index %d...\n", i);
-
     int n = vec->num_nonzero - i - 1;
 
     left_shift_array_unsigned(vec->indices, n, i);
 
     --(vec->num_nonzero);
-
-    print_array_unsigned(vec->indices, vec->num_nonzero);
 
     return 0;
 }
