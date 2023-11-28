@@ -1,3 +1,5 @@
+gol_sparse:
+	cd c && gcc gol_sparse.c sparse.c gol_util.c -o gol_sparse -Werror -Wall
 game_of_life:
 	cd c && gcc game_of_life.c -o game_of_life -Werror -Wall
 test_sparse:

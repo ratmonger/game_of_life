@@ -450,3 +450,7 @@ void print_COO_boolmat(struct COOBooleanMatrix* mtx) {
         putchar('\n');
     }
 }
+
+void zero_out(struct SparseCharVector* vec) {
+    vec->num_nonzero = 0;
+}
