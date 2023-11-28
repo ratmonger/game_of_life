@@ -5,7 +5,7 @@
 
 int main() {
    unsigned N = 10;
-   unsigned NUM_STEPS = 5;
+   unsigned NUM_STEPS = 30;
 
    struct COOBooleanMatrix* update_mtx;
    struct SparseBooleanVector* glider;
@@ -26,8 +26,10 @@ int main() {
        print_grid(state);
        printf("\n");
 
+       /*
        print_neighbors(neighbors);
        printf("\n");
+       */
 
        update_state(state, neighbors);
        zero_out(neighbors);
