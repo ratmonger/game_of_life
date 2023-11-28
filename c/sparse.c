@@ -61,11 +61,13 @@ struct SparseCharVector* init_charvec(unsigned length, unsigned init_capacity) {
 void print_array_unsigned(unsigned* arr, unsigned len) {
     for (unsigned i = 0; i < len; ++i)
         printf("%d ", arr[i]);	
+    printf("\n");
 }
 
 void print_array_char(unsigned char* arr, unsigned len) {
     for (unsigned i = 0; i < len; ++i)
         printf("%d ", arr[i]);	
+    printf("\n");
 }
 
 int find_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
@@ -159,14 +161,14 @@ void copy_array_char(unsigned char* a, unsigned char* b, unsigned n) {
 }
 
 void left_shift_array_unsigned(unsigned* arr, unsigned int n, unsigned idx) {
-    for (int i = idx; i < n; ++i) {
-	arr[i] = arr[i+1];
+    for (int i = 0; i < n; ++i) {
+	arr[idx + i] = arr[idx + i + 1];
     }
 }
 
 void left_shift_array_char(unsigned char* arr, unsigned int n, unsigned idx) {
-    for (int i = idx; i < n; ++i) {
-	arr[i] = arr[i+1];
+    for (int i = 0; i < n; ++i) {
+	arr[idx + i] = arr[idx + i + 1];
     }
 }
 
@@ -249,17 +251,7 @@ int set_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
         double_capacity_boolvec(vec);
     }
 
-    if (idx == 4) {
-	print_array_unsigned(vec->indices, vec->capacity);
-	printf("\n");
-	printf("Setting indices[%d] = %d...\n", nnz, idx);
-    }
-
     (vec->indices)[nnz] = idx;
-    if (idx == 4) {
-	print_array_unsigned(vec->indices, vec->capacity);
-	printf("\n");
-    }    	
 
     ++(vec->num_nonzero);
 
@@ -352,17 +344,23 @@ int unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
     if (idx >= vec->length)
         return -1;
 
+
     int i = find_nonzero_boolvec(vec, idx);
 
     if (i < 0) {
         return 0;
     }
 
+    print_array_unsigned(vec->indices, vec->num_nonzero);
+    printf("Unsetting index %d...\n", i);
+
     int n = vec->num_nonzero - i - 1;
 
     left_shift_array_unsigned(vec->indices, n, i);
 
     --(vec->num_nonzero);
+
+    print_array_unsigned(vec->indices, vec->num_nonzero);
 
     return 0;
 }
@@ -483,7 +481,6 @@ void inspect_boolvec(struct SparseBooleanVector* vec) {
     printf("\tlength: %d\n", vec->length);
     printf("\tindices: ");
     print_array_unsigned(vec->indices, vec->capacity);
-    printf("\n");
     printf("\tnum_nonzero: %d\n", vec->num_nonzero);
     printf("\tcapacity: %d", vec->capacity);
 }
@@ -494,10 +491,8 @@ void inspect_charvec(struct SparseCharVector* vec) {
     printf("\tlength: %d\n", vec->length);
     printf("\tindices: ");
     print_array_unsigned(vec->indices, vec->capacity);
-    printf("\n");
     printf("\tvalues: ");
     print_array_char(vec->values, vec->capacity);
-    printf("\n");
     printf("\tnum_nonzero: %d\n", vec->num_nonzero);
     printf("\tcapacity: %d", vec->capacity);
 }
