@@ -59,3 +59,7 @@ struct COOBooleanMatrix* generate_COO_stencil_matrix(unsigned n);
 void print_COO_boolmat(struct COOBooleanMatrix* mtx);
 
 void zero_out(struct SparseCharVector* vec);
+
+void inspect_boolvec(struct SparseBooleanVector* vec);
+
+void inspect_charvec(struct SparseCharVector* vec);
