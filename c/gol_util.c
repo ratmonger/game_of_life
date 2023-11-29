@@ -29,7 +29,7 @@ void print_grid_sparse(struct SparseBooleanVector* grid) {
     }
 }
 
-void print_grid_dense(char* grid, unsigned n) {
+void print_grid_dense(unsigned char* grid, unsigned n) {
     unsigned idx;
 
     for (unsigned i = 0; i < n; ++i) {
@@ -67,21 +67,21 @@ struct SparseBooleanVector* glider_sparse() {
     return glider;
 }
 
-void init_array(char* arr, unsigned n) {
+void init_array(unsigned char* arr, unsigned n) {
     for (int i = 0; i < n; ++i)
             arr[i] = 0;
 }
 
-char* empty_grid_dense(unsigned n) {
-    char* grid = malloc(n*n*sizeof(char));
+unsigned char* empty_grid_dense(unsigned n) {
+    unsigned char* grid = malloc(n*n*sizeof(char));
 
     init_array(grid, n*n);
 
     return grid;
 }
 
-char* glider_dense() {
-    char* glider = malloc(9*sizeof(char));
+unsigned char* glider_dense() {
+    unsigned char* glider = malloc(9*sizeof(char));
     init_array(glider, 9);
 
     glider[1] = 1;
@@ -119,7 +119,7 @@ struct SparseBooleanVector* random_grid_sparse(unsigned n, double density) {
     return grid;
 }
 
-void embed_dense(char* u, char* v, unsigned u_size, unsigned v_size, unsigned i, unsigned j) {
+void embed_dense(unsigned char* u, unsigned char* v, unsigned u_size, unsigned v_size, unsigned i, unsigned j) {
     unsigned u_width = sqrt(u_size);
     unsigned v_width = sqrt(v_size);
     unsigned u_row, u_col, v_row, v_col, u_idx, v_idx;
@@ -166,4 +166,59 @@ void update_state_sparse(struct SparseBooleanVector* state, struct SparseCharVec
             set_nonzero_boolvec(state, i);
         }
     }
+}
+
+unsigned char count_neighbors_dense(unsigned char* grid, unsigned n, unsigned i) {
+    unsigned on_left_edge, on_right_edge, on_top_edge, on_bottom_edge;
+
+    unsigned char neighbors = 0;
+
+    on_left_edge = (i % n == 0);
+    on_right_edge = (i % n == n - 1);
+    on_top_edge = (i / n == 0);
+    on_bottom_edge = (i / n == n - 1);
+    
+    if (!on_left_edge && grid[i - 1] == 1)
+        ++neighbors;
+    if (!on_right_edge && grid[i + 1] == 1)
+        ++neighbors;
+    if (!on_top_edge && grid[i - n] == 1)
+        ++neighbors;
+    if (!on_bottom_edge && grid[i + n] == 1)
+        ++neighbors;
+
+    // Diagonal Neighbors
+    if (!(on_left_edge || on_top_edge) && grid[i - n - 1] == 1)
+        ++neighbors;
+    if (!(on_right_edge || on_top_edge) && grid[i - n + 1] == 1)
+        ++neighbors;
+    if (!(on_left_edge || on_bottom_edge) && grid[i + n - 1] == 1)
+        ++neighbors;
+    if (!(on_right_edge || on_bottom_edge) && grid[i + n + 1] == 1)
+        ++neighbors;
+
+    return neighbors;
+}
+
+unsigned char is_alive(unsigned char cell, unsigned char neighbors) {
+    if (neighbors < 2 || neighbors > 3)
+        return FALSE;
+    else if (neighbors == 3)
+        return TRUE;
+    else if (cell == 1 && neighbors == 2)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+unsigned char* update_state_dense(unsigned char* grid, unsigned n) {
+    unsigned char* new_grid = malloc(n*n*sizeof(char));
+    unsigned char neighbors;
+
+    for (unsigned i = 0; i < n*n; ++i) {
+        neighbors = count_neighbors_dense(grid, n, i);
+        new_grid[i] = is_alive(grid[i], neighbors);
+    }
+
+    return new_grid;
 }

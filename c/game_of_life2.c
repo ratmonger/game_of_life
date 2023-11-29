@@ -4,6 +4,8 @@
 #include <math.h>
 #include <time.h>   
 #include <mpi.h>
+#include "gol_util.h"
+#include "parallel.h"
 
 // this file has multiple implementations
 // 1. naive
@@ -13,32 +15,21 @@
 // see the main() function for how to toggle these on/off
 
 
-char *grid;
-char *copy;
-char *C;
+unsigned char *grid;
+unsigned char *copy;
+unsigned char *C;
 unsigned long rows,cols;
 
 
-struct SrcVectors{
-  char *partition;
-  char *top;
-  char *bottom;
-  char *right;
-  char *left;
-  char topR;
-  char topL;
-  char botL;
-  char botR;
-};
 struct RecvVectors{
-  char *top;
-  char *bottom;
-  char *right;
-  char *left;
-  char topR;
-  char topL;
-  char botL;
-  char botR;
+  unsigned char *top;
+  unsigned char *bottom;
+  unsigned char *right;
+  unsigned char *left;
+  unsigned char topR;
+  unsigned char topL;
+  unsigned char botL;
+  unsigned char botR;
 };
 
 
@@ -135,9 +126,9 @@ void run_Dense_Mult(int ticks){
   // int sum;
   int count=ticks;
   unsigned long i,j,N;
-  char *temp;
+  unsigned char *temp;
   unsigned int liveNeighbors;
-  char cellState;
+  unsigned char cellState;
   int *loop;
   int forever = 1;
 
@@ -187,16 +178,7 @@ void run_Dense_Mult(int ticks){
   free(copy);
 }
 
-void print_sub(char *sub, int n, int rank){
-  unsigned long i,j;
-  printf("Sub_Grid of rank %d:\n", rank);
-  for (i =0; i < n+2; i++){
-    for (j = 0; j < n+2; j++){
-      printf("%c", 48+sub[i*(n+2) + j]);
-    }
-    printf("\n");
-  }
-}
+
 // run the game for number of ticks  using naive method
 void run_naive(int ticks, unsigned long r_start, unsigned long r_end,  unsigned long c_start, unsigned long c_end, unsigned long k){
   unsigned long i,j,n;
@@ -205,7 +187,7 @@ void run_naive(int ticks, unsigned long r_start, unsigned long r_end,  unsigned 
   char cellState; // state of the cell: alive or dead
   unsigned long WIDTH = (cols+2);
   unsigned long dim = k*k;
-  char *temp;
+  unsigned char *temp;
   int *loop = 0;
   
   printf("rows %ld, col %ld\n", rows, cols);
@@ -260,67 +242,8 @@ void run_naive(int ticks, unsigned long r_start, unsigned long r_end,  unsigned 
   }
   free(copy);
 }
-struct SrcVectors partitions(int ticks, int rank, unsigned long num_procs, unsigned long r_rows, unsigned long r_cols, unsigned long n){
 
-  struct SrcVectors srcVec;
-    
-  srcVec.partition = calloc(n, sizeof(char));//has an extra dimension built in but is 0 at first
-  unsigned long r_end = r_rows+n-2;
-  unsigned long c_end = r_cols+n-2;
-  unsigned long k = 1;//leaves buffer cells 0
-  unsigned long q = 1;
-  unsigned long i, j, t, p, a=0, b=0, c=0, d=0;
- 
-
-  srcVec.top = calloc(n, sizeof(char));//init to all zeros
-  srcVec.bottom = calloc(n, sizeof(char));
-  srcVec.right = calloc(n, sizeof(char));
-  srcVec.left = calloc(n, sizeof(char));
-  
-  //puts data from grid into partition grid
-  //puts edge vectors into separate arrays
-
-  for (i = r_rows; i < r_end; i++){
-    q = 1;
-    for (j = r_cols; j< c_end; j++){ 
-      t =k*(n)+q;
-      p = i*(rows+2)+j;
-      srcVec.partition[t]= grid[p];
-
-      if(t== (n+q)){
-	srcVec.top[a]=grid[p];
-	a++;
-      }if(t==(n-2)*n+q){
-	srcVec.bottom[b]= grid[p];
-	b++;
-      }if(t==(k*n+1)){
-	srcVec.left[c]= grid[p];
-	c++;
-      }if(t==(k*n+(n-2))){
-	srcVec.right[d]= grid[p];
-	d++;
-      }
-      //Diags
-      if(t== n+1){
-	srcVec.topL=grid[p];
-      }if(t==((n-2)*n+1)){
-	srcVec.botL= grid[p];
-      }if(t==n+(n-2)){
-	srcVec.topR= grid[p];
-      }if(t==((n-2)*n+(n-2))){
-	srcVec.botR= grid[p];
-      }
-      q++;
-    }
-    printf("\n");
-    k++;
-  }
-   
-  return srcVec;
-}
-
-
-struct SrcVectors get_Vectors(int rank, unsigned long k, struct SrcVectors srcV, unsigned long num_procs){
+struct SrcVectors get_Vectors(int rank, unsigned long k, struct SrcVectors* srcV, unsigned long num_procs){
   struct RecvVectors recvV;
   unsigned long i, j, n;
   int tag = 1234;
@@ -383,27 +306,27 @@ struct SrcVectors get_Vectors(int rank, unsigned long k, struct SrcVectors srcV,
       n = (i * (k+2)) + j;
             
       if(n==j && n!=0 && j!= width-1){//first row 
-	srcV.partition[n]= recvV.top[t];
+	srcV.interior[n]= recvV.top[t];
 	t++;
       }if(n==((width-1)*width+j) && j!=0 && j!=width-1 ){//bottom row
-	srcV.partition[n]= recvV.bottom[b];
+	srcV.interior[n]= recvV.bottom[b];
 	b++;
       }if(n==(i*(width)+(width-1))&& i!=0 && i!=width-1){//right column
-	srcV.partition[n]= recvV.right[r];
+	srcV.interior[n]= recvV.right[r];
 	r++;
       }if(n==(i*(width)+0)&& i!=0 && i!=width-1){//left column
-	srcV.partition[n]= recvV.left[l];
+	srcV.interior[n]= recvV.left[l];
 	l++;
       }
       //diags
       if(n == width-1){//top right
-	srcV.partition[n]=recvV.topR;
+	srcV.interior[n]=recvV.topR;
       }if(n == 0){//top left
-	srcV.partition[n]=recvV.topL;
+	srcV.interior[n]=recvV.topL;
       }if(n == (width-1)*(width)){//bottom left
-	srcV.partition[n]=recvV.botL;
+	srcV.interior[n]=recvV.botL;
       }if(n == (width-1)*(width) +(width-1)){//bottom right
-	srcV.partition[n]=recvV.botR;
+	srcV.interior[n]=recvV.botR;
       }
     }
   }
@@ -415,23 +338,27 @@ struct SrcVectors get_Vectors(int rank, unsigned long k, struct SrcVectors srcV,
 }
 
 
-void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long r_rows, unsigned long r_cols, unsigned long k, struct SrcVectors p){
+void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long r_rows, unsigned long r_cols, unsigned long k, struct SrcVectors* p){
     
   int count=ticks;//total ticks left to loop
   int *loop = 0;//a toggle variable: loop for ticks or forever
   unsigned long i,j,n;
   int forever = 1;
   unsigned int liveNeighbors; // neighbors of a given cell
-  char cellState; // state of the cell: alive or dead
+  unsigned char cellState; // state of the cell: alive or dead
   unsigned long WIDTH = k+2;
   unsigned long dim = k*k;
-  char *temp;
+  unsigned char *temp;
   // struct RecvVectors recvV;
   copy = malloc(dim * sizeof(char));
 
   //get the vectors from other processes here, will be all zeros if no processes to communicate with
   MPI_Barrier(MPI_COMM_WORLD);
   p = get_Vectors(rank, k, p, num_procs);
+
+  printf("Partition (rank %d):\n\n", rank);
+  print_grid_dense(p->interior, k);
+  printf("\n");
 
   // set loop type: ticks or indefinite loop
   if (ticks > 0){
@@ -445,9 +372,9 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
     
   while (*loop){
         
-    //if(rank == 0){
-      print_sub(p.partition,k, rank);//prints each subgrid
-    //}
+    if(rank == 0){
+      print_grid_dense(p->interior, k);//prints each subgrid
+    }
         
     forever = 0;
 
@@ -455,17 +382,17 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
       for (j = 1; j< k; j++){
                 
 	n = i * (k+2) + j;
-	liveNeighbors = p.partition[n - 1] + //left
-	  p.partition[n + 1] + //right  
-	  p.partition[n - (WIDTH)] +// top
-	  p.partition[n + (WIDTH)] +//bottom
-	  p.partition[n - (WIDTH) - 1]+//diag upleft
-	  p.partition[n + (WIDTH) - 1]+//diag downleft
-	  p.partition[n - (WIDTH) + 1]+//diag upright
-	  p.partition[n + (WIDTH) + 1];// diag downright
+	liveNeighbors = (p->interior)[n - 1] + //left
+	  (p->interior)[n + 1] + //right  
+	  (p->interior)[n - (WIDTH)] +// top
+	  (p->interior)[n + (WIDTH)] +//bottom
+	  (p->interior)[n - (WIDTH) - 1]+//diag upleft
+	  (p->interior)[n + (WIDTH) - 1]+//diag downleft
+	  (p->interior)[n - (WIDTH) + 1]+//diag upright
+	  (p->interior)[n + (WIDTH) + 1];// diag downright
             
 
-	cellState = p.partition[n];
+	cellState = (p->interior)[n];
 	forever += cellState;
 	//if(rank == 0){
 	  printf("cellstate %d, forever %d\n", cellState, forever);
@@ -473,7 +400,7 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
 	  printf("liveNeighbors %d\n", liveNeighbors);
 	//}
                 
-	if (p.partition[n]) { 
+	if ((p->interior)[n]) { 
 	  if (liveNeighbors < 2 || liveNeighbors > 3) {
 	    copy[n] = 0; // dead due to underpopulation or overpopulation
 	  } else {
@@ -493,8 +420,8 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
     //MPI_Bcast(&grid, (rows + 2) * WIDTH, MPI_CHAR, 0, MPI_COMM_WORLD);
     count--;//decrement ticks
 
-    temp = p.partition;//swap the grids (new and old)
-    p.partition = copy;
+    temp = p->interior;//swap the grids (new and old)
+    p->interior = copy;
     copy = temp;
   }
 
@@ -511,7 +438,7 @@ int main( int argc, char *argv[] )  {
   // int row_temp,col_temp;
   int ticks;
   float start, end;
-  struct SrcVectors part;
+  struct SrcVectors* part;
   unsigned long r_row; 
   unsigned long r_col; 
   unsigned long n; 
@@ -547,7 +474,17 @@ int main( int argc, char *argv[] )  {
 
     if (rows > 0 &&  cols > 0){
         
-      init_grid();
+      // init_grid();
+      grid = empty_grid_dense(rows + 2);
+
+      if (rank == 0) {
+          unsigned char* glider = glider_dense();
+          embed_dense(glider, grid, 9, (rows + 2)*(rows + 2), 1, 3);
+      }
+
+      printf("Initial grid (rank %d):\n\n", rank);
+      print_grid_dense(grid, rows + 2);
+      printf("\n");
 
       // run the naive implementation
       //run_naive(ticks);
@@ -555,7 +492,7 @@ int main( int argc, char *argv[] )  {
       MPI_Barrier(MPI_COMM_WORLD);
       start = MPI_Wtime();   
 
-      part  = partitions(ticks, rank, num_procs, r_row, r_col, n + 2);//sets up partition
+      part = partitions(grid, rows);//sets up.interior
       parallel_naive(ticks, rank, num_procs, r_row, r_col, n, part);//runs naive method
 
       end = MPI_Wtime() - start;

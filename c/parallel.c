@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "gol_util.h"
 
 struct SrcVectors{
     unsigned char *interior;
@@ -67,4 +68,70 @@ struct SrcVectors* partitions(unsigned char* grid, unsigned long n){
     srcVec->botR = grid[(n + 2)*(n + 2) - 1];
 
     return srcVec;
+}
+
+unsigned char count_neighbors_parallel(struct SrcVectors* partition, unsigned n, unsigned i) {
+    unsigned char on_left_edge, on_right_edge, on_top_edge, on_bottom_edge;
+    unsigned char neighbors = 0;
+
+    on_left_edge = (i % n == 0);
+    on_right_edge = (i % n == n - 1);
+    on_top_edge = (i / n == 0);
+    on_bottom_edge = (i / n == n - 1);
+    
+    // Interior neighbors
+    
+    if (!on_left_edge && (partition->interior)[i - 1] == 1)
+        ++neighbors;
+    if (!on_right_edge && (partition->interior)[i + 1] == 1)
+        ++neighbors;
+    if (!on_top_edge && (partition->interior)[i - n] == 1)
+        ++neighbors;
+    if (!on_bottom_edge && (partition->interior)[i + n] == 1)
+        ++neighbors;
+
+    if (!(on_left_edge || on_top_edge) && (partition->interior)[i - n - 1] == 1)
+        ++neighbors;
+    if (!(on_left_edge || on_bottom_edge) && (partition->interior)[i - n - 1] == 1)
+        ++neighbors;
+    if (!(on_right_edge || on_top_edge) && (partition->interior)[i - n - 1] == 1)
+        ++neighbors;
+    if (!(on_right_edge || on_bottom_edge) && (partition->interior)[i - n - 1] == 1)
+        ++neighbors;
+
+    // Exterior neighbors
+    if (on_left_edge && (partition->left)[i / n] == 1)
+        ++neighbors;
+    if (on_right_edge && (partition->right)[i / n] == 1)
+        ++neighbors;
+    if (on_top_edge && (partition->top)[i % n] == 1)
+        ++neighbors;
+    if (on_bottom_edge && (partition->bottom)[i % n] == 1)
+        ++neighbors;
+
+    if (on_left_edge && on_top_edge && partition->topL == 1)
+        ++neighbors;
+    if (on_left_edge && on_bottom_edge && partition->botL == 1)
+        ++neighbors;
+    if (on_right_edge && on_top_edge && partition->topR == 1)
+        ++neighbors;
+    if (on_right_edge && on_bottom_edge && partition->botR == 1)
+        ++neighbors;
+
+    return neighbors;
+}
+
+void update_state_parallel(struct SrcVectors* grid, unsigned n) {
+    unsigned char neighbors;
+    unsigned char* new_grid = calloc(n*n, sizeof(char));
+
+    for (unsigned i = 0; i < n*n; ++i) {
+        neighbors = count_neighbors_parallel(grid, n, i);
+        
+        if (is_alive((grid->interior)[i], neighbors))
+            new_grid[i] = 1;
+    }
+
+    free(grid->interior);
+    grid->interior = new_grid;
 }
