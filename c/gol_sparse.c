@@ -14,7 +14,7 @@ int main() {
 
    state = init_boolvec(N*N, 16);
    neighbors = init_charvec(N*N, 16);
-   glider = make_glider_sparse();
+   glider = glider_sparse();
 
    embed_sparse(glider, state, 0, 0);
 

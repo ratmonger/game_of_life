@@ -1,12 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include "sparse.h"
 
 #define TRUE 1
 #define FALSE 0
 
 const char ZERO_CHAR = 48;
+
+
+double rand_double() {
+    return (float) rand() / (float) RAND_MAX;
+}
+
 
 void print_grid_sparse(struct SparseBooleanVector* grid) {
     unsigned rows = (unsigned) sqrt(grid->length);
@@ -48,7 +55,7 @@ void print_neighbors_sparse(struct SparseCharVector* neighbors) {
     }
 }
 
-struct SparseBooleanVector* make_glider_sparse() {
+struct SparseBooleanVector* glider_sparse() {
     struct SparseBooleanVector* glider = init_boolvec(9, 5);
 
     set_nonzero_boolvec(glider, 1);
@@ -73,7 +80,7 @@ char* empty_grid_dense(unsigned n) {
     return grid;
 }
 
-char* make_glider_dense() {
+char* glider_dense() {
     char* glider = malloc(9*sizeof(char));
     init_array(glider, 9);
 
@@ -84,6 +91,32 @@ char* make_glider_dense() {
     glider[8] = 1;
 
     return glider;   
+}
+
+char* random_grid_dense(unsigned n, double density) {
+    char* grid = malloc(n*n*sizeof(char));
+    
+    for (unsigned i = 0; i < n*n; ++i) {
+        if (rand_double() < density) {
+            grid[i] = 1;
+        } else {
+            grid[i] = 0;
+        }
+    }
+
+    return grid;
+}
+
+struct SparseBooleanVector* random_grid_sparse(unsigned n, double density) {
+    struct SparseBooleanVector* grid = init_boolvec(n*n, 1);
+
+    for (unsigned i = 0; i < n*n; ++i) {
+        if (rand_double() < density) {
+            set_nonzero_boolvec(grid, i);
+        }
+    }
+
+    return grid;
 }
 
 void embed_dense(char* u, char* v, unsigned u_size, unsigned v_size, unsigned i, unsigned j) {

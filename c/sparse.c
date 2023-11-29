@@ -493,7 +493,7 @@ void inspect_charvec(struct SparseCharVector* vec) {
 }
 
 struct COOBooleanMatrix* COO_boolmat_from_dense(unsigned char** arr, unsigned rows, unsigned cols) {
-    COOBooleanMatrix mtx* = init_COO_boolmat(rows, cols, 1);
+    struct COOBooleanMatrix* mtx = init_COO_boolmat(rows, cols, 1);
 
     for (unsigned i = 0; i < rows; ++i) {
         for(unsigned j = 0; j < cols; ++j) {
@@ -506,10 +506,10 @@ struct COOBooleanMatrix* COO_boolmat_from_dense(unsigned char** arr, unsigned ro
 }
 
 struct SparseBooleanVector* sparse_boolvec_from_dense(unsigned char* arr, unsigned len) {
-    SparseBooleanVector vec* = init_boolvec(len, 1);
+    struct SparseBooleanVector* vec = init_boolvec(len, 1);
 
     for (unsigned i = 0; i < len; ++i) {
-        if(arr[i] != 0)
+        if(arr[i] != 0) {
             set_nonzero_boolvec(vec, i);
         }
     }
@@ -518,12 +518,12 @@ struct SparseBooleanVector* sparse_boolvec_from_dense(unsigned char* arr, unsign
 }
 
 
-struct SparaeCharVector* sparse_charvec_from_dense(unsigned char* vec, unsigned len) {
-    SparseCharVector vec* = init_charvec(len, 1);
+struct SparseCharVector* sparse_charvec_from_dense(unsigned char* arr, unsigned len) {
+    struct SparseCharVector* vec = init_charvec(len, 1);
 
     for (unsigned i = 0; i < len; ++i) {
-        if(arr[i] != 0)
-            set_value_charvec(vec, i);
+        if(arr[i] != 0) {
+            set_value_charvec(vec, i, arr[i]);
         }
     }
 

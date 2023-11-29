@@ -124,4 +124,16 @@ void inspect_charvec(struct SparseCharVector* vec);
 /* Print out the internals of the sparse char vector struct. Intended for debugging. */
 
 
+struct COOBooleanMatrix* COO_boolmat_from_dense(unsigned char** arr, unsigned rows, unsigned cols);
+/* Convert a dense two-dimensional array into a sparse boolean matrix. */
+
+
+struct SparseBooleanVector* sparse_boolvec_from_dense(unsigned char* arr, unsigned len);
+/* Convert a dense char array into a sparse boolean vector. */
+
+
+struct SparseCharVector* sparse_charvec_from_dense(unsigned char* arr, unsigned len);
+/* Convert a dense char array into a sparse char vector. */
+
 #endif
+

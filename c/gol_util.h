@@ -14,6 +14,10 @@ void update_state_sparse(struct SparseBooleanVector* state, struct SparseCharVec
 
 char* empty_grid_dense(unsigned n);
 
-struct SparseBooleanVector* make_glider_sparse();
+char* random_grid_dense(unsigned n, double density);
 
-char* make_glider_dense();
+struct SparseBooleanVector* random_grid_sparse(unsigned n, double density);
+
+struct SparseBooleanVector* glider_sparse();
+
+char* glider_dense();
