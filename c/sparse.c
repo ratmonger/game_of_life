@@ -491,3 +491,41 @@ void inspect_charvec(struct SparseCharVector* vec) {
     printf("\tnum_nonzero: %d\n", vec->num_nonzero);
     printf("\tcapacity: %d", vec->capacity);
 }
+
+struct COOBooleanMatrix* COO_boolmat_from_dense(unsigned char** arr, unsigned rows, unsigned cols) {
+    COOBooleanMatrix mtx* = init_COO_boolmat(rows, cols, 1);
+
+    for (unsigned i = 0; i < rows; ++i) {
+        for(unsigned j = 0; j < cols; ++j) {
+            if(arr[i][j] != 0)
+                set_nonzero_boolmat(mtx, i, j);
+        }
+    }
+
+    return mtx;
+}
+
+struct SparseBooleanVector* sparse_boolvec_from_dense(unsigned char* arr, unsigned len) {
+    SparseBooleanVector vec* = init_boolvec(len, 1);
+
+    for (unsigned i = 0; i < len; ++i) {
+        if(arr[i] != 0)
+            set_nonzero_boolvec(vec, i);
+        }
+    }
+
+    return vec;
+}
+
+
+struct SparaeCharVector* sparse_charvec_from_dense(unsigned char* vec, unsigned len) {
+    SparseCharVector vec* = init_charvec(len, 1);
+
+    for (unsigned i = 0; i < len; ++i) {
+        if(arr[i] != 0)
+            set_value_charvec(vec, i);
+        }
+    }
+
+    return vec;
+}
