@@ -14,16 +14,16 @@ int main() {
 
    state = init_boolvec(N*N, 16);
    neighbors = init_charvec(N*N, 16);
-   glider = generate_glider();
+   glider = glider_sparse();
 
-   embed(glider, state, 0, 0);
+   embed_sparse(glider, state, 0, 0);
 
    update_mtx = generate_COO_stencil_matrix(N);
 
    for (unsigned i = 0; i < NUM_STEPS; ++i) {
        matvec_mult(update_mtx, state, neighbors);
 
-       print_grid(state);
+       print_grid_sparse(state);
        printf("\n");
 
        /*
@@ -31,7 +31,7 @@ int main() {
        printf("\n");
        */
 
-       update_state(state, neighbors);
+       update_state_sparse(state, neighbors);
        zero_out(neighbors);
    }
 

@@ -13,6 +13,8 @@ progress.pdf:
 clean:
 	rm -f c/test_sparse
 	rm -f c/game_of_life
+	rm -f c/gol_sparse
+	rm -f c/gol_parallel
 	rm -f latex/progress.pdf
 	rm -f latex/*.aux
 	rm -f latex/*.log
