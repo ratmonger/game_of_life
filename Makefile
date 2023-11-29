@@ -3,7 +3,7 @@ gol_sparse:
 game_of_life:
 	cd c && gcc game_of_life.c -o game_of_life -Werror -Wall -lm
 gol_parallel:
-	cd c && mpicc game_of_life2.c -o gol_parallel -Werror -Wall
+	cd c && mpicc game_of_life2.c gol_util.c sparse.c -o gol_parallel -Werror -Wall
 test_sparse:
 	cd c && gcc test_sparse.c sparse.c gol_util.c -o test_sparse -Werror -Wall
 progress.pdf:

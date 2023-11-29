@@ -8,16 +8,7 @@
 
 const char ZERO_CHAR = 48;
 
-void print_grid_dense(char** grid, unsigned rows, unsigned cols) {
-    for (unsigned i = 0; i < rows; ++i) {
-        for(unsigned j = 0; j < cols; ++j) {
-            printf("%d ", grid[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void print_grid(struct SparseBooleanVector* grid) {
+void print_grid_sparse(struct SparseBooleanVector* grid) {
     unsigned rows = (unsigned) sqrt(grid->length);
     unsigned char value;
 
@@ -31,7 +22,19 @@ void print_grid(struct SparseBooleanVector* grid) {
     }
 }
 
-void print_neighbors(struct SparseCharVector* neighbors) {
+void print_grid_dense(char* grid, unsigned n) {
+    unsigned idx;
+
+    for (unsigned i = 0; i < n; ++i) {
+        for (unsigned j = 0; j < n; ++j) {
+            idx = n * i + j;
+            printf("%d ", grid[idx]);
+        }
+        printf("\n");
+    }
+}
+
+void print_neighbors_sparse(struct SparseCharVector* neighbors) {
     unsigned rows = (unsigned) sqrt(neighbors->length);
     unsigned char value;
 
@@ -45,7 +48,7 @@ void print_neighbors(struct SparseCharVector* neighbors) {
     }
 }
 
-struct SparseBooleanVector* generate_glider() {
+struct SparseBooleanVector* make_glider_sparse() {
     struct SparseBooleanVector* glider = init_boolvec(9, 5);
 
     set_nonzero_boolvec(glider, 1);
@@ -57,7 +60,49 @@ struct SparseBooleanVector* generate_glider() {
     return glider;
 }
 
-void embed(struct SparseBooleanVector* u, struct SparseBooleanVector* v, unsigned i, unsigned j) {
+void init_array(char* arr, unsigned n) {
+    for (int i = 0; i < n; ++i)
+            arr[i] = 0;
+}
+
+char* empty_grid_dense(unsigned n) {
+    char* grid = malloc(n*n*sizeof(char));
+
+    init_array(grid, n*n);
+
+    return grid;
+}
+
+char* make_glider_dense() {
+    char* glider = malloc(9*sizeof(char));
+    init_array(glider, 9);
+
+    glider[1] = 1;
+    glider[5] = 1;
+    glider[6] = 1;
+    glider[7] = 1;
+    glider[8] = 1;
+
+    return glider;   
+}
+
+void embed_dense(char* u, char* v, unsigned u_size, unsigned v_size, unsigned i, unsigned j) {
+    unsigned u_width = sqrt(u_size);
+    unsigned v_width = sqrt(v_size);
+    unsigned u_row, u_col, v_row, v_col, u_idx, v_idx;
+
+    for (u_idx = 0; u_idx < u_size; ++u_idx) {
+        u_row = u_idx / u_width;
+        u_col = u_idx % u_width;
+
+        v_row = u_row + i;
+        v_col = u_col + j;
+        v_idx = v_row * v_width + v_col;
+        v[v_idx] = u[u_idx];
+    }
+}
+
+void embed_sparse(struct SparseBooleanVector* u, struct SparseBooleanVector* v, unsigned i, unsigned j) {
     unsigned u_width = sqrt(u->length);
     unsigned v_width = sqrt(v->length);
     unsigned u_row, u_col, v_row, v_col, u_idx, v_idx;
@@ -76,7 +121,7 @@ void embed(struct SparseBooleanVector* u, struct SparseBooleanVector* v, unsigne
     }
 }
 
-void update_state(struct SparseBooleanVector* state, struct SparseCharVector* neighbors) {
+void update_state_sparse(struct SparseBooleanVector* state, struct SparseCharVector* neighbors) {
     unsigned num_nbrs;
 
     for (unsigned i = 0; i < state->length; ++i) {
