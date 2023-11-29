@@ -1,13 +1,13 @@
 struct SrcVectors{
-    char *interior;
-    char *top;
-    char *bottom;
-    char *right;
-    char *left;
-    char topR;
-    char topL;
-    char botL;
-    char botR;
+    unsigned char *interior;
+    unsigned char *top;
+    unsigned char *bottom;
+    unsigned char *right;
+    unsigned char *left;
+    unsigned char topR;
+    unsigned char topL;
+    unsigned char botL;
+    unsigned char botR;
 };
 
 void init_partition(struct SrcVectors* part, unsigned n);

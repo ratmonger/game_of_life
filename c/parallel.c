@@ -1,13 +1,15 @@
+#include <stdlib.h>
+
 struct SrcVectors{
-    char *interior;
-    char *top;
-    char *bottom;
-    char *right;
-    char *left;
-    char topR;
-    char topL;
-    char botL;
-    char botR;
+    unsigned char *interior;
+    unsigned char *top;
+    unsigned char *bottom;
+    unsigned char *right;
+    unsigned char *left;
+    unsigned char topR;
+    unsigned char topL;
+    unsigned char botL;
+    unsigned char botR;
 };
 
 
@@ -22,7 +24,7 @@ void init_partition(struct SrcVectors* part, unsigned n) {
 
 void copy_interior(unsigned char* A, unsigned char* B, unsigned n) {
 /* Assumes A has (n + 2)^2 elements, B has n^2 elements */
-    unsigned A_row, A_col, B_idx;
+    unsigned A_row, A_col, A_idx;
 
     for (unsigned i = 0; i < n*n; ++i) {
         A_row = i / n + 1;
@@ -34,14 +36,14 @@ void copy_interior(unsigned char* A, unsigned char* B, unsigned n) {
 }
 
 
-void copy_row_interior(unsigned char* A, char* b, unsigned n, unsigned row) {
+void copy_row_interior(unsigned char* A, unsigned char* b, unsigned n, unsigned row) {
     for(unsigned i = 0; i < n; ++i) {
         b[i] = A[row*(n + 2) + i + 1];
     }
 }
 
 
-void copy_col_interior(unsigned char* A, char* b, unsigned n, unsigned col) {
+void copy_col_interior(unsigned char* A, unsigned char* b, unsigned n, unsigned col) {
     for(unsigned i = 0; i < n; ++i) {
         b[i] = A[(n + 2)*(i + 1) + col];
     }
@@ -49,12 +51,10 @@ void copy_col_interior(unsigned char* A, char* b, unsigned n, unsigned col) {
 
 
 struct SrcVectors* partitions(unsigned char* grid, unsigned long n){
-    struct SrcVectors* srcVec;
-    init_partion(srcVec);
+    struct SrcVectors* srcVec = malloc(sizeof(struct SrcVectors));
+    init_partition(srcVec, n);
 
-    unsigned long grid_row, grid_col;
-
-    copy_interior(grid, srcVec->interior);
+    copy_interior(grid, srcVec->interior, n);
 
     copy_row_interior(grid, srcVec->top, n, 0);
     copy_row_interior(grid, srcVec->bottom, n, n + 1);
