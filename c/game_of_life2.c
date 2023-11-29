@@ -48,7 +48,7 @@ struct RecvVectors{
 // until FIXED!!!
 void generate_C(){
 
-  unsigned long i,j,n,row_offset;
+  unsigned long i,n,row_offset;
   int on_left_edge;
   int on_right_edge;
   int on_top_edge;
@@ -132,7 +132,7 @@ void print_grid(){
 // perform dense multiplication using C matrix
 void run_Dense_Mult(int ticks){
 
-  int sum;
+  // int sum;
   int count=ticks;
   unsigned long i,j,N;
   char *temp;
@@ -206,7 +206,7 @@ void run_naive(int ticks, unsigned long r_start, unsigned long r_end,  unsigned 
   unsigned long WIDTH = (cols+2);
   unsigned long dim = k*k;
   char *temp;
-  int *loop;
+  int *loop = 0;
   
   printf("rows %ld, col %ld\n", rows, cols);
   // allocate the array to copy the new updated grid
@@ -417,7 +417,7 @@ struct SrcVectors get_Vectors(int rank, unsigned long k, struct SrcVectors srcV,
 void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long r_rows, unsigned long r_cols, unsigned long k, struct SrcVectors p){
     
   int count=ticks;//total ticks left to loop
-  int *loop;//a toggle variable: loop for ticks or forever
+  int *loop = 0;//a toggle variable: loop for ticks or forever
   unsigned long i,j,n;
   int forever = 1;
   unsigned int liveNeighbors; // neighbors of a given cell
@@ -425,7 +425,7 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
   unsigned long WIDTH = k+2;
   unsigned long dim = k*k;
   char *temp;
-  struct RecvVectors recvV;
+  // struct RecvVectors recvV;
   copy = malloc(dim * sizeof(char));
 
   //get the vectors from other processes here, will be all zeros if no processes to communicate with
@@ -507,7 +507,8 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
 
 int main( int argc, char *argv[] )  {
 
-  int row_temp,col_temp, ticks;
+  // int row_temp,col_temp;
+  int ticks;
   float start, end;
   struct SrcVectors part;
   unsigned long r_row; 
@@ -538,7 +539,7 @@ int main( int argc, char *argv[] )  {
     if (n*n*num_procs != rows*rows)
       {
         if (rank == 0) 
-	  printf("Cannot evenly split %ld rows and cols over %ld processes\n", rows, num_procs);
+	  printf("Cannot evenly split %ld rows and cols over %d processes\n", rows, num_procs);
         MPI_Finalize();
         return 1;
       }
