@@ -1,3 +1,5 @@
+void print_grid_dense(char** grid, unsigned rows, unsigned cols) {
+
 void print_grid(struct SparseBooleanVector* grid);
 
 void print_neighbors(struct SparseCharVector* neighbors);

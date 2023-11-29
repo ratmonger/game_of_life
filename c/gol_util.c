@@ -8,6 +8,15 @@
 
 const char ZERO_CHAR = 48;
 
+void print_grid_dense(char** grid, unsigned rows, unsigned cols) {
+    for (unsigned i = 0; i < rows; ++i) {
+        for(unsigned j = 0; j < cols; ++j) {
+            printf("%d ", grid[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 void print_grid(struct SparseBooleanVector* grid) {
     unsigned rows = (unsigned) sqrt(grid->length);
     unsigned char value;
