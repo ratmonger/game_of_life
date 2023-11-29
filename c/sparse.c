@@ -58,6 +58,18 @@ struct SparseCharVector* init_charvec(unsigned length, unsigned init_capacity) {
     return vec;
 }
 
+void print_array_unsigned(unsigned* arr, unsigned len) {
+    for (unsigned i = 0; i < len; ++i)
+        printf("%d ", arr[i]);	
+    printf("\n");
+}
+
+void print_array_char(unsigned char* arr, unsigned len) {
+    for (unsigned i = 0; i < len; ++i)
+        printf("%d ", arr[i]);	
+    printf("\n");
+}
+
 int find_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned col) {
     if (row >= mtx->num_rows || col >= mtx->num_cols)
         return -1;
@@ -142,21 +154,21 @@ void copy_array_unsigned(unsigned* a, unsigned* b, unsigned n) {
     }
 }
 
-void left_shift_array_unsigned(unsigned* arr, unsigned int n, unsigned idx) {
-    for (int i = idx; i < n - 1; ++i) {
-	arr[i] = arr[i+1];
-    }
-}
-
 void copy_array_char(unsigned char* a, unsigned char* b, unsigned n) {
     for (int i = 0; i < n; ++i) {
         b[i] = a[i];
     }
 }
 
+void left_shift_array_unsigned(unsigned* arr, unsigned int n, unsigned idx) {
+    for (int i = 0; i < n; ++i) {
+	arr[idx + i] = arr[idx + i + 1];
+    }
+}
+
 void left_shift_array_char(unsigned char* arr, unsigned int n, unsigned idx) {
-    for (int i = idx; i < n - 1; ++i) {
-	arr[i] = arr[i+1];
+    for (int i = 0; i < n; ++i) {
+	arr[idx + i] = arr[idx + i + 1];
     }
 }
 
@@ -251,7 +263,7 @@ int unset_value_charvec(struct SparseCharVector* vec, unsigned idx) {
         return -1;
 
     int i = find_value_charvec(vec, idx);
-    int n = vec->num_nonzero - i;
+    int n = vec->num_nonzero - i - 1;
 
     if (i < 0) {
         return 0;
@@ -314,7 +326,7 @@ int unset_nonzero_boolmat(struct COOBooleanMatrix* mtx, unsigned row, unsigned c
         return -1;
 
     int idx = find_nonzero_boolmat(mtx, row, col);
-    int n = mtx->num_nonzero - idx;
+    int n = mtx->num_nonzero - idx - 1;
 
     if (idx < 0) {
         return 0;
@@ -332,12 +344,14 @@ int unset_nonzero_boolvec(struct SparseBooleanVector* vec, unsigned idx) {
     if (idx >= vec->length)
         return -1;
 
+
     int i = find_nonzero_boolvec(vec, idx);
-    int n = vec->num_nonzero - i;
 
     if (i < 0) {
         return 0;
     }
+
+    int n = vec->num_nonzero - i - 1;
 
     left_shift_array_unsigned(vec->indices, n, i);
 
@@ -449,4 +463,31 @@ void print_COO_boolmat(struct COOBooleanMatrix* mtx) {
         }
         putchar('\n');
     }
+}
+
+void zero_out(struct SparseCharVector* vec) {
+    vec->num_nonzero = 0;
+}
+
+
+void inspect_boolvec(struct SparseBooleanVector* vec) {
+/* Print the actual contents of vector struct, rather than the vector it represents */
+    printf("SparseBooleanVector:\n");
+    printf("\tlength: %d\n", vec->length);
+    printf("\tindices: ");
+    print_array_unsigned(vec->indices, vec->capacity);
+    printf("\tnum_nonzero: %d\n", vec->num_nonzero);
+    printf("\tcapacity: %d", vec->capacity);
+}
+
+void inspect_charvec(struct SparseCharVector* vec) {
+/* Print the actual contents of vector struct, rather than the vector it represents */
+    printf("SparseCharVector:\n");
+    printf("\tlength: %d\n", vec->length);
+    printf("\tindices: ");
+    print_array_unsigned(vec->indices, vec->capacity);
+    printf("\tvalues: ");
+    print_array_char(vec->values, vec->capacity);
+    printf("\tnum_nonzero: %d\n", vec->num_nonzero);
+    printf("\tcapacity: %d", vec->capacity);
 }
