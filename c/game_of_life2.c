@@ -340,36 +340,37 @@ struct SrcVectors get_Vectors(int rank, unsigned long k, struct SrcVectors srcV,
   recvV.botL = 0;
   recvV.topL = 0;
 
-  int sqrt_procs = sqrt(num_procs);
 
+  int sqrt_procs = sqrt(num_procs);
+  //communication of edge vectors
   if( rank%sqrt_procs ==0 && rank!= sqrt_procs+1 ){//if has process to the right 
     topR++;
     botR++;
-    MPI_Sendrecv(srcV.right, k, MPI_CHAR, rank+1, tag, recvV.right, k,MPI_CHAR, rank+1, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(srcV.right, k, MPI_CHAR, rank+1, tag, recvV.right, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }if(rank!=0 && rank!= num_procs+1 && rank%sqrt_procs !=0){// if process to the left1`
     topL++;
     botL++;
-    MPI_Sendrecv(srcV.left, k, MPI_CHAR, rank-1, tag, recvV.left, k,MPI_CHAR, rank-1, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(srcV.left, k, MPI_CHAR, rank-1, tag, recvV.left, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }if(rank-sqrt_procs >=0){//if process above
     topR++;
     topL++; 
-    MPI_Sendrecv(srcV.top, k, MPI_CHAR, rank-sqrt_procs, tag, recvV.top, k,MPI_CHAR, rank-sqrt_procs, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(srcV.top, k, MPI_CHAR, rank-sqrt_procs, tag, recvV.top, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }if(rank+sqrt_procs< num_procs){//if process below 
     botL++;
     botR++;
-    MPI_Sendrecv(srcV.bottom, k, MPI_CHAR, rank+sqrt_procs, tag, recvV.bottom, k,MPI_CHAR, rank+sqrt_procs, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(srcV.bottom, k, MPI_CHAR, rank+sqrt_procs, tag, recvV.bottom, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
   if(topL == 2){
-    MPI_Sendrecv(&srcV.topL, k, MPI_CHAR, rank-sqrt_procs-1, tag, &recvV.topL, k,MPI_CHAR, rank-sqrt_procs-1, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&srcV.topL, k, MPI_CHAR, rank-sqrt_procs-1, tag, &recvV.topL, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
   if(topR == 2){
-    MPI_Sendrecv(&srcV.topR, k, MPI_CHAR, rank-sqrt_procs+1, tag, &recvV.topR, k,MPI_CHAR, rank-sqrt_procs+1, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&srcV.topR, k, MPI_CHAR, rank-sqrt_procs+1, tag, &recvV.topR, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
   if(botL == 2){
-    MPI_Sendrecv(&srcV.botL, k, MPI_CHAR, rank+sqrt_procs-1, tag, &recvV.botL, k,MPI_CHAR, rank+sqrt_procs-1, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&srcV.botL, k, MPI_CHAR, rank+sqrt_procs-1, tag, &recvV.botL, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
   if(botR == 2){
-    MPI_Sendrecv(&srcV.botR, k, MPI_CHAR, rank+sqrt_procs+1, tag, &recvV.botR, k,MPI_CHAR, rank+sqrt_procs+1, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Sendrecv(&srcV.botR, k, MPI_CHAR, rank+sqrt_procs+1, tag, &recvV.botR, k,MPI_CHAR, rank, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   }
 
   int width = k+2;
@@ -444,9 +445,9 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
     
   while (*loop){
         
-    if(rank == 1){
-      print_sub(p.partition,k, rank);
-    }
+    //if(rank == 0){
+      print_sub(p.partition,k, rank);//prints each subgrid
+    //}
         
     forever = 0;
 
@@ -466,11 +467,11 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
 
 	cellState = p.partition[n];
 	forever += cellState;
-	if(rank == 0){
+	//if(rank == 0){
 	  printf("cellstate %d, forever %d\n", cellState, forever);
 	  // alive
 	  printf("liveNeighbors %d\n", liveNeighbors);
-	}
+	//}
                 
 	if (p.partition[n]) { 
 	  if (liveNeighbors < 2 || liveNeighbors > 3) {
@@ -488,7 +489,7 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
       }
     }
     MPI_Barrier(MPI_COMM_WORLD);
-    //MPI_Gather(copy, dim, MPI_CHAR, &grid[r_rows+r_cols], dim, MPI_CHAR, 0, MPI_COMM_WORLD);
+    //MPI_Gather(copy, dim, MPI_CHAR, &grid[r_rows+r_cols], dim, MPI_CHAR, 0, MPI_COMM_WORLD);//should we gather to one process?
     //MPI_Bcast(&grid, (rows + 2) * WIDTH, MPI_CHAR, 0, MPI_COMM_WORLD);
     count--;//decrement ticks
 
@@ -554,11 +555,11 @@ int main( int argc, char *argv[] )  {
       MPI_Barrier(MPI_COMM_WORLD);
       start = MPI_Wtime();   
 
-      part  = partitions(ticks, rank, num_procs, r_row, r_col, n + 2);
-      parallel_naive(ticks, rank, num_procs, r_row, r_col, n, part);
+      part  = partitions(ticks, rank, num_procs, r_row, r_col, n + 2);//sets up partition
+      parallel_naive(ticks, rank, num_procs, r_row, r_col, n, part);//runs naive method
 
       end = MPI_Wtime() - start;
-      MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);//reduces to get the longest process time.
             
       if (rank == 0){
 	printf("Naive Time %e\n", start);
