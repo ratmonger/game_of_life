@@ -1,3 +1,5 @@
+#ifndef SPARSE_H
+#define SPARSE_H
 struct COOBooleanMatrix {
     unsigned num_rows;
     unsigned num_cols;
@@ -63,3 +65,5 @@ void zero_out(struct SparseCharVector* vec);
 void inspect_boolvec(struct SparseBooleanVector* vec);
 
 void inspect_charvec(struct SparseCharVector* vec);
+
+#endif
