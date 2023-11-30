@@ -210,18 +210,6 @@ void run_naive(int ticks, unsigned long r_start, unsigned long r_end,  unsigned 
   free(copy);
 }
 
-void communicate_edges(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, unsigned rank, unsigned num_procs){
-    communicate_left(grid, grid_width, edges, rank, num_procs);
-    communicate_right(grid, grid_width, edges, rank, num_procs);
-    communicate_above(grid, grid_width, edges, rank, num_procs);
-    communicate_below(grid, grid_width, edges, rank, num_procs);
-
-    communicate_upper_left(grid, grid_width, edges, rank, num_procs);
-    communicate_upper_right(grid, grid_width, edges, rank, num_procs);
-    communicate_lower_right(grid, grid_width, edges, rank, num_procs);
-    communicate_lower_left(grid, grid_width, edges, rank, num_procs);
-}
-
 void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long rank_rows, unsigned long rank_cols, unsigned long n, struct AugmentedDomain* p){
     
   int count=ticks;//total ticks left to loop
