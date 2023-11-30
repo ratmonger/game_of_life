@@ -53,7 +53,7 @@ unsigned test_partitions() {
             topLEq && topREq && botLEq && botREq;
 }
 
-unsigned char test_count_neighbors() {
+unsigned char test_count_neighbors_filled() {
     unsigned n = 3;
     unsigned N = n + 2;
     unsigned char* arr = malloc(N*N*sizeof(char));
@@ -75,6 +75,45 @@ unsigned char test_count_neighbors() {
     return TRUE;
 }
 
+unsigned char test_count_neighbors_block() {
+    unsigned n = 2;
+    unsigned N = n + 2;
+    unsigned char* arr = malloc(N*N*sizeof(char));
+    unsigned char* block = block_dense();
+
+    fill_array(arr, N*N, 0);
+    embed_dense(block, arr, n*n, N*N, 1, 1);
+
+    struct AugmentedDomain* parts = partitions(arr, n);
+
+    unsigned char neighbors;
+
+    for (unsigned i = 0; i < n*n; ++i) {
+        neighbors = count_neighbors_parallel(parts, n, i);
+
+        if (neighbors != 3) {
+            printf("\tExpected %d neighbors but got %d\n", 3, neighbors);
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+
+unsigned test_count_neighbors() {
+    unsigned filled_res, block_res;
+
+    printf("Testing count_neighbors...\n");
+
+    filled_res = test_count_neighbors_filled();
+    block_res = test_count_neighbors_block();
+
+    printf("\tFilled: %d\n", filled_res);
+    printf("\tBlock: %d\n", block_res);
+
+    return filled_res && block_res;
+}
 
 unsigned char test_update_empty() {
     unsigned n = 3;
@@ -98,12 +137,19 @@ unsigned char test_update_block() {
     unsigned char* arr = malloc(N*N*sizeof(char));
     unsigned char* block = block_dense();
 
-    fill_array(arr, N*N, 1);
-    embed_dense(block, arr, 4, n*n, 0, 0);
+    fill_array(arr, N*N, 0);
+    embed_dense(block, arr, 4, N*N, 1, 1);
 
     struct AugmentedDomain* parts = partitions(arr, n);
 
+    // printf("Before update:\n\n");
+    // print_grid_dense(parts->interior, n);
+    // printf("\n");
+
     update_state_parallel(parts, n);
+
+    // printf("After update:\n\n");
+    // print_grid_dense(parts->interior, n);
 
     return array_equal(parts->interior, block, 4);
 }
