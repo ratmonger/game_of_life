@@ -154,17 +154,55 @@ unsigned char test_update_block() {
     return array_equal(parts->interior, block, 4);
 }
 
+unsigned char test_update_glider() {
+    unsigned n = 4;
+    unsigned N = n + 2;
+    unsigned char* arr = malloc(N*N*sizeof(char));
+    unsigned char* glider = glider_dense();
+
+    unsigned char* expected = malloc(n*n*sizeof(char));
+    fill_array(expected, n*n, 0);
+    expected[4] = 1;
+    expected[6] = 1;
+    expected[9] = 1;
+    expected[10] = 1;
+    expected[13] = 1;
+
+    fill_array(arr, N*N, 0);
+    embed_dense(glider, arr, 9, N*N, 1, 1);
+
+    struct AugmentedDomain* parts = partitions(arr, n);
+
+    // printf("Before update:\n\n");
+    // print_grid_dense(parts->interior, n);
+    // printf("\n");
+
+    update_state_parallel(parts, n);
+
+    // printf("After update:\n\n");
+    // print_grid_dense(parts->interior, n);
+    // printf("\n");
+
+    // printf("Expected:\n\n");
+    // print_grid_dense(expected, n);
+    // printf("\n");
+
+    return array_equal(parts->interior, expected, n*n);
+}
+
 unsigned test_update() {
-    printf("Testing update state...\n");
-    unsigned char empty_res, block_res;
+    printf("Testing update_state...\n");
+    unsigned char empty_res, block_res, glider_res;
 
     empty_res = test_update_empty();
     block_res = test_update_block();
+    glider_res = test_update_glider();
 
     printf("\tUpdate empty: %d\n", empty_res);
     printf("\tUpdate block: %d\n", block_res);
+    printf("\tUpdate glider: %d\n", glider_res);
 
-    return empty_res && block_res;
+    return empty_res && block_res && glider_res;
 }
 
 
