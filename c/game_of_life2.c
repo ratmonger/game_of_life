@@ -8,8 +8,13 @@
 #include "parallel.h"
 #include "communication.h"
 
+#ifndef TRUE
 #define TRUE 1
+#endif
+
+#ifndef FALSE
 #define FALSE 0
+#endif
 
 // this file has multiple implementations
 // 1. naive
@@ -83,34 +88,6 @@ void generate_C(){
 }
 
 
-// fills the grid with random 0 and 1
-// TODO implement probability here
-// creates a grid with border padding cells to avoid out-of-bounds error
-void init_grid(){
-  unsigned long i,j;
-  grid = malloc((rows+2) * (cols+2) * sizeof(char));
-  srand(2);//set seed
-  for (i = 1; i < rows+1; i++){
-    for (j = 1; j< cols+1; j++){
-      grid[i*(cols+2) + j] = rand() & 0x1;
-    }
-  }
-}
-
-
-void print_grid(){
-  unsigned long i,j;
-  printf("This is the full grid\n");
-  printf("\n");
-  for (i = 1; i < rows+1; i++){
-    for (j = 1; j < cols+1; j++){
-      printf("%c", 48+grid[i*(cols+2) + j]);
-    }
-    printf("\n");
-  }
-}
-
-
 // run the game
 // perform dense multiplication using C matrix
 void run_Dense_Mult(int ticks){
@@ -136,7 +113,6 @@ void run_Dense_Mult(int ticks){
   copy = malloc(rows * cols * sizeof(char));
   while (*loop){
 
-    print_grid();
 
     for (i = 0; i < N; i++){
       liveNeighbors = 0;
@@ -187,7 +163,6 @@ void run_naive(int ticks, unsigned long r_start, unsigned long r_end,  unsigned 
   copy = malloc(dim * sizeof(char));
 
   while (*loop){
-    print_grid();
 
     forever = 0;
 
@@ -278,15 +253,21 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
   while (*loop){
         
     if(rank == 0){
+      printf("Subgrid (rank %d, tick %d):\n\n", rank, ticks - count);
       print_grid_dense(p->interior, n);//prints each subgrid
+      printf("\n");
     }
         
     
     communicate_edges(p, n, edges, rank, num_procs);
     forever = 0;
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
     update_state_parallel(p, n);
 
     MPI_Barrier(MPI_COMM_WORLD);
+
     //MPI_Gather(copy, dim, MPI_CHAR, &grid[rank_rows+rank_cols], dim, MPI_CHAR, 0, MPI_COMM_WORLD);//should we gather to one process?
     //MPI_Bcast(&grid, (rows + 2) * WIDTH, MPI_CHAR, 0, MPI_COMM_WORLD);
     count--;//decrement ticks
@@ -364,6 +345,8 @@ int main( int argc, char *argv[] )  {
 
       parallel_naive(ticks, rank, num_procs, rank_row, rank_col, subgrid_width, part);//runs naive method
 
+
+      MPI_Barrier(MPI_COMM_WORLD);
       end = MPI_Wtime() - start;
       MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);//reduces to get the longest process time.
             
