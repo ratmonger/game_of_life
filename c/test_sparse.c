@@ -350,7 +350,7 @@ unsigned test_stencil_matrix() {
     struct SparseBooleanVector* cells = init_boolvec(rows*rows, rows*rows);
     struct SparseCharVector* neighbors = init_charvec(rows*rows, rows*rows);
 
-    // print_COO_boolmat(stencil);
+    print_COO_boolmat(stencil);
 
     for (unsigned i = 0; i < rows*rows; ++i) {
         set_nonzero_boolvec(cells, i);
@@ -358,20 +358,25 @@ unsigned test_stencil_matrix() {
 
     matvec_mult(stencil, cells, neighbors);
 
-    // print_neighbors(neighbors);
+    print_neighbors_sparse(neighbors);
 
     unsigned on_left_edge, on_right_edge, on_top_edge, on_bottom_edge;
     unsigned char expected;
 
     for (unsigned i = 0; i < rows*rows; ++i) {
+        on_left_edge = FALSE;
+        on_right_edge = FALSE;
+        on_top_edge = FALSE;
+        on_bottom_edge = FALSE;
+
         if (i % rows == 0)
             on_left_edge = TRUE;
         else if (i % rows == rows - 1)
             on_right_edge = TRUE;
         if (i / rows == 0)
-            on_bottom_edge = TRUE;
-        else if (i / rows == rows - 1)
             on_top_edge = TRUE;
+        else if (i / rows == rows - 1)
+            on_bottom_edge = TRUE;
 
         if (on_left_edge && on_top_edge)
             expected  = 3;
