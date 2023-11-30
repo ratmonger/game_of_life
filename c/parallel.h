@@ -13,3 +13,5 @@ struct SrcVectors{
 void init_partition(struct SrcVectors* part, unsigned n);
 
 struct SrcVectors* partitions(unsigned char* grid, unsigned long n);
+
+unsigned char count_neighbors_parallel(struct SrcVectors* partition, unsigned n, unsigned i);

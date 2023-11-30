@@ -80,7 +80,6 @@ unsigned char count_neighbors_parallel(struct SrcVectors* partition, unsigned n,
     on_bottom_edge = (i / n == n - 1);
     
     // Interior neighbors
-    
     if (!on_left_edge && (partition->interior)[i - 1] == 1)
         ++neighbors;
     if (!on_right_edge && (partition->interior)[i + 1] == 1)
@@ -92,11 +91,11 @@ unsigned char count_neighbors_parallel(struct SrcVectors* partition, unsigned n,
 
     if (!(on_left_edge || on_top_edge) && (partition->interior)[i - n - 1] == 1)
         ++neighbors;
-    if (!(on_left_edge || on_bottom_edge) && (partition->interior)[i - n - 1] == 1)
+    if (!(on_left_edge || on_bottom_edge) && (partition->interior)[i + n - 1] == 1)
         ++neighbors;
-    if (!(on_right_edge || on_top_edge) && (partition->interior)[i - n - 1] == 1)
+    if (!(on_right_edge || on_top_edge) && (partition->interior)[i - n + 1] == 1)
         ++neighbors;
-    if (!(on_right_edge || on_bottom_edge) && (partition->interior)[i - n - 1] == 1)
+    if (!(on_right_edge || on_bottom_edge) && (partition->interior)[i + n + 1] == 1)
         ++neighbors;
 
     // Exterior neighbors
@@ -107,6 +106,23 @@ unsigned char count_neighbors_parallel(struct SrcVectors* partition, unsigned n,
     if (on_top_edge && (partition->top)[i % n] == 1)
         ++neighbors;
     if (on_bottom_edge && (partition->bottom)[i % n] == 1)
+        ++neighbors;
+
+    if (on_left_edge && !on_top_edge && (partition->left)[i / n - 1] == 1)
+        ++neighbors;
+    if (on_left_edge && !on_bottom_edge && (partition->left)[i / n + 1] == 1)
+        ++neighbors;
+    if (on_right_edge && !on_top_edge && (partition->right)[i / n - 1] == 1)
+        ++neighbors;
+    if (on_right_edge && !on_bottom_edge && (partition->right)[i / n + 1] == 1)
+        ++neighbors;
+    if (on_top_edge && !on_left_edge && (partition->top)[i % n - 1] == 1)
+        ++neighbors;
+    if (on_top_edge && !on_right_edge && (partition->top)[i % n + 1] == 1)
+        ++neighbors;
+    if (on_bottom_edge && !on_left_edge && (partition->bottom)[i % n - 1] == 1)
+        ++neighbors;
+    if (on_bottom_edge && !on_right_edge && (partition->bottom)[i % n + 1] == 1)
         ++neighbors;
 
     if (on_left_edge && on_top_edge && partition->topL == 1)
