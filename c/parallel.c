@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include "gol_util.h"
 
-struct SrcVectors{
+
+struct AugmentedDomain{
     unsigned char *interior;
     unsigned char *top;
     unsigned char *bottom;
@@ -13,21 +14,48 @@ struct SrcVectors{
     unsigned char botR;
 };
 
+struct DomainEdges{
+  unsigned char *top;
+  unsigned char *bottom;
+  unsigned char *right;
+  unsigned char *left;
+  unsigned char topR;
+  unsigned char topL;
+  unsigned char botL;
+  unsigned char botR;
+};
 
-void init_partition(struct SrcVectors* part, unsigned n) {
-    part->interior = malloc(n*n*sizeof(char));
-    part->top = malloc(n*sizeof(char));
-    part->bottom = malloc(n*sizeof(char));
-    part->right = malloc(n*sizeof(char));
-    part->left = malloc(n*sizeof(char));
+
+struct AugmentedDomain* init_domain(unsigned long n) {
+    struct AugmentedDomain* domain = malloc(sizeof(struct DomainEdges));
+
+    domain->interior = malloc(n*n*sizeof(char));
+    domain->top = malloc(n*sizeof(char));
+    domain->bottom = malloc(n*sizeof(char));
+    domain->right = malloc(n*sizeof(char));
+    domain->left = malloc(n*sizeof(char));
+
+    return domain;
 }
 
 
-void copy_interior(unsigned char* A, unsigned char* B, unsigned n) {
+struct DomainEdges* init_edges(unsigned long n) {
+    struct DomainEdges* edges = malloc(sizeof(struct DomainEdges));
+
+    edges->top = malloc((n-2)*sizeof(char));
+    edges->bottom = malloc((n-2)*sizeof(char));
+    edges->left = malloc((n-2)*sizeof(char));
+    edges->right = malloc((n-2)*sizeof(char));
+
+    return edges;
+}
+
+
+void copy_interior(unsigned char* A, unsigned char* B, unsigned long n) {
 /* Assumes A has (n + 2)^2 elements, B has n^2 elements */
     unsigned A_row, A_col, A_idx;
 
-    for (unsigned i = 0; i < n*n; ++i) {
+    for (unsigned long i = 0; i < n*n; ++i) {
         A_row = i / n + 1;
         A_col = i % n + 1;
         A_idx = A_row * (n + 2) + A_col;
@@ -37,23 +65,37 @@ void copy_interior(unsigned char* A, unsigned char* B, unsigned n) {
 }
 
 
-void copy_row_interior(unsigned char* A, unsigned char* b, unsigned n, unsigned row) {
-    for(unsigned i = 0; i < n; ++i) {
+void copy_row_interior(unsigned char* A, unsigned char* b, unsigned long n, unsigned long row) {
+    for(unsigned long i = 0; i < n; ++i) {
         b[i] = A[row*(n + 2) + i + 1];
     }
 }
 
 
-void copy_col_interior(unsigned char* A, unsigned char* b, unsigned n, unsigned col) {
-    for(unsigned i = 0; i < n; ++i) {
+void copy_col_interior(unsigned char* A, unsigned char* b, unsigned long n, unsigned long col) {
+    for(unsigned long i = 0; i < n; ++i) {
         b[i] = A[(n + 2)*(i + 1) + col];
     }
 }
 
 
-struct SrcVectors* partitions(unsigned char* grid, unsigned long n){
-    struct SrcVectors* srcVec = malloc(sizeof(struct SrcVectors));
-    init_partition(srcVec, n);
+void get_edges(unsigned char* grid, struct DomainEdges* edges, unsigned long n) {
+    copy_row_interior(grid, edges->top, n, 0);
+    copy_row_interior(grid, edges->bottom, n, n-1);
+    copy_col_interior(grid, edges->left, n, 0);
+    copy_col_interior(grid, edges->right, n, n-1);
+
+    edges->topL = grid[0];
+    edges->topR = grid[n-1];
+    edges->botL = grid[n*(n-1)];
+    edges->botR = grid[n*n - 1];
+}
+
+
+struct AugmentedDomain* partitions(unsigned char* grid, unsigned long n){
+    struct AugmentedDomain* srcVec = malloc(sizeof(struct AugmentedDomain));
+
+    srcVec = init_domain(n);
 
     copy_interior(grid, srcVec->interior, n);
 
@@ -70,7 +112,7 @@ struct SrcVectors* partitions(unsigned char* grid, unsigned long n){
     return srcVec;
 }
 
-unsigned char count_neighbors_parallel(struct SrcVectors* partition, unsigned n, unsigned i) {
+unsigned char count_neighbors_parallel(struct AugmentedDomain* partition, unsigned long n, unsigned long i) {
     unsigned char on_left_edge, on_right_edge, on_top_edge, on_bottom_edge;
     unsigned char neighbors = 0;
 
@@ -137,11 +179,12 @@ unsigned char count_neighbors_parallel(struct SrcVectors* partition, unsigned n,
     return neighbors;
 }
 
-void update_state_parallel(struct SrcVectors* grid, unsigned n) {
+
+void update_state_parallel(struct AugmentedDomain* grid, unsigned long n) {
     unsigned char neighbors;
     unsigned char* new_grid = calloc(n*n, sizeof(char));
 
-    for (unsigned i = 0; i < n*n; ++i) {
+    for (unsigned long i = 0; i < n*n; ++i) {
         neighbors = count_neighbors_parallel(grid, n, i);
         
         if (is_alive((grid->interior)[i], neighbors))

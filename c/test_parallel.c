@@ -34,7 +34,7 @@ unsigned test_partitions() {
     fill_array(expectedEdge, n, 1);
     fill_array(expectedIntr, n*n, 1);
 
-    struct SrcVectors* parts = partitions(arr, n);
+    struct AugmentedDomain* parts = partitions(arr, n);
 
     topEq = array_equal(parts->top, expectedEdge, n);
     botEq = array_equal(parts->bottom, expectedEdge, n);
@@ -59,7 +59,7 @@ unsigned char test_count_neighbors() {
 
     fill_array(arr, N*N, 1);
 
-    struct SrcVectors* parts = partitions(arr, n);
+    struct AugmentedDomain* parts = partitions(arr, n);
 
     unsigned char neighbors;
 
