@@ -222,3 +222,13 @@ unsigned char* update_state_dense(unsigned char* grid, unsigned n) {
 
     return new_grid;
 }
+
+unsigned char* block_dense() {
+    unsigned char* block = malloc(4*sizeof(char));
+
+    for (unsigned i = 0; i < 4; ++i) {
+        block[i] = 1;
+    }
+
+    return block;
+}

@@ -26,3 +26,4 @@ struct SparseBooleanVector* glider_sparse();
 
 unsigned char* glider_dense();
 
+unsigned char* block_dense();
