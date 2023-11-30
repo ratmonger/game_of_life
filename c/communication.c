@@ -159,3 +159,16 @@ void communicate_lower_left(struct AugmentedDomain* grid, unsigned long grid_wid
     MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
     MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
 }
+
+
+void communicate_edges(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, unsigned rank, unsigned num_procs) {
+    communicate_left(grid, grid_width, edges, rank, num_procs);
+    communicate_right(grid, grid_width, edges, rank, num_procs);
+    communicate_above(grid, grid_width, edges, rank, num_procs);
+    communicate_below(grid, grid_width, edges, rank, num_procs);
+
+    communicate_upper_left(grid, grid_width, edges, rank, num_procs);
+    communicate_upper_right(grid, grid_width, edges, rank, num_procs);
+    communicate_lower_right(grid, grid_width, edges, rank, num_procs);
+    communicate_lower_left(grid, grid_width, edges, rank, num_procs);
+}
