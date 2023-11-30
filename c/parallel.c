@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include "gol_util.h"
 
+#define TRUE 1
+#define FALSE 0
+
 
 struct AugmentedDomain{
     unsigned char *interior;
@@ -209,4 +212,35 @@ void free_domain_edges(struct DomainEdges* edges) {
     free(edges->right);
     free(edges->top);
     free(edges->bottom);
+}
+
+unsigned char array_empty(unsigned char* arr, unsigned long n) {
+    for (unsigned long i = 0; i < n; ++i) {
+        if (arr[i] != 0)
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
+
+unsigned char is_empty(struct DomainEdges* edges, unsigned long n) {
+    if (!array_empty(edges->left, n - 2))
+        return FALSE;
+    else if (!array_empty(edges->right, n - 2))
+        return FALSE;
+    else if (!array_empty(edges->top, n - 2))
+        return FALSE;
+    else if (!array_empty(edges->bottom, n - 2))
+        return FALSE;
+    else if (edges->topL != 0)
+        return FALSE;
+    else if (edges->topR != 0)
+        return FALSE;
+    else if (edges->botL != 0)
+        return FALSE;
+    else if (edges->botR != 0)
+        return FALSE;
+    else
+        return TRUE;
 }

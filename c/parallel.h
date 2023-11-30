@@ -42,4 +42,6 @@ void free_augmented_domain(struct AugmentedDomain* domain);
 
 void free_domain_edges(struct DomainEdges* edges);
 
+unsigned char is_empty(struct DomainEdges* edges, unsigned long n);
+
 #endif
