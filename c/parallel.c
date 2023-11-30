@@ -244,3 +244,34 @@ unsigned char is_empty(struct DomainEdges* edges, unsigned long n) {
     else
         return TRUE;
 }
+
+unsigned char count_nonzero(unsigned char* arr, unsigned long n) {
+    unsigned char count = 0;
+
+    for (unsigned long i = 0; i < n; ++i) {
+        if (arr[i] > 0)
+            ++count;
+    }
+
+    return count;
+}
+
+unsigned char count_exterior(struct AugmentedDomain* grid, unsigned long n) {
+    unsigned char count;
+
+    count = count_nonzero(grid->left, n - 2);
+    count += count_nonzero(grid->right, n - 2);
+    count += count_nonzero(grid->top, n - 2);
+    count += count_nonzero(grid->bottom, n - 2);
+
+    if (grid->topL)
+        ++count;
+    if (grid->topR)
+        ++count;
+    if (grid->botL)
+        ++count;
+    if (grid->botR)
+        ++count;
+    
+    return count;
+}

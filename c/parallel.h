@@ -44,4 +44,6 @@ void free_domain_edges(struct DomainEdges* edges);
 
 unsigned char is_empty(struct DomainEdges* edges, unsigned long n);
 
+unsigned char count_exterior(struct AugmentedDomain* grid, unsigned long n);
+
 #endif
