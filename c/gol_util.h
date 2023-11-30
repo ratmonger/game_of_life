@@ -7,8 +7,10 @@ void print_grid_dense(unsigned char* grid, unsigned n);
 void print_neighbors_sparse(struct SparseCharVector* neighbors);
 
 void embed_sparse(struct SparseBooleanVector* u, struct SparseBooleanVector* v, unsigned i, unsigned j);
+/* Embeds the grid u into the larger grid v with origin at index (i, j) */
 
 void embed_dense(unsigned char* u, unsigned char* v, unsigned u_size, unsigned v_size, unsigned i, unsigned j);
+/* Embeds the grid u into the larger grid v with origin at index (i, j) */
 
 unsigned char is_alive(unsigned char cell, unsigned char neighbors);
 

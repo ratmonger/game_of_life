@@ -32,3 +32,5 @@ void get_edges(unsigned char* grid, struct DomainEdges* edges, unsigned long n);
 struct AugmentedDomain* partitions(unsigned char* grid, unsigned long n);
 
 unsigned char count_neighbors_parallel(struct AugmentedDomain* partition, unsigned long n, unsigned long i);
+
+void update_state_parallel(struct AugmentedDomain* grid, unsigned long n);

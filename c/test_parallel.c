@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "gol_util.h"
 #include "parallel.h"
 
 #define TRUE 1
@@ -74,7 +75,55 @@ unsigned char test_count_neighbors() {
     return TRUE;
 }
 
+
+unsigned char test_update_empty() {
+    unsigned n = 3;
+    unsigned N = n + 2;
+    unsigned char* arr = malloc(N*N*sizeof(char));
+    unsigned char* expected = malloc(n*n*sizeof(char));
+
+    fill_array(arr, N*N, 1);
+
+    struct AugmentedDomain* parts = partitions(arr, n);
+
+    update_state_parallel(parts, n);
+
+    return array_equal(parts->interior, expected, n);
+}
+
+
+unsigned char test_update_block() {
+    unsigned n = 2;
+    unsigned N = n + 2;
+    unsigned char* arr = malloc(N*N*sizeof(char));
+    unsigned char* block = block_dense();
+
+    fill_array(arr, N*N, 1);
+    embed_dense(block, arr, 4, n*n, 0, 0);
+
+    struct AugmentedDomain* parts = partitions(arr, n);
+
+    update_state_parallel(parts, n);
+
+    return array_equal(parts->interior, block, 4);
+}
+
+unsigned test_update() {
+    printf("Testing update state...\n");
+    unsigned char empty_res, block_res;
+
+    empty_res = test_update_empty();
+    block_res = test_update_block();
+
+    printf("\tUpdate empty: %d\n", empty_res);
+    printf("\tUpdate block: %d\n", block_res);
+
+    return empty_res && block_res;
+}
+
+
 int main() {
     printf("Partitions: %d\n", test_partitions());
     printf("Neighbors: %d\n", test_count_neighbors());
+    printf("Update: %d\n", test_update());
 }
