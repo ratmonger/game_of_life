@@ -32,11 +32,11 @@ struct DomainEdges{
 struct AugmentedDomain* init_domain(unsigned long n) {
     struct AugmentedDomain* domain = malloc(sizeof(struct DomainEdges));
 
-    domain->interior = malloc(n*n*sizeof(char));
-    domain->top = malloc(n*sizeof(char));
-    domain->bottom = malloc(n*sizeof(char));
-    domain->right = malloc(n*sizeof(char));
-    domain->left = malloc(n*sizeof(char));
+    domain->interior = calloc(n*n, sizeof(char));
+    domain->top = calloc(n, sizeof(char));
+    domain->bottom = calloc(n, sizeof(char));
+    domain->right = calloc(n, sizeof(char));
+    domain->left = calloc(n, sizeof(char));
 
     return domain;
 }
@@ -81,12 +81,23 @@ void copy_col_interior(unsigned char* A, unsigned char* b, unsigned long n, unsi
     }
 }
 
+void copy_row(unsigned char* A, unsigned char* b, unsigned long n, unsigned row) {
+    for(unsigned long i = 0; i < n; ++i) {
+        b[i] = A[row*n + i];
+    }
+}
+
+void copy_col(unsigned char* A, unsigned char* b, unsigned long n, unsigned long col) {
+    for(unsigned long i = 0; i < n; ++i) {
+        b[i] = A[i*n + col];
+    }
+}
+
 
 void get_edges(unsigned char* grid, struct DomainEdges* edges, unsigned long n) {
-    copy_row_interior(grid, edges->top, n, 0);
-    copy_row_interior(grid, edges->bottom, n, n-1);
-    copy_col_interior(grid, edges->left, n, 0);
-    copy_col_interior(grid, edges->right, n, n-1);
+    copy_row(grid, edges->bottom, n, n-1);
+    copy_col(grid, edges->left, n, 0);
+    copy_col(grid, edges->right, n, n-1);
 
     edges->topL = grid[0];
     edges->topR = grid[n-1];

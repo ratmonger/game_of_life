@@ -58,7 +58,12 @@ void parallel_naive(int ticks, int rank, unsigned long num_procs, unsigned long 
     if (rank == 0 && !is_empty(edges, n)) {
         printf("Nonzero values to communicate!\n");
     }
+    get_edges(p->interior, edges, n);
     communicate_edges(p, n, edges, rank, num_procs);
+
+    if (rank == 1 && count_exterior(p, n) > 0) {
+        printf("Rank %d received %d non-empty neighbors (tick %d)!\n", rank, count_exterior(p, n), ticks - count);
+    }
     forever = 0;
 
     MPI_Barrier(MPI_COMM_WORLD);
