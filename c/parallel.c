@@ -194,3 +194,19 @@ void update_state_parallel(struct AugmentedDomain* grid, unsigned long n) {
     free(grid->interior);
     grid->interior = new_grid;
 }
+
+void free_augmented_domain(struct AugmentedDomain* domain) {
+    free(domain->interior);
+    free(domain->left);
+    free(domain->right);
+    free(domain->top);
+    free(domain->bottom);
+    free(domain);
+}
+
+void free_domain_edges(struct DomainEdges* edges) {
+    free(edges->left);
+    free(edges->right);
+    free(edges->top);
+    free(edges->bottom);
+}

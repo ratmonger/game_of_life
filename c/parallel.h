@@ -1,3 +1,6 @@
+#ifndef PARALLEL_H
+#define PARALLEL_H
+
 /* n x n local domain augmented by the edges and corners of domains on
  * neighboring processes. */
 struct AugmentedDomain{
@@ -34,3 +37,9 @@ struct AugmentedDomain* partitions(unsigned char* grid, unsigned long n);
 unsigned char count_neighbors_parallel(struct AugmentedDomain* partition, unsigned long n, unsigned long i);
 
 void update_state_parallel(struct AugmentedDomain* grid, unsigned long n);
+
+void free_augmented_domain(struct AugmentedDomain* domain);
+
+void free_domain_edges(struct DomainEdges* edges);
+
+#endif
