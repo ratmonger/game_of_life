@@ -407,9 +407,6 @@ void communicate_lower_left_toroidal(struct AugmentedDomain* grid, unsigned long
     unsigned proc_rows = (unsigned) sqrt(num_procs);
     unsigned lower_left_proc = get_lower_left_proc_circular(rank, proc_rows);
 
-    if (rank / proc_rows == proc_rows - 1 || rank % proc_rows == 0)
-        return;
-    
     MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
