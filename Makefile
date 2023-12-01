@@ -11,7 +11,7 @@ test_parallel:
 test_communication:
 	cd c && mpicc test_communication.c gol_util.c sparse.c parallel.c communication.c -o test_communication -Werror -Wall -lm
 test_toroidal:
-	cd c && mpicc test_toroidal.c communication.c -o test_toroidal -Werror -Wall
+	cd c && mpicc test_toroidal.c communication.c -o test_toroidal -Werror -Wall -lm
 progress.pdf:
 	pdflatex --shell-escape --jobname=progress --output-directory=latex latex/progress.tex
 	biber latex/progress.bcf
