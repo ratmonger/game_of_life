@@ -52,3 +52,30 @@ void communicate_lower_left(struct AugmentedDomain* grid, unsigned long grid_wid
 /* Perform a single round of communication (sending and receiving) with all neighbors, and store
  * the received neighbors on the provided AugmentedDomain object. Assumes a square number of processes. */
 void communicate_edges(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, unsigned rank, unsigned num_procs);
+
+
+unsigned get_left_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+unsigned get_right_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+unsigned get_above_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+unsigned get_below_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+unsigned get_upper_left_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+unsigned get_upper_right_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+unsigned get_lower_right_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+unsigned get_lower_left_proc_circular(unsigned rank, unsigned proc_rows);
+
+
+void communicate_edges_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, unsigned rank, unsigned num_procs);

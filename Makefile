@@ -3,13 +3,15 @@ gol_sparse:
 game_of_life:
 	cd c && gcc game_of_life.c -o game_of_life -Werror -Wall -lm
 gol_parallel:
-	cd c && mpicc gol_parallel.c gol_util.c sparse.c parallel.c communication.c -o gol_parallel -Werror -Wall
+	cd c && mpicc gol_parallel.c gol_util.c sparse.c parallel.c communication.c -o gol_parallel -Werror -Wall -lm
 test_sparse:
 	cd c && gcc test_sparse.c sparse.c gol_util.c -o test_sparse -Werror -Wall
 test_parallel:
 	cd c && gcc test_parallel.c parallel.c gol_util.c sparse.c -o test_parallel -Werror -Wall
 test_communication:
 	cd c && mpicc test_communication.c gol_util.c sparse.c parallel.c communication.c -o test_communication -Werror -Wall
+test_toroidal:
+	cd c && mpicc test_toroidal.c communication.c -o test_toroidal -Werror -Wall
 progress.pdf:
 	pdflatex --shell-escape --jobname=progress --output-directory=latex latex/progress.tex
 	biber latex/progress.bcf
@@ -17,6 +19,8 @@ progress.pdf:
 clean:
 	rm -f c/test_sparse
 	rm -f c/test_parallel
+	rm -f c/test_communication
+	rm -f c/test_toroidal
 	rm -f c/game_of_life
 	rm -f c/gol_sparse
 	rm -f c/gol_parallel
