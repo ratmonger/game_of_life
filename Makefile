@@ -5,11 +5,11 @@ game_of_life:
 gol_parallel:
 	cd c && mpicc gol_parallel.c gol_util.c sparse.c parallel.c communication.c -o gol_parallel -Werror -Wall -lm
 test_sparse:
-	cd c && gcc test_sparse.c sparse.c gol_util.c -o test_sparse -Werror -Wall
+	cd c && gcc test_sparse.c sparse.c gol_util.c -o test_sparse -Werror -Wall -lm
 test_parallel:
-	cd c && gcc test_parallel.c parallel.c gol_util.c sparse.c -o test_parallel -Werror -Wall
+	cd c && gcc test_parallel.c parallel.c gol_util.c sparse.c -o test_parallel -Werror -Wall -lm
 test_communication:
-	cd c && mpicc test_communication.c gol_util.c sparse.c parallel.c communication.c -o test_communication -Werror -Wall
+	cd c && mpicc test_communication.c gol_util.c sparse.c parallel.c communication.c -o test_communication -Werror -Wall -lm
 test_toroidal:
 	cd c && mpicc test_toroidal.c communication.c -o test_toroidal -Werror -Wall
 progress.pdf:
