@@ -85,9 +85,9 @@ unsigned char* agar_grid_dense(unsigned n) {
     unsigned char* grid = malloc(n*n*sizeof(char));
 
     init_array(grid, n*n);
-    for (int i = 0; i < n; i=i+2){
+    for (int i = 0; i < n; i+=2){
         for (int j = 0; j < n; j++){
-            grid[i] = 1;
+            grid[i*n+j] = 1;
         }
     }
 
