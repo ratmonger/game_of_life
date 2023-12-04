@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <mpi.h>
 
 
 char *grid;
@@ -49,6 +50,9 @@ void run_naive(int ticks){
     int *loop;//a toggle variable: loop for ticks or forever
     int forever = 1;
     unsigned long WIDTH = (cols+2);
+    int rank;
+
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     // set loop type: ticks or indefinite loop
     if (ticks > 0){
@@ -59,9 +63,10 @@ void run_naive(int ticks){
 
     // allocate the array to copy the new updated grid
     copy = malloc((rows+2) * (WIDTH) * sizeof(char));
+    double t0 = MPI_Wtime();
 
     while (*loop){
-        print_grid();
+        //print_grid();
 
         forever = 0;
 
@@ -105,11 +110,20 @@ void run_naive(int ticks){
         grid = copy;
         copy = temp;
     }
+
+    double tfinal = (MPI_Wtime() - t0);
+
+    if (rank == 0)
+    {
+      printf("time = %e\n", tfinal);
+    }
+
     free(copy);
 }
 
 
 int main( int argc, char *argv[] )  {
+    MPI_Init(&argc, &argv);
 
     int row_temp,col_temp, ticks;
     if( argc == 4 ) {
@@ -138,6 +152,9 @@ int main( int argc, char *argv[] )  {
         printf("Incorrect number of arguments.\nPlease provide: {rows} {columns} {ticks}\n"
                 "If (ticks < 1), program will indefinitely loop until all cells are dead.\n");
     }
+
+    MPI_Finalize();
+
     return 0;
 }
 
