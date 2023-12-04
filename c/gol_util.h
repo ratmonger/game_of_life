@@ -20,6 +20,8 @@ unsigned char* update_state_dense(unsigned char* grid, unsigned n);
 
 unsigned char* empty_grid_dense(unsigned n);
 
+unsigned char* agar_grid_dense(unsigned n);
+
 unsigned char* random_grid_dense(unsigned n, double density);
 
 struct SparseBooleanVector* random_grid_sparse(unsigned n, double density);

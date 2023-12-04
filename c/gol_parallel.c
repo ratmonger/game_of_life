@@ -121,13 +121,15 @@ int main( int argc, char *argv[] )  {
     if (grid_width > 0){
       aug_width = subgrid_width + 2;
         
-      // init_grid();
-      grid = empty_grid_dense(aug_width);
+      //grid = empty_grid_dense(aug_width);
 
-      if (rank == 0) {
-          unsigned char* glider = glider_dense();
-          embed_dense(glider, grid, 9, aug_width*aug_width, 1, subgrid_width-3);
-      }
+      grid = agar_grid_dense(aug_width);
+
+
+      //if (rank == 0) {
+      //    unsigned char* glider = glider_dense();
+      //    embed_dense(glider, grid, 9, aug_width*aug_width, 1, subgrid_width-3);
+      //}
 
       part = partitions(grid, subgrid_width);//sets up.interior
 
