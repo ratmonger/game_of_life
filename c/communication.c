@@ -315,7 +315,7 @@ void communicate_above_circular(struct AugmentedDomain* grid, unsigned long grid
     int tag = 1234;
 
     if (VERBOSE_COMM)
-        printf("Sending and receiving from proc %d to proc %d (above)...\n", rank, above_proc);
+        printf("Sending and receiving from proc %d to proc %d...\n", rank, above_proc);
 
     MPI_Isend(edges->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, send_rqst);
     MPI_Irecv(grid->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, recv_rqst);
@@ -329,7 +329,7 @@ void communicate_below_circular(struct AugmentedDomain* grid, unsigned long grid
     int tag = 1234;
 
     if (VERBOSE_COMM)
-        printf("Sending and receiving from proc %d to proc %d (below)...\n", rank, below_proc);
+        printf("Sending and receiving from proc %d to proc %d...\n", rank, below_proc);
     
     MPI_Isend(edges->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, send_rqst);
     MPI_Irecv(grid->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, recv_rqst);
