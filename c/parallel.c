@@ -17,6 +17,7 @@ struct AugmentedDomain{
     unsigned char botR;
 };
 
+
 struct DomainEdges{
   unsigned char *top;
   unsigned char *bottom;
@@ -95,6 +96,7 @@ void copy_col(unsigned char* A, unsigned char* b, unsigned long n, unsigned long
 
 
 void get_edges(unsigned char* grid, struct DomainEdges* edges, unsigned long n) {
+    copy_row(grid, edges->top, n, 0);
     copy_row(grid, edges->bottom, n, n-1);
     copy_col(grid, edges->left, n, 0);
     copy_col(grid, edges->right, n, n-1);

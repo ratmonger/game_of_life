@@ -61,8 +61,9 @@ void communicate_above(struct AugmentedDomain* grid, unsigned long grid_width, s
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, rank-proc_rows);
-    MPI_Isend(edges->top, grid_width - 2, MPI_CHAR, rank - proc_rows, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->top, grid_width - 2, MPI_CHAR, rank - proc_rows, tag, MPI_COMM_WORLD, &recv_rqst);
+
+    MPI_Isend(edges->top, grid_width, MPI_CHAR, rank - proc_rows, tag, MPI_COMM_WORLD, &send_rqst);
+    MPI_Irecv(grid->top, grid_width, MPI_CHAR, rank - proc_rows, tag, MPI_COMM_WORLD, &recv_rqst);
 
     MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
     MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
@@ -80,8 +81,9 @@ void communicate_below(struct AugmentedDomain* grid, unsigned long grid_width, s
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, rank+proc_rows);
-    MPI_Isend(edges->bottom, grid_width - 2, MPI_CHAR, rank + proc_rows, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->bottom, grid_width - 2, MPI_CHAR, rank + proc_rows, tag, MPI_COMM_WORLD, &recv_rqst);
+
+    MPI_Isend(edges->bottom, grid_width, MPI_CHAR, rank + proc_rows, tag, MPI_COMM_WORLD, &send_rqst);
+    MPI_Irecv(grid->bottom, grid_width, MPI_CHAR, rank + proc_rows, tag, MPI_COMM_WORLD, &recv_rqst);
 
     MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
     MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
@@ -323,8 +325,8 @@ void communicate_above_circular(struct AugmentedDomain* grid, unsigned long grid
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, rank-proc_rows);
 
-    MPI_Isend(edges->top, grid_width - 2, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->top, grid_width - 2, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, &recv_rqst);
+    MPI_Isend(edges->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, &send_rqst);
+    MPI_Irecv(grid->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, &recv_rqst);
 
     MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
     MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
@@ -341,8 +343,8 @@ void communicate_below_circular(struct AugmentedDomain* grid, unsigned long grid
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, rank+proc_rows);
     
-    MPI_Isend(edges->bottom, grid_width - 2, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->bottom, grid_width - 2, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, &recv_rqst);
+    MPI_Isend(edges->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, &send_rqst);
+    MPI_Irecv(grid->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, &recv_rqst);
 
     MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
     MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
