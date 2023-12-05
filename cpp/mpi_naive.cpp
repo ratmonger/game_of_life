@@ -101,6 +101,6 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
 
     }
 
-    MPI_Type_free(&column);
+    MPI_Type_free(&column_type);
 
 }
