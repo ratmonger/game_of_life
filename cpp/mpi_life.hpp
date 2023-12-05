@@ -31,5 +31,6 @@ void print_grid(unsigned long dim, char *grid);
 // swaps the pointers of 2 char arrays
 void swap(char * A, char * B);
 
-
+// naive test provided initial grid A, grid B of same size, dimension of partition
+void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks);
 #endif

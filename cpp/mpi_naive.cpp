@@ -10,7 +10,6 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
     int rank, num_procs,i,j,k;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
-    MPI_Request send_req, recv_req;
 
     unsigned long pad_dim = dim + 2;
 
@@ -69,22 +68,17 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         MPI_Isend(&(A[(dim*pad_dim)+1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(send_req[1]));
         MPI_Irecv(&(A[(dim+1)*(pad_dim) +1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(recv_req[1]));
 
-        ////
         MPI_Isend(&(A[pad_dim + 1]), 1, MPI_CHAR, NW, 3333, MPI_COMM_WORLD, &(send_req[2]));
         MPI_Irecv(&(A[0]]), 1, MPI_CHAR, NW, 3333, MPI_COMM_WORLD, &(recv_req[2]));
 
         MPI_Isend(&(A[(2*pad_dim) -2]), 1, MPI_CHAR, NE, 3333, MPI_COMM_WORLD, &(send_req[3]));
         MPI_Irecv(&(A[pad_dim - 1]), 1, MPI_CHAR, NE, 3333, MPI_COMM_WORLD, &(recv_req[3]));
 
-
-
         MPI_Isend(&(A[(dim*pad_dim)+1]), 1, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(send_req[4]));
-        // quick note
         MPI_Irecv(&(A[(dim+1)*pad_dim]), 1, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(recv_req[4]));
 
         MPI_Isend(&(A[((dim+1)*pad_dim) - 2]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(send_req[5]));
         MPI_Irecv(&(A[(pad_dim*pad_dim) - 1]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(recv_req[5]));
-
 
         MPI_Isend(&(A[pad_dim + 1]), 1, column, W, 6666, MPI_COMM_WORLD, &(send_req[6]));
         MPI_Irecv(&(A[pad_dim]]), 1, column, W, 6666, MPI_COMM_WORLD, &(recv_req[6]));
@@ -98,21 +92,10 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
 
         // swap A and B
 
-        MPI_Wait(&send_req, &status);
-        MPI_Wait(&recv_req, &status);
+        MPI_Waitall(8, send_req.data(), MPI_STATUSES_IGNORE);
+        MPI_Waitall(8, recv_req.data(), MPI_STATUSES_IGNORE);
 
-        tmp = send_B;
-        send_B = recv_B;
-        recv_B = tmp;
 
-        MPI_Isend(send_B, size, MPI_DOUBLE, send_proc_B, 4321,MPI_COMM_WORLD, &send_req);
-        MPI_Irecv(tmp, size, MPI_DOUBLE, recv_proc_B, 4321,MPI_COMM_WORLD, &recv_req);
-
-        MPI_Wait(&send_req, &status);
-        MPI_Wait(&recv_req, &status);
-
-        // 4e.local matrix  multiplication C += recv_A * recv_B
-        matmat(n, recv_A, recv_B, C);
     }
 
 }
