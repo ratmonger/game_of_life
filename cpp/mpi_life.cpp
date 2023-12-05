@@ -16,14 +16,16 @@ int get_proc(int row, int col, int sq_procs)
 
 // mallocs a char array with border padding
 // total size = (dim + 2) * (dim + 2)
-void init_grid(unsigned long dim, char* grid){
+char* init_grid(unsigned long dim){
     unsigned long i,j;
-    grid = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
+    char* temp;
+    temp = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
     for (i = 0; i < dim+2; i++){
         for (j = 0; j< dim+2; j++){
-            grid[i*(dim+2) + j] = 0;
+            temp[i*(dim+2) + j] = 0;
         }
     }
+    return temp;
 }
 
 

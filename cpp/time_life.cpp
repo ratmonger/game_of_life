@@ -70,8 +70,10 @@ int main(int argc, char* argv[])
     char* A;
     char* B;
 
-    init_grid(dim, A);
-    init_grid(dim, B);
+    //A = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
+    //B = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
+    A = init_grid(dim);
+    B = init_grid(dim);
 
     // Initialize matrices A and B 
     /*int first_i = rank_row*N;
@@ -88,9 +90,6 @@ int main(int argc, char* argv[])
     */
     //double sum_C, total_sum_C;
     double start, end;
-
-
-
 
     // ticks, A, B, dim, sqnumprocs, rank row, rank col
 
@@ -110,9 +109,13 @@ int main(int argc, char* argv[])
     MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0) printf("Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
 
-    delete[] A;
-    delete[] B;
+
+    free(A);
+    free(B);
+
 
     MPI_Finalize();
+
+
     return 0;
 }

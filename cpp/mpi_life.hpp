@@ -23,7 +23,7 @@ void updateOuter(int n, char* A, char* B);
 
 // Allocate a char array wth padded bording, dim is an unpadded dimension
 // therefore total size of array is (dim+2) * (dim + 2)
-void init_grid(unsigned long dim, char* grid);
+char* init_grid(unsigned long dim);
 
 // print the given char* grid, provided the unpadded dimension
 void print_grid(unsigned long dim, char *grid);
