@@ -71,18 +71,27 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         MPI_Isend(&(A[((dim+1)*pad_dim) - 2]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(send_req[5]));
         MPI_Irecv(&(A[(pad_dim*pad_dim) - 1]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(recv_req[5]));
 
-
-
         /// implement column communication
+
+     //   m items separated by a stride of n
+       MPI_Datatype column
+       MPI_Type_vector(dim, 1, pad_dim, MPI_CHAR, &column)
+       MPI_Type_commit(&column)
+       
+       //saving this for later
+       //MPI_Type_free(&column)
+
+       MPI_Isend(&(A[pad_dim + 1]), 1, column, W, 6666, MPI_COMM_WORLD, &(send_req[6]));
+       MPI_Irecv(&(A[pad_dim]]), 1, column, W, 6666, MPI_COMM_WORLD, &(recv_req[6]));
+
+       MPI_Isend(&(A[(2*pad_dim) -2]), 1, column, E, 7777, MPI_COMM_WORLD, &(send_req[3]));
+       MPI_Irecv(&(A[(2*pad_dim) -1]), 1, column, E, 7777, MPI_COMM_WORLD, &(recv_req[3]));
 
         // use wait ALL
 
         // add in call to update A and B
 
         // swap A and B
-
-
-
 
         MPI_Wait(&send_req, &status);
         MPI_Wait(&recv_req, &status);
@@ -101,8 +110,4 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         matmat(n, recv_A, recv_B, C);
     }
 
-    delete[] send_A;
-    delete[] recv_A;
-    delete[] send_B;
-    delete[] recv_B;
 }
