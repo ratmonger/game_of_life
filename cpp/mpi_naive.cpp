@@ -8,8 +8,8 @@ using namespace std;
 void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank)
 {
     int i,j,k;
-   // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-   // MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    // MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 
     unsigned long pad_dim = dim + 2;
 
@@ -99,7 +99,9 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
 
         update(dim, A, B);
         swap(A,B);
-        print_grid(dim, A);
+        if (rank == 0){
+            print_grid(dim, A);
+        }
 
     }
 
