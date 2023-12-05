@@ -13,13 +13,13 @@
 int get_proc(int row, int col, int sq_procs);
 
 // Performs local (serial) update
-void update(int dim, char* A, char* B);
+void update(unsigned long  dim, char* A, char* B);
 
 // Performs local (serial) update
-void updateInner(int dim, char* A, char* B);
+void updateInner(unsigned long dim, char* A, char* B);
 
 // Performs local (serial) update
-void updateOuter(int dim, char* A, char* B);
+void updateOuter(unsigned long dim, char* A, char* B);
 
 // Allocate a char array wth padded bording, dim is an unpadded dimension
 // therefore total size of array is (dim+2) * (dim + 2)

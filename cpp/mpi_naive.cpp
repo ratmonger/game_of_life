@@ -43,13 +43,15 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
     //saving this for later
     //MPI_Type_free(&column_type)
 
-    MPI_Datatype column;
+    MPI_Datatype column_type;
     MPI_Type_vector(dim, 1, pad_dim, MPI_CHAR, &column_type);
     MPI_Type_commit(&column_type);
 
 
 
-    print_grid(dim, A);
+    if (rank == 0){
+        print_grid(dim, A);
+    }
 
 
     for (int i = 0; i < ticks; i++)
@@ -69,7 +71,7 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         MPI_Irecv(&(A[(dim+1)*(pad_dim) +1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(recv_req[1]));
 
         MPI_Isend(&(A[pad_dim + 1]), 1, MPI_CHAR, NW, 3333, MPI_COMM_WORLD, &(send_req[2]));
-        MPI_Irecv(&(A[0]]), 1, MPI_CHAR, NW, 3333, MPI_COMM_WORLD, &(recv_req[2]));
+        MPI_Irecv(&(A[0]), 1, MPI_CHAR, NW, 3333, MPI_COMM_WORLD, &(recv_req[2]));
 
         MPI_Isend(&(A[(2*pad_dim) -2]), 1, MPI_CHAR, NE, 4444, MPI_COMM_WORLD, &(send_req[3]));
         MPI_Irecv(&(A[pad_dim - 1]), 1, MPI_CHAR, NE, 4444, MPI_COMM_WORLD, &(recv_req[3]));
@@ -81,7 +83,7 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         MPI_Irecv(&(A[(pad_dim*pad_dim) - 1]), 1, MPI_CHAR, SE, 6666, MPI_COMM_WORLD, &(recv_req[5]));
 
         MPI_Isend(&(A[pad_dim + 1]), 1, column_type, W, 7777, MPI_COMM_WORLD, &(send_req[6]));
-        MPI_Irecv(&(A[pad_dim]]), 1, column_type, W, 7777, MPI_COMM_WORLD, &(recv_req[6]));
+        MPI_Irecv(&(A[pad_dim]), 1, column_type, W, 7777, MPI_COMM_WORLD, &(recv_req[6]));
 
         MPI_Isend(&(A[(2*pad_dim) -2]), 1, column_type, E, 8888, MPI_COMM_WORLD, &(send_req[7]));
         MPI_Irecv(&(A[(2*pad_dim) -1]), 1, column_type, E, 8888, MPI_COMM_WORLD, &(recv_req[7]));

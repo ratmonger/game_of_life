@@ -102,6 +102,7 @@ int main(int argc, char* argv[])
     //mpi_matmat_simple(A, B, C, n, sq_num_procs, rank_row, rank_col);
     // CALL 2ND TEST
 
+    mpi_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks);
 
     end = MPI_Wtime() - start;
     //sum_C = mat_sum(n, C);
