@@ -52,7 +52,7 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         MPI_Isend(&(A[pad_dim + 1]), dim, MPI_CHAR, N, 1111, MPI_COMM_WORLD, &(send_req[0]));
         MPI_Irecv(&(A[1]),     dim, MPI_CHAR, N, 1111, MPI_COMM_WORLD, &(recv_req[0]));
 
-        MPI_Isend(&(A[dim*(pad_dim)+1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(send_req[1]));
+        MPI_Isend(&(A[(dim*pad_dim)+1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(send_req[1]));
         MPI_Irecv(&(A[(dim+1)*(pad_dim) +1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(recv_req[1]));
 
 ////
@@ -64,24 +64,25 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
 
 
 
-        MPI_Isend(&(A[dim*(pad_dim)+1]), 1, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(send_req[4]));
+        MPI_Isend(&(A[(dim*pad_dim)+1]), 1, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(send_req[4]));
         // quick note
-        MPI_Irecv(&(A[0]]), 1, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(recv_req[4]));
+        MPI_Irecv(&(A[(dim+1)*pad_dim]), 1, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(recv_req[4]));
 
-        MPI_Isend(&(A[(2*pad_dim) -2]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(send_req[5]));
-        MPI_Irecv(&(A[pad_dim - 1]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(recv_req[5]));
-
-
-        MPI_Isend(&(A[pad_dim + 1]), dim, MPI_CHAR, NW, 4444, MPI_COMM_WORLD, &(send_req[3]));
-        MPI_Irecv(&(A[1]),     dim, MPI_CHAR, NW, 4444, MPI_COMM_WORLD, &(recv_req[3]));
-
-        MPI_Isend(&(A[dim*(pad_dim)+1]), dim, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(send_req[3]));
-        MPI_Irecv(&(A[(dim+1)*(pad_dim) +1]), dim, MPI_CHAR, SW, 4444, MPI_COMM_WORLD, &(recv_req[3]));
+        MPI_Isend(&(A[((dim+1)*pad_dim) - 2]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(send_req[5]));
+        MPI_Irecv(&(A[(pad_dim*pad_dim) - 1]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(recv_req[5]));
 
 
 
-        MPI_Isend(send_A, size, MPI_DOUBLE, send_proc_A, 1234,MPI_COMM_WORLD, &send_req);
-        MPI_Irecv(tmp, size, MPI_DOUBLE, recv_proc_A, 1234,MPI_COMM_WORLD, &recv_req);
+        /// implement column communication
+
+        // use wait ALL
+
+        // add in call to update A and B
+
+        // swap A and B
+
+
+
 
         MPI_Wait(&send_req, &status);
         MPI_Wait(&recv_req, &status);
