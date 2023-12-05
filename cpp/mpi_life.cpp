@@ -14,6 +14,14 @@ int get_proc(int row, int col, int sq_procs)
 }
 
 
+// swaps the pointers of 2 char arrays
+void swap(char * A, char * B){
+    char temp = *A;
+    *A = *B;
+    *B = temp;
+}
+
+
 // mallocs a char array with border padding
 // total size = (dim + 2) * (dim + 2)
 char* init_grid(unsigned long dim){

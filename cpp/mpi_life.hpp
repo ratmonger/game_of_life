@@ -28,4 +28,8 @@ char* init_grid(unsigned long dim);
 // print the given char* grid, provided the unpadded dimension
 void print_grid(unsigned long dim, char *grid);
 
+// swaps the pointers of 2 char arrays
+void swap(char * A, char * B);
+
+
 #endif
