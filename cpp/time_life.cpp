@@ -24,16 +24,18 @@ int main(int argc, char* argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 
     // Make sure matrix dimension is in argv
-    if (argc <= 1)
+    if (argc <= 2)
     {   
         if (rank == 0)
-            printf("Pass Matrix Dimension as Command Line Argument!\n");
+            printf("Pass Matrix Dimension and Ticks as Command Line Argument!\n");
         MPI_Finalize();
         return 1;
     }
 
     // Grab global dimension of matrices (A, B)
     unsigned long N = atoi(argv[1]);
+    int ticks = atoi(argv[2]);
+
 
     // Calculate how many process rows/cols in process-grid
     int sq_num_procs = sqrt(num_procs);
@@ -51,11 +53,11 @@ int main(int argc, char* argv[])
     // - n : local (per-process) matrix dimension
     int rank_row = rank / sq_num_procs;
     int rank_col = rank % sq_num_procs;
-    unsigned long n = N / sq_num_procs; // n is unpadded dimension
+    unsigned long dim = N / sq_num_procs; // n is unpadded dimension
     
-    unsigned long size = n*n;
+    unsigned long size = dim*dim;
 
-    if (n*n*num_procs != N*N)
+    if (dim*dim*num_procs != N*N)
     {
         if (rank == 0) 
             printf("Cannot evenly split %lu rows and cols over %d processes\n",
@@ -68,8 +70,8 @@ int main(int argc, char* argv[])
     char* A;
     char* B;
 
-    init_grid(n, A);
-    init_grid(n, B);
+    init_grid(dim, A);
+    init_grid(dim, B);
 
     // Initialize matrices A and B 
     /*int first_i = rank_row*N;
@@ -86,6 +88,11 @@ int main(int argc, char* argv[])
     */
     //double sum_C, total_sum_C;
     double start, end;
+
+
+
+
+    // ticks, A, B, dim, sqnumprocs, rank row, rank col
 
     // Time Simple Method
     //mpi_matmat_simple(A, B, C, n, sq_num_procs, rank_row, rank_col);
