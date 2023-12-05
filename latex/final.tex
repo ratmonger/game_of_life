@@ -1,0 +1,96 @@
+\documentclass[12pt]{article}
+
+\usepackage{amssymb,amsmath,amsthm} % Include AMS Math symbols
+\usepackage{graphicx}               % Allows for importation of figures 
+\usepackage{float}
+\usepackage{hyperref}
+
+\usepackage{booktabs} % professional table typesetting commands 
+
+\usepackage{color}   % Sets up a nice typesetting environment for Python
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[hang,flushmargin]{footmisc}
+
+\usepackage[inputlanglinenos]{minted}
+
+\usepackage[
+backend=biber,
+style=ieee,
+sorting=none
+]{biblatex}
+
+\addbibresource{progress.bib}
+
+\usepackage{caption}
+\captionsetup[figure]{font=small, labelfont=small}
+\setlength\parindent{0pt}
+% \setcounter{secnumdepth}{0}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{backgroundcolor}{rgb}{0.95,0.95,0.95}
+
+\lstset{
+% frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  % basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  % breakatwhitespace=true,
+  tabsize=3,
+  basicstyle=\footnotesize\ttfamily,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{backgroundcolor},
+  rulecolor=\color{black},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+
+% define command \expandableinput  for table input
+\makeatletter
+\def\expinput#1{\@@input#1 }
+\makeatother
+
+\title{Final Project: Parallel Game of Life \\ CS 442/542, Fall 2023}
+\author{
+        Kelsey Knowlson \\
+        Victoria Lien \\ 
+        Bryce Palmer \\
+        Hank Wikle
+}
+\date{\today}   % Activate to display a given date or no date
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+\section{Background}
+
+\section{Problem}
+
+\section{Hypothesis}
+
+\section{Naive Implementation}
+
+\section{Sparse Implementation}
+
+\section{Experimental Design}
+
+\section{Results}
+
+\printbibliography[
+heading=bibintoc,
+title={References}
+]
+
+\end{document}
