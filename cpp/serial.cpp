@@ -136,6 +136,7 @@ int main( int argc, char *argv[] )  {
 
             init_grid();
 
+
             // run the naive implementation
             run_naive(ticks);
 
