@@ -13,5 +13,5 @@ module load gcc
 
 cd $SLURM_SUBMIT_DIR
 
-srun -n 16  ../cpp/output 32 10
+srun -n 16  ../cpp/output 32 150
 
