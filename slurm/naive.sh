@@ -2,7 +2,7 @@
 
 #SBATCH --partition normal
 #SBATCH --ntasks-per-node=8
-#SBATCH --nodes=8
+#SBATCH --nodes=2
 #SBATCH --time 00:00:40
 #SBATCH --job-name naive-life
 #SBATCH --output naive-life.out
@@ -13,5 +13,5 @@ module load gcc
 
 cd $SLURM_SUBMIT_DIR
 
-srun -n 64  ../cpp/output 1024
+srun -n 16  ../cpp/output 32 10
 

@@ -64,29 +64,37 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         // 4c. Recv new B from recv_proc_B
 
 
+
         MPI_Isend(&(A[pad_dim + 1]), dim, MPI_CHAR, N, 1111, MPI_COMM_WORLD, &(send_req[0]));
-        MPI_Irecv(&(A[1]),     dim, MPI_CHAR, N, 1111, MPI_COMM_WORLD, &(recv_req[0]));
+        MPI_Irecv(&(A[(dim+1)*(pad_dim) +1]), dim, MPI_CHAR, S, 1111, MPI_COMM_WORLD, &(recv_req[0]));
 
         MPI_Isend(&(A[(dim*pad_dim)+1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(send_req[1]));
-        MPI_Irecv(&(A[(dim+1)*(pad_dim) +1]), dim, MPI_CHAR, S, 2222, MPI_COMM_WORLD, &(recv_req[1]));
+        MPI_Irecv(&(A[1]),     dim, MPI_CHAR, N, 2222, MPI_COMM_WORLD, &(recv_req[1]));
 
-        MPI_Isend(&(A[pad_dim + 1]), 1, MPI_CHAR, NW, 3333, MPI_COMM_WORLD, &(send_req[2]));
-        MPI_Irecv(&(A[0]), 1, MPI_CHAR, NW, 3333, MPI_COMM_WORLD, &(recv_req[2]));
+        MPI_Isend(&(A[pad_dim + 1]), 1, column_type, W, 3333, MPI_COMM_WORLD, &(send_req[2]));
+        MPI_Irecv(&(A[(2*pad_dim) -1]), 1, column_type, E, 3333, MPI_COMM_WORLD, &(recv_req[2]));
 
-        MPI_Isend(&(A[(2*pad_dim) -2]), 1, MPI_CHAR, NE, 4444, MPI_COMM_WORLD, &(send_req[3]));
-        MPI_Irecv(&(A[pad_dim - 1]), 1, MPI_CHAR, NE, 4444, MPI_COMM_WORLD, &(recv_req[3]));
+        MPI_Isend(&(A[(2*pad_dim) -2]), 1, column_type, E, 4444, MPI_COMM_WORLD, &(send_req[3]));
+        MPI_Irecv(&(A[pad_dim]), 1, column_type, W, 4444, MPI_COMM_WORLD, &(recv_req[3]));
 
-        MPI_Isend(&(A[(dim*pad_dim)+1]), 1, MPI_CHAR, SW, 5555, MPI_COMM_WORLD, &(send_req[4]));
-        MPI_Irecv(&(A[(dim+1)*pad_dim]), 1, MPI_CHAR, SW, 5555, MPI_COMM_WORLD, &(recv_req[4]));
+        MPI_Isend(&(A[pad_dim + 1]), 1, MPI_CHAR, NW, 5555, MPI_COMM_WORLD, &(send_req[4]));
+        MPI_Irecv(&(A[(pad_dim*pad_dim) - 1]), 1, MPI_CHAR, SE, 5555, MPI_COMM_WORLD, &(recv_req[4]));
 
-        MPI_Isend(&(A[((dim+1)*pad_dim) - 2]), 1, MPI_CHAR, SE, 6666, MPI_COMM_WORLD, &(send_req[5]));
-        MPI_Irecv(&(A[(pad_dim*pad_dim) - 1]), 1, MPI_CHAR, SE, 6666, MPI_COMM_WORLD, &(recv_req[5]));
+        MPI_Isend(&(A[(2*pad_dim) -2]), 1, MPI_CHAR, NE, 6666, MPI_COMM_WORLD, &(send_req[5]));
+        MPI_Irecv(&(A[(dim+1)*pad_dim]), 1, MPI_CHAR, SW, 6666, MPI_COMM_WORLD, &(recv_req[5]));
 
-        MPI_Isend(&(A[pad_dim + 1]), 1, column_type, W, 7777, MPI_COMM_WORLD, &(send_req[6]));
-        MPI_Irecv(&(A[pad_dim]), 1, column_type, W, 7777, MPI_COMM_WORLD, &(recv_req[6]));
+        MPI_Isend(&(A[(dim*pad_dim)+1]), 1, MPI_CHAR, SW, 7777, MPI_COMM_WORLD, &(send_req[6]));
+        MPI_Irecv(&(A[pad_dim - 1]), 1, MPI_CHAR, NE, 7777, MPI_COMM_WORLD, &(recv_req[6]));
 
-        MPI_Isend(&(A[(2*pad_dim) -2]), 1, column_type, E, 8888, MPI_COMM_WORLD, &(send_req[7]));
-        MPI_Irecv(&(A[(2*pad_dim) -1]), 1, column_type, E, 8888, MPI_COMM_WORLD, &(recv_req[7]));
+        MPI_Isend(&(A[((dim+1)*pad_dim) - 2]), 1, MPI_CHAR, SE, 8888, MPI_COMM_WORLD, &(send_req[7]));
+        MPI_Irecv(&(A[0]), 1, MPI_CHAR, NW, 8888, MPI_COMM_WORLD, &(recv_req[7]));
+
+
+
+
+
+
+
 
         // use wait ALL
 
@@ -96,6 +104,7 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
 
         MPI_Waitall(8, send_req.data(), MPI_STATUSES_IGNORE);
         MPI_Waitall(8, recv_req.data(), MPI_STATUSES_IGNORE);
+
 
         update(dim, A, B);
         swap(A,B);
