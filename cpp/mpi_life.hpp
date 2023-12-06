@@ -48,6 +48,9 @@ void openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int ran
 // concurrency test provided initial grid A, grid B of same size, dimension of partition
 void concurrency_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
 
+// concurrency test provided initial grid A, grid B of same size, dimension of partition with TESTALL included
+void concurrency_naive_testall(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
+
 // concurrency with openmp
 void concurrency_openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
 
