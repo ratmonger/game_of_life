@@ -107,7 +107,8 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
 
 
         update(dim, A, B);
-        swap(A,B);
+        swap(&A,&B);
+
         if (rank == 0){
             print_grid(dim, A);
         }
