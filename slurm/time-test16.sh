@@ -12,7 +12,7 @@
 module load openmpi
 module load gcc
 
-cd cpp
+cd ../cpp
 srun -n 16 ./output 64 1000
 srun -n 16 ./output 128 1000
 srun -n 16 ./output 256 1000
