@@ -25,6 +25,13 @@ void updateOuter(unsigned long dim, char* A, char* B);
 // therefore total size of array is (dim+2) * (dim + 2)
 char* init_grid(unsigned long dim);
 
+// mallocs a char array with border padding
+// total size = (dim + 2) * (dim + 2)
+char* agar(unsigned long dim);
+
+// generates a random filled grid
+char* rand_grid(unsigned long dim);
+
 // print the given char* grid, provided the unpadded dimension
 void print_grid(unsigned long dim, char *grid);
 

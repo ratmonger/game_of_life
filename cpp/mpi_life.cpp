@@ -37,6 +37,45 @@ char* init_grid(unsigned long dim){
 }
 
 
+// mallocs a char array with border padding
+// total size = (dim + 2) * (dim + 2)
+char* agar(unsigned long dim){
+    unsigned long i,j;
+    char* temp;
+    temp = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
+
+    for (i = 0; i < dim+2; i++){
+        for (j = 0; j< dim+2; j++){
+            temp[i*(dim+2) + j] = 0;
+        }
+    }
+    for (i = 0; i < dim+2; i+=2){
+        for (j = 0; j< dim+2; j++){
+            temp[i*(dim+2) + j] = 1;
+        }
+    }
+
+    return temp;
+}
+
+// fills the grid with random 0 and 1
+// creates a grid with border padding cells to avoid out-of-bounds error
+char* rand_grid(unsigned long dim){
+    unsigned long i,j;
+    char* temp;
+    srand(2);
+    temp = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
+    for (i = 0; i < dim+2; i++){
+        for (j = 0; j< dim+2; j++){
+            temp[i*(dim+2) + j] = rand() & 0x1;
+        }
+    }
+    return temp;
+}
+
+
+
+
 // print the given char* grid, provided the unpadded dimension
 void print_grid(unsigned long dim, char *grid){
     unsigned long i,j;
@@ -54,7 +93,7 @@ void print_grid(unsigned long dim, char *grid){
 // does NOT swap A and B
 void update(unsigned long dim, char* A, char* B){
 
-unsigned long i,j;
+    unsigned long i,j;
     unsigned long n;
     unsigned long padDim = dim + 2;
     int liveNeighbors;
@@ -97,7 +136,7 @@ unsigned long i,j;
 // Performs local (serial)INNER grid update, A old, B new
 // does NOT swap A and B
 void updateInner(unsigned long dim, char* A, char* B){
-unsigned long i,j;
+    unsigned long i,j;
     unsigned long n;
     unsigned long padDim = dim + 2;
     int liveNeighbors;
@@ -141,7 +180,7 @@ unsigned long i,j;
 // does NOT swap A and B
 // dim is the actual submatrix size
 void updateOuter(unsigned long dim, char* A, char* B){
-unsigned long i,j;
+    unsigned long i,j;
     unsigned long n;
     unsigned long padDim = dim + 2;
     int liveNeighbors;
