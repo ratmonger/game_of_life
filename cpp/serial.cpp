@@ -117,7 +117,7 @@ void run_naive(int ticks){
 
     if (rank == 0)
     {
-      printf("time = %e\n", tfinal);
+      printf("Dimension: %lu, Time: %e\n",dim, tfinal);
     }
 
     free(copy);
