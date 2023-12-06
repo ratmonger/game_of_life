@@ -45,10 +45,17 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
 // openmp test provided initial grid A, grid B of same size, dimension of partition
 void openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
 
-// openmp test provided initial grid A, grid B of same size, dimension of partition
+// concurrency test provided initial grid A, grid B of same size, dimension of partition
 void concurrency_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
+
+// concurrency with openmp
+void concurrency_openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
 
 // updates grid with openmp threaded assistance
 void updateThreads(unsigned long dim, char* A, char* B);
+
+void updateInnerThread(unsigned long dim, char* A, char* B);
+
+void updateOuterThread(unsigned long dim, char* A, char* B);
 
 #endif

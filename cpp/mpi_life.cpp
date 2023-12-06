@@ -296,3 +296,123 @@ void updateThreads(unsigned long dim, char* A, char* B){
 
 }
 
+// Performs local (serial)INNER grid update, A old, B new
+// does NOT swap A and B
+void updateInnerThread(unsigned long dim, char* A, char* B){
+    unsigned long i,j;
+    unsigned long n;
+    unsigned long padDim = dim + 2;
+    int liveNeighbors;
+
+    #pragma omp parallel for collapse(2)
+    for (i = 2; i < dim; i++){
+        for (j = 2; j< dim; j++){
+
+            n = (i * (dim+2)) + j;
+
+            liveNeighbors = A[n - 1] +
+                A[n + 1] +
+                A[n - (padDim)] +
+                A[n + (padDim)] +
+                A[n - (padDim) - 1]+
+                A[n + (padDim) - 1]+
+                A[n - (padDim) + 1]+
+                A[n + (padDim) + 1];
+
+            // alive
+            if (A[n]) {
+                if (liveNeighbors < 2 || liveNeighbors > 3) {
+                    B[n] = 0; // dead due to underpopulation or overpopulation
+                } else {
+                    B[n] = 1; // survive to the next generation
+                }
+            } else { // dead
+                if (liveNeighbors == 3) {
+                    B[n] = 1; // becomes alive due to reproduction
+                } else {
+                    B[n] = 0;   // stay dead
+                }
+            }
+
+        }
+    }
+
+}
+
+
+// Performs local (serial) OUTER grid update, A old, B new
+// does NOT swap A and B
+// dim is the actual submatrix size
+void updateOuterThread(unsigned long dim, char* A, char* B){
+    unsigned long i,j;
+    unsigned long n;
+    unsigned long padDim = dim + 2;
+    int liveNeighbors;
+
+    #pragma omp parallel for collapse(2)
+    for (i = 1; i < dim + 1; i+=(dim -1)){
+        for (j = 1; j< dim + 1; j++){
+
+            n = (i * (dim+2)) + j;
+
+            liveNeighbors = A[n - 1] +
+                A[n + 1] +
+                A[n - (padDim)] +
+                A[n + (padDim)] +
+                A[n - (padDim) - 1]+
+                A[n + (padDim) - 1]+
+                A[n - (padDim) + 1]+
+                A[n + (padDim) + 1];
+
+            // alive
+            if (A[n]) {
+                if (liveNeighbors < 2 || liveNeighbors > 3) {
+                    B[n] = 0; // dead due to underpopulation or overpopulation
+                } else {
+                    B[n] = 1; // survive to the next generation
+                }
+            } else { // dead
+                if (liveNeighbors == 3) {
+                    B[n] = 1; // becomes alive due to reproduction
+                } else {
+                    B[n] = 0;   // stay dead
+                }
+            }
+
+        }
+    }
+
+    #pragma omp parallel for collapse(2)
+    for (i = 1; i < dim + 1; i++){
+        for (j = 1; j< dim + 1; j+= dim -1){
+
+            n = (i * (dim+2)) + j;
+
+            liveNeighbors = A[n - 1] +
+                A[n + 1] +
+                A[n - (padDim)] +
+                A[n + (padDim)] +
+                A[n - (padDim) - 1]+
+                A[n + (padDim) - 1]+
+                A[n - (padDim) + 1]+
+                A[n + (padDim) + 1];
+
+            // alive
+            if (A[n]) {
+                if (liveNeighbors < 2 || liveNeighbors > 3) {
+                    B[n] = 0; // dead due to underpopulation or overpopulation
+                } else {
+                    B[n] = 1; // survive to the next generation
+                }
+            } else { // dead
+                if (liveNeighbors == 3) {
+                    B[n] = 1; // becomes alive due to reproduction
+                } else {
+                    B[n] = 0;   // stay dead
+                }
+            }
+
+        }
+    }
+}
+
