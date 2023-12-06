@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 
     //A = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
     //B = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
-    A = rand_grid(dim);
+    A = agar(dim);
     B = init_grid(dim);
 
     // Initialize matrices A and B 
