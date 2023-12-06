@@ -1,18 +1,19 @@
 #!/bin/bash
 
-#SBATCH --partition normal
+#SBATCH --partition general
 #SBATCH --ntasks=64
-#SBATCH --ntasks-per-node=8
-#SBATCH --nodes=8
-#SBATCH --time 10:00:00
-#SBATCH --job-name naive-life
-#SBATCH --output outputs/naive-life1000ticks-64procs.out
+#SBATCH --ntasks-per-node=32
+#SBATCH --nodes=2
+#SBATCH --time 20:00:00
+#SBATCH --job-name L64
+#SBATCH --output outputs/naive-life1000ticks-64procs-hopv2.out
 #SBATCH --mail-user dunharrow@unm.edu
 
 module load openmpi
 module load gcc
 
 cd cpp
+srun -n 64 ./output 64 1000
 srun -n 64 ./output 64 1000
 srun -n 64 ./output 128 1000
 srun -n 64 ./output 256 1000
