@@ -4,9 +4,9 @@
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --nodes=1
-#SBATCH --time 10:00:00
-#SBATCH --job-name naive-life
-#SBATCH --output outputs/naive-life1000ticks-1procs.out
+#SBATCH --time 20:00:00
+#SBATCH --job-name 1naive-life
+#SBATCH --output outputs/naive-life1000ticks-1procs-wheel.out
 #SBATCH --mail-user dunharrow@unm.edu
 
 module load openmpi

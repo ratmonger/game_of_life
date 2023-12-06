@@ -7,6 +7,12 @@
 #SBATCH --time 20:00:00
 #SBATCH --job-name L64
 #SBATCH --output outputs/naive-life1000ticks-64procs-hopv2.out
+=======
+#SBATCH --ntasks-per-node=8
+#SBATCH --nodes=8
+#SBATCH --time 20:00:00
+#SBATCH --job-name 64naive-life
+#SBATCH --output outputs/naive-life1000ticks-64procs-hopv2.out
 #SBATCH --mail-user dunharrow@unm.edu
 
 module load openmpi

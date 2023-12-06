@@ -1,18 +1,18 @@
 #!/bin/bash
 
-#SBATCH --partition general
+#SBATCH --partition normal
 #SBATCH --ntasks=16
-#SBATCH --ntasks-per-node=16
-#SBATCH --nodes=1
-#SBATCH --time 10:00:00
-#SBATCH --job-name L16
-#SBATCH --output outputs/naive-life1000ticks-16procs.out
+#SBATCH --ntasks-per-node=8
+#SBATCH --nodes=2
+#SBATCH --time 20:00:00
+#SBATCH --job-name 16naive-life
+#SBATCH --output outputs/naive-life1000ticks-16procs-wheel.out
 #SBATCH --mail-user dunharrow@unm.edu
 
 module load openmpi
 module load gcc
 
-cd ../cpp
+cd cpp
 srun -n 16 ./output 64 1000
 srun -n 16 ./output 128 1000
 srun -n 16 ./output 256 1000
