@@ -94,11 +94,14 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         // add in call to update A and B
 
         // swap A and B
+        updateInner(dim, A, B);
 
         MPI_Waitall(8, send_req.data(), MPI_STATUSES_IGNORE);
         MPI_Waitall(8, recv_req.data(), MPI_STATUSES_IGNORE);
 
-        update(dim, A, B);
+
+        updateOuter(dim, A, B);
+        //update(dim, A, B);
         swap(&A, &B);
 
         if (rank == 0){
