@@ -96,6 +96,17 @@ int main(int argc, char* argv[])
     MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0) printf("Concurrency Naive -- Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
 
+    // second test 2.5: concurrency with TESTALL
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    start = MPI_Wtime();
+    concurrency_naive_testall(A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    end = MPI_Wtime() - start;
+
+    MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0) printf("Concurrency Naive TESTALL-- Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
+
+
     // third test: openmp naive
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -121,7 +132,6 @@ int main(int argc, char* argv[])
 
 
     MPI_Finalize();
-
 
     return 0;
 }
