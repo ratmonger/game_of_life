@@ -40,4 +40,8 @@ void swap(char **A, char **B);
 
 // naive test provided initial grid A, grid B of same size, dimension of partition
 void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
+
+// updates grid with openmp threaded assistance
+void updateThreads(unsigned long dim, char* A, char* B)
+
 #endif
