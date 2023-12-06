@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#SBATCH --partition normal
+#SBATCH --partition general
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --nodes=1
-#SBATCH --time 10:00:00
+#SBATCH --time 20:00:00
 #SBATCH --job-name naive-life
-#SBATCH --output outputs/serial1000ticks.out
+#SBATCH --output outputs/serial1000ticks-hopv2.out
 #SBATCH --mail-user dunharrow@unm.edu
 
 module load openmpi
@@ -23,5 +23,3 @@ srun ./serial.out 4096 1000
 srun ./serial.out 8192 1000
 srun ./serial.out 16384 1000
 srun ./serial.out 32768 1000
-srun ./serial.out 65536 1000
-srun ./serial.out 131072 1000
