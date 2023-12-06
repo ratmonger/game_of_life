@@ -77,28 +77,7 @@ int main(int argc, char* argv[])
     A = agar(dim);
     B = init_grid(dim);
 
-    // Initialize matrices A and B 
-    /*int first_i = rank_row*N;
-    int first_j = rank_col;
-    int i, j;
-    for (i = 0; i < n; i++)
-    {
-        for (j = 0; j < n; j++)
-        {
-            A[i*n+j] = ((rank_row*n)+i)*N + (rank_col*n)+j+1;
-            B[i*n+j] = ((rank_row*n)+i)*N + (rank_col*n)+j+1;
-        }
-    }
-    */
-    //double sum_C, total_sum_C;
     double start, end;
-
-    // ticks, A, B, dim, sqnumprocs, rank row, rank col
-
-    // Time Simple Method
-    //mpi_matmat_simple(A, B, C, n, sq_num_procs, rank_row, rank_col);
-    // POSSIBLY CALL FIRST TEST
-
 
     // first test: mpi naive
     MPI_Barrier(MPI_COMM_WORLD);
