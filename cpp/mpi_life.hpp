@@ -7,6 +7,7 @@
 #include <mpi.h>
 #include <time.h>
 #include <math.h>
+#include <omp.h>
 
 // Return process in process-row 'row' and
 // process-column 'col'
@@ -41,7 +42,13 @@ void swap(char **A, char **B);
 // naive test provided initial grid A, grid B of same size, dimension of partition
 void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
 
+// openmp test provided initial grid A, grid B of same size, dimension of partition
+void openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
+
+// openmp test provided initial grid A, grid B of same size, dimension of partition
+void concurrency_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
+
 // updates grid with openmp threaded assistance
-void updateThreads(unsigned long dim, char* A, char* B)
+void updateThreads(unsigned long dim, char* A, char* B);
 
 #endif

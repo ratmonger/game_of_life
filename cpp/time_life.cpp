@@ -16,7 +16,9 @@ int main(int argc, char* argv[])
 {
 
     // Initialize MPI
-    MPI_Init(&argc, &argv);
+    //MPI_Init(&argc, &argv);
+    int provided;
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
 
     // Get rank of process and number of processes
     int rank, num_procs;
@@ -102,7 +104,7 @@ int main(int argc, char* argv[])
     //mpi_matmat_simple(A, B, C, n, sq_num_procs, rank_row, rank_col);
     // CALL 2ND TEST
 
-    mpi_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    openmp_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
 
     end = MPI_Wtime() - start;
     //sum_C = mat_sum(n, C);

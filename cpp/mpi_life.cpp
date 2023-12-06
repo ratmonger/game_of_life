@@ -261,6 +261,7 @@ void updateThreads(unsigned long dim, char* A, char* B){
     unsigned long padDim = dim + 2;
     int liveNeighbors;
 
+    #pragma omp parallel for collapse(2)
     for (i = 1; i < dim+1; i++){
         for (j = 1; j< dim+1; j++){
 

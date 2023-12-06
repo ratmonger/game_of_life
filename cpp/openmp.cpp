@@ -5,7 +5,7 @@ using namespace std;
 
 
 
-void concurrency_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank)
+void openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank)
 {
     int i,j,k;
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -94,14 +94,11 @@ void concurrency_naive(char* A, char* B, unsigned long dim, int sq_num_procs, in
         // add in call to update A and B
 
         // swap A and B
-        updateInner(dim, A, B);
 
         MPI_Waitall(8, send_req.data(), MPI_STATUSES_IGNORE);
         MPI_Waitall(8, recv_req.data(), MPI_STATUSES_IGNORE);
 
-
-        updateOuter(dim, A, B);
-        //update(dim, A, B);
+        updateThreads(dim, A, B);
         swap(&A, &B);
 
         if (rank == 0){
