@@ -104,7 +104,9 @@ int main(int argc, char* argv[])
     //mpi_matmat_simple(A, B, C, n, sq_num_procs, rank_row, rank_col);
     // CALL 2ND TEST
 
-    openmp_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    //mpi_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    //openmp_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    concurrency_openmp_naive(A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
 
     end = MPI_Wtime() - start;
     //sum_C = mat_sum(n, C);
