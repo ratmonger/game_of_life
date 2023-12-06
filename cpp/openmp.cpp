@@ -49,9 +49,9 @@ void openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int ran
 
 
 
-    if (rank == 0){
+    /*if (rank == 0){
         print_grid(dim, A);
-    }
+    }*/
 
 
     for (int i = 0; i < ticks; i++)
@@ -101,9 +101,9 @@ void openmp_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int ran
         updateThreads(dim, A, B);
         swap(&A, &B);
 
-        if (rank == 0){
+        /*if (rank == 0){
             print_grid(dim, A);
-        }
+        }*/
 
     }
 

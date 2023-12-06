@@ -99,21 +99,46 @@ int main(int argc, char* argv[])
     //mpi_matmat_simple(A, B, C, n, sq_num_procs, rank_row, rank_col);
     // POSSIBLY CALL FIRST TEST
 
+
+    // first test: mpi naive
     MPI_Barrier(MPI_COMM_WORLD);
+
     start = MPI_Wtime();
-    //mpi_matmat_simple(A, B, C, n, sq_num_procs, rank_row, rank_col);
-    // CALL 2ND TEST
-
-    //mpi_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
-    //openmp_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
-    concurrency_openmp_naive(A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
-
+    mpi_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
     end = MPI_Wtime() - start;
-    //sum_C = mat_sum(n, C);
-    //MPI_Reduce(&sum_C, &total_sum_C, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    if (rank == 0) printf("Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
 
+    MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0) printf("MPI Naive -- Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
+
+    // second test: concurrency test
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    start = MPI_Wtime();
+    concurrency_naive(A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    end = MPI_Wtime() - start;
+
+    MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0) printf("Concurrency Naive -- Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
+
+    // third test: openmp naive
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    start = MPI_Wtime();
+    openmp_naive( A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    end = MPI_Wtime() - start;
+
+    MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0) printf("OpenMP Naive -- Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
+
+    // fourth test: concurrency with openmp naive
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    start = MPI_Wtime();
+    concurrency_openmp_naive(A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+    end = MPI_Wtime() - start;
+
+    MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0) printf("Concurrency with OpenMP Naive -- Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
 
     free(A);
     free(B);

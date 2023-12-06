@@ -49,9 +49,9 @@ void concurrency_openmp_naive(char* A, char* B, unsigned long dim, int sq_num_pr
 
 
 
-    if (rank == 0){
+    /*if (rank == 0){
         print_grid(dim, A);
-    }
+    }*/
 
 
     for (int i = 0; i < ticks; i++)
@@ -104,9 +104,9 @@ void concurrency_openmp_naive(char* A, char* B, unsigned long dim, int sq_num_pr
         //update(dim, A, B);
         swap(&A, &B);
 
-        if (rank == 0){
+        /*if (rank == 0){
             print_grid(dim, A);
-        }
+        }*/
 
     }
 
