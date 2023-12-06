@@ -49,7 +49,6 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    // Calculate variables
     // - rank_row : process row
     // - rank_col : process col
     // - n : local (per-process) matrix dimension
@@ -72,8 +71,6 @@ int main(int argc, char* argv[])
     char* A;
     char* B;
 
-    //A = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
-    //B = (char *) malloc((dim+2) * (dim+2) * sizeof(char));
     A = agar(dim);
     B = init_grid(dim);
 
