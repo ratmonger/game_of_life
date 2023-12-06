@@ -16,6 +16,10 @@ progress.pdf:
 	pdflatex --shell-escape --jobname=progress --output-directory=latex latex/progress.tex
 	biber latex/progress.bcf
 	pdflatex --shell-escape --jobname=progress --output-directory=latex latex/progress.tex
+final.pdf:
+	pdflatex --shell-escape --jobname=final --output-directory=latex latex/final.tex
+	biber latex/final.bcf
+	pdflatex --shell-escape --jobname=final --output-directory=latex latex/final.tex
 clean:
 	rm -f c/test_sparse
 	rm -f c/test_parallel
@@ -25,6 +29,7 @@ clean:
 	rm -f c/gol_sparse
 	rm -f c/gol_parallel
 	rm -f latex/progress.pdf
+	rm -f latex/final.pdf
 	rm -f latex/*.aux
 	rm -f latex/*.log
 	rm -f latex/*.out
@@ -33,3 +38,4 @@ clean:
 	rm -f latex/*.blg
 	rm -f latex/*.run.xml
 	rm -rf _minted-progress
+	rm -rf _minted-final

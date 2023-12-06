@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <mpi.h>
@@ -7,7 +8,7 @@
 #define FALSE 0
 
 
-const unsigned char VERBOSE_COMM = FALSE;
+const unsigned char VERBOSE_COMM = TRUE;
 
 
 void communicate_left(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
@@ -279,158 +280,134 @@ int get_lower_left_proc_circular(int rank, int proc_rows) {
 }
 
 
-void communicate_left_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_left_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     unsigned left_proc = get_left_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, left_proc);
 
-    MPI_Isend(edges->left, grid_width, MPI_CHAR, left_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->left, grid_width, MPI_CHAR, left_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(edges->left, grid_width, MPI_CHAR, left_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(grid->left, grid_width, MPI_CHAR, left_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
-void communicate_right_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_right_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     unsigned right_proc = get_right_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, right_proc);
 
-    MPI_Isend(edges->right, grid_width, MPI_CHAR, right_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->right, grid_width, MPI_CHAR, right_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(edges->right, grid_width, MPI_CHAR, right_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(grid->right, grid_width, MPI_CHAR, right_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
-void communicate_above_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_above_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     unsigned above_proc = get_above_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, above_proc);
 
-    MPI_Isend(edges->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(edges->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(grid->top, grid_width, MPI_CHAR, above_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
-void communicate_below_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_below_circular(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     unsigned below_proc = get_below_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, below_proc);
     
-    MPI_Isend(edges->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(grid->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(edges->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(grid->bottom, grid_width, MPI_CHAR, below_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
-void communicate_upper_left_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_upper_left_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     int upper_left_proc = get_upper_left_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, upper_left_proc);
 
-    MPI_Isend(&edges->topL, 1, MPI_CHAR, upper_left_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(&grid->topL, 1, MPI_CHAR, upper_left_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(&edges->topL, 1, MPI_CHAR, upper_left_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(&grid->topL, 1, MPI_CHAR, upper_left_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
-void communicate_upper_right_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_upper_right_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     int upper_right_proc = get_upper_right_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, upper_right_proc);
 
-    MPI_Isend(&edges->topR, 1, MPI_CHAR, upper_right_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(&grid->topR, 1, MPI_CHAR, upper_right_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(&edges->topR, 1, MPI_CHAR, upper_right_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(&grid->topR, 1, MPI_CHAR, upper_right_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
-void communicate_lower_right_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_lower_right_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     int lower_right_proc = get_lower_right_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, lower_right_proc);
 
-    MPI_Isend(&edges->botR, 1, MPI_CHAR, lower_right_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(&grid->botR, 1, MPI_CHAR, lower_right_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(&edges->botR, 1, MPI_CHAR, lower_right_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(&grid->botR, 1, MPI_CHAR, lower_right_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
-void communicate_lower_left_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
+void communicate_lower_left_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs, MPI_Request* send_rqst, MPI_Request* recv_rqst) {
     int proc_rows = (int) sqrt(num_procs);
     int lower_left_proc = get_lower_left_proc_circular(rank, proc_rows);
 
-    MPI_Request send_rqst, recv_rqst;
     int tag = 1234;
 
     if (VERBOSE_COMM)
         printf("Sending and receiving from proc %d to proc %d...\n", rank, lower_left_proc);
 
-    MPI_Isend(&edges->botL, 1, MPI_CHAR, lower_left_proc, tag, MPI_COMM_WORLD, &send_rqst);
-    MPI_Irecv(&grid->botL, 1, MPI_CHAR, lower_left_proc, tag, MPI_COMM_WORLD, &recv_rqst);
-
-    MPI_Wait(&send_rqst, MPI_STATUS_IGNORE);
-    MPI_Wait(&recv_rqst, MPI_STATUS_IGNORE);
+    MPI_Isend(&edges->botL, 1, MPI_CHAR, lower_left_proc, tag, MPI_COMM_WORLD, send_rqst);
+    MPI_Irecv(&grid->botL, 1, MPI_CHAR, lower_left_proc, tag, MPI_COMM_WORLD, recv_rqst);
 }
 
 
 void communicate_edges_toroidal(struct AugmentedDomain* grid, unsigned long grid_width, struct DomainEdges* edges, int rank, unsigned num_procs) {
-    communicate_left_circular(grid, grid_width, edges, rank, num_procs);
-    communicate_right_circular(grid, grid_width, edges, rank, num_procs);
-    communicate_above_circular(grid, grid_width, edges, rank, num_procs);
-    communicate_below_circular(grid, grid_width, edges, rank, num_procs);
+    MPI_Request* requests = malloc(16*sizeof(MPI_Request));
+    MPI_Status* statuses = malloc(16*sizeof(MPI_Status));
 
-    communicate_upper_left_toroidal(grid, grid_width, edges, rank, num_procs);
-    communicate_upper_right_toroidal(grid, grid_width, edges, rank, num_procs);
-    communicate_lower_right_toroidal(grid, grid_width, edges, rank, num_procs);
-    communicate_lower_left_toroidal(grid, grid_width, edges, rank, num_procs);
+    communicate_left_circular(grid, grid_width, edges, rank, num_procs, &requests[0], &requests[1]);
+    communicate_right_circular(grid, grid_width, edges, rank, num_procs, &requests[2], &requests[3]);
+    communicate_above_circular(grid, grid_width, edges, rank, num_procs, &requests[4], &requests[5]);
+    communicate_below_circular(grid, grid_width, edges, rank, num_procs, &requests[6], &requests[7]);
+
+    communicate_upper_left_toroidal(grid, grid_width, edges, rank, num_procs, &requests[8], &requests[9]);
+    communicate_upper_right_toroidal(grid, grid_width, edges, rank, num_procs, &requests[10], &requests[11]);
+    communicate_lower_right_toroidal(grid, grid_width, edges, rank, num_procs, &requests[12], &requests[13]);
+    communicate_lower_left_toroidal(grid, grid_width, edges, rank, num_procs, &requests[14], &requests[15]);
+
+    MPI_Waitall(16, requests, statuses);
+
+    free(requests);
+    free(statuses);
 }
