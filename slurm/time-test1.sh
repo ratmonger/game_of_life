@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#SBATCH --partition general
+#SBATCH --partition normal
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --nodes=1
 #SBATCH --time 20:00:00
-#SBATCH --job-name naive-life
-#SBATCH --output outputs/naive-life1000ticks-1procs-hopv2.out
+#SBATCH --job-name 1naive-life
+#SBATCH --output outputs/naive-life1000ticks-1procs-wheel.out
 #SBATCH --mail-user dunharrow@unm.edu
 
 module load openmpi
