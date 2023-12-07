@@ -6,4 +6,3 @@ module load openmpi/4.1.4-7gqe
 
 
 nvcc -ccbin=mpicxx -arch=sm_35  -o cuda-output time_life.cpp mpi_life.cpp cuda_life.cu cuda.cu
-#srun --partition=normal --nodes=8 --ntasks-per-node=8 --ntasks=64 ./output 128 1000
