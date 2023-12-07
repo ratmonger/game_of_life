@@ -1,10 +1,13 @@
 #include "mpi_life.hpp"
 #include <vector>
+#include <cuda.h>
+#include <cuda_runtime.h>
+
 
 using namespace std;
 
 
-void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank)
+void cuda_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank)
 {
     int i,j,k;
 
@@ -39,10 +42,25 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
     MPI_Type_commit(&column_type);
 
 
+    dim3 dimBlock(32,32);
+    int grid_dim = ceil(dim / 32.0);
+    dim3 dimGrid(grid_dim, grid_dim);
 
-    /*if (rank == 0){
+    //device matrices
+    char *d_A, *d_B;
+
+    //malloc the device matrices on GPU
+    cudaMalloc((void**)&d_A, pad_dim*pad_dim*sizeof(char));
+    cudaMalloc((void**)&d_B, pad_dim*pad_dim*sizeof(char));
+
+
+    // copy B matrix over to GPU
+    cudaMemcpy(d_B, B, pad_dim*pad_dim*sizeof(char), cudaMemcpyHostToDevice);
+
+
+    if (rank == 0){
         print_grid(dim, A);
-    }*/
+    }
 
 
     for (int i = 0; i < ticks; i++)
@@ -76,12 +94,20 @@ void mpi_naive(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_r
         MPI_Waitall(8, send_req.data(), MPI_STATUSES_IGNORE);
         MPI_Waitall(8, recv_req.data(), MPI_STATUSES_IGNORE);
 
-        update(dim, A, B);
-        swap(&A, &B);
+        cudaMemcpy(d_A, A, pad_dim*pad_dim*sizeof(char), cudaMemcpyHostToDevice);
 
-        /*if (rank == 0){
+
+        // function for GPU to update
+        updateKernel<<<dimGrid, dimBlock>>>(dim, d_A, d_B);
+
+        //note we swap matrices by simply copying d_B back to A
+        cudaMemcpy(A, d_B, pad_dim*pad_dim*sizeof(char), cudaMemcpyDeviceToHost);
+
+        //swap(&A, &B);
+
+        if (rank == 0){
             print_grid(dim, A);
-        }*/
+        }
 
     }
 

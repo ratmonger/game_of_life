@@ -61,4 +61,6 @@ void updateInnerThread(unsigned long dim, char* A, char* B);
 
 void updateOuterThread(unsigned long dim, char* A, char* B);
 
+__global__ void updateKernel(unsigned long dim, char* A, char* B);
+
 #endif
