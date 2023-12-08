@@ -1,0 +1,72 @@
+MPI Naive -- Matrix dim: 64, Procs: 64 , Elapsed Time 1.524650e-01
+Concurrency Naive -- Matrix dim: 64, Procs: 64 , Elapsed Time 1.747185e-02
+Concurrency Naive TESTALL-- Matrix dim: 64, Procs: 64 , Elapsed Time 1.736752e-02
+OpenMP Naive -- Matrix dim: 64, Procs: 64 , Elapsed Time 1.782027e-02
+Concurrency with OpenMP Naive -- Matrix dim: 64, Procs: 64 , Elapsed Time 1.742324e-02
+
+MPI Naive -- Matrix dim: 128, Procs: 64 , Elapsed Time 1.094510e-01
+Concurrency Naive -- Matrix dim: 128, Procs: 64 , Elapsed Time 1.697303e-02
+Concurrency Naive TESTALL-- Matrix dim: 128, Procs: 64 , Elapsed Time 1.697469e-02
+OpenMP Naive -- Matrix dim: 128, Procs: 64 , Elapsed Time 1.771545e-02
+Concurrency with OpenMP Naive -- Matrix dim: 128, Procs: 64 , Elapsed Time 1.905988e-02
+
+MPI Naive -- Matrix dim: 256, Procs: 64 , Elapsed Time 1.131793e-01
+Concurrency Naive -- Matrix dim: 256, Procs: 64 , Elapsed Time 3.229819e-02
+Concurrency Naive TESTALL-- Matrix dim: 256, Procs: 64 , Elapsed Time 2.904105e-02
+OpenMP Naive -- Matrix dim: 256, Procs: 64 , Elapsed Time 3.254744e-02
+Concurrency with OpenMP Naive -- Matrix dim: 256, Procs: 64 , Elapsed Time 2.603543e-02
+
+MPI Naive -- Matrix dim: 512, Procs: 64 , Elapsed Time 1.776369e-01
+Concurrency Naive -- Matrix dim: 512, Procs: 64 , Elapsed Time 8.046065e-02
+Concurrency Naive TESTALL-- Matrix dim: 512, Procs: 64 , Elapsed Time 7.761253e-02
+OpenMP Naive -- Matrix dim: 512, Procs: 64 , Elapsed Time 8.285412e-02
+Concurrency with OpenMP Naive -- Matrix dim: 512, Procs: 64 , Elapsed Time 7.844709e-02
+
+MPI Naive -- Matrix dim: 1024, Procs: 64 , Elapsed Time 3.852891e-01
+Concurrency Naive -- Matrix dim: 1024, Procs: 64 , Elapsed Time 2.829572e-01
+Concurrency Naive TESTALL-- Matrix dim: 1024, Procs: 64 , Elapsed Time 2.897411e-01
+OpenMP Naive -- Matrix dim: 1024, Procs: 64 , Elapsed Time 2.892410e-01
+Concurrency with OpenMP Naive -- Matrix dim: 1024, Procs: 64 , Elapsed Time 2.838324e-01
+
+MPI Naive -- Matrix dim: 2048, Procs: 64 , Elapsed Time 1.203779e+00
+Concurrency Naive -- Matrix dim: 2048, Procs: 64 , Elapsed Time 1.096356e+00
+Concurrency Naive TESTALL-- Matrix dim: 2048, Procs: 64 , Elapsed Time 1.096812e+00
+OpenMP Naive -- Matrix dim: 2048, Procs: 64 , Elapsed Time 1.103993e+00
+Concurrency with OpenMP Naive -- Matrix dim: 2048, Procs: 64 , Elapsed Time 1.097025e+00
+
+MPI Naive -- Matrix dim: 4096, Procs: 64 , Elapsed Time 4.484356e+00
+Concurrency Naive -- Matrix dim: 4096, Procs: 64 , Elapsed Time 4.330737e+00
+Concurrency Naive TESTALL-- Matrix dim: 4096, Procs: 64 , Elapsed Time 4.328544e+00
+OpenMP Naive -- Matrix dim: 4096, Procs: 64 , Elapsed Time 4.361860e+00
+Concurrency with OpenMP Naive -- Matrix dim: 4096, Procs: 64 , Elapsed Time 4.334162e+00
+
+MPI Naive -- Matrix dim: 8192, Procs: 64 , Elapsed Time 1.748407e+01
+Concurrency Naive -- Matrix dim: 8192, Procs: 64 , Elapsed Time 1.725091e+01
+Concurrency Naive TESTALL-- Matrix dim: 8192, Procs: 64 , Elapsed Time 1.724488e+01
+OpenMP Naive -- Matrix dim: 8192, Procs: 64 , Elapsed Time 1.738744e+01
+Concurrency with OpenMP Naive -- Matrix dim: 8192, Procs: 64 , Elapsed Time 1.725286e+01
+
+MPI Naive -- Matrix dim: 16384, Procs: 64 , Elapsed Time 6.948206e+01
+Concurrency Naive -- Matrix dim: 16384, Procs: 64 , Elapsed Time 6.899084e+01
+Concurrency Naive TESTALL-- Matrix dim: 16384, Procs: 64 , Elapsed Time 6.895732e+01
+OpenMP Naive -- Matrix dim: 16384, Procs: 64 , Elapsed Time 6.929589e+01
+Concurrency with OpenMP Naive -- Matrix dim: 16384, Procs: 64 , Elapsed Time 6.900991e+01
+
+MPI Naive -- Matrix dim: 32768, Procs: 64 , Elapsed Time 2.767590e+02
+Concurrency Naive -- Matrix dim: 32768, Procs: 64 , Elapsed Time 2.755357e+02
+Concurrency Naive TESTALL-- Matrix dim: 32768, Procs: 64 , Elapsed Time 2.755358e+02
+OpenMP Naive -- Matrix dim: 32768, Procs: 64 , Elapsed Time 2.766383e+02
+Concurrency with OpenMP Naive -- Matrix dim: 32768, Procs: 64 , Elapsed Time 2.755964e+02
+
+MPI Naive -- Matrix dim: 65536, Procs: 64 , Elapsed Time 1.105620e+03
+Concurrency Naive -- Matrix dim: 65536, Procs: 64 , Elapsed Time 1.101085e+03
+Concurrency Naive TESTALL-- Matrix dim: 65536, Procs: 64 , Elapsed Time 1.101046e+03
+OpenMP Naive -- Matrix dim: 65536, Procs: 64 , Elapsed Time 1.105719e+03
+Concurrency with OpenMP Naive -- Matrix dim: 65536, Procs: 64 , Elapsed Time 1.101475e+03
+
+MPI Naive -- Matrix dim: 131072, Procs: 64 , Elapsed Time 4.421821e+03
+Concurrency Naive -- Matrix dim: 131072, Procs: 64 , Elapsed Time 4.403785e+03
+Concurrency Naive TESTALL-- Matrix dim: 131072, Procs: 64 , Elapsed Time 4.403920e+03
+OpenMP Naive -- Matrix dim: 131072, Procs: 64 , Elapsed Time 4.421805e+03
+Concurrency with OpenMP Naive -- Matrix dim: 131072, Procs: 64 , Elapsed Time 4.404064e+03
+

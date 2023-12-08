@@ -1,0 +1,268 @@
+
+Inactive Modules:
+  1) cmake/3.26.3-vyco     3) gcc/10.2.0-3kjq        5) slurm/20.02.05-hfsl
+  2) cuda/11.4.2-rgi3      4) openmpi/4.1.4-7gqe
+
+
+Activating Modules:
+  1) cmake/3.26.3-vyco     3) gcc/10.2.0-3kjq        5) slurm/20.02.05-hfsl
+  2) cuda/11.4.2-rgi3      4) openmpi/4.1.4-7gqe
+
+Thu Dec  7 22:55:15 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 470.199.02   Driver Version: 470.199.02   CUDA Version: 11.4     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla K40m          Off  | 00000000:04:00.0 Off |                    0 |
+| N/A   29C    P0    67W / 235W |      0MiB / 11441MiB |     94%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+You have been allocated one or more GPUs.
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 64, Procs: 1 , Elapsed Time 8.317448e-02
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 64, Procs: 1 , Elapsed Time 7.771911e-02
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 128, Procs: 1 , Elapsed Time 1.254834e-01
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 256, Procs: 1 , Elapsed Time 2.347090e-01
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 512, Procs: 1 , Elapsed Time 6.833618e-01
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 1024, Procs: 1 , Elapsed Time 2.405181e+00
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 2048, Procs: 1 , Elapsed Time 8.720151e+00
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 4096, Procs: 1 , Elapsed Time 3.392474e+01
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 8192, Procs: 1 , Elapsed Time 1.348554e+02
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 16384, Procs: 1 , Elapsed Time 5.375553e+02
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+CUDA -- Matrix dim: 32768, Procs: 1 , Elapsed Time 2.146839e+03
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=433586.11. Some of your processes may have been killed by the cgroup out-of-memory handler.
+srun: error: xena15: task 0: Out Of Memory
+--------------------------------------------------------------------------
+By default, for Open MPI 4.0 and later, infiniband ports on a device
+are not used by default.  The intent is to use UCX for these devices.
+You can override this policy by setting the btl_openib_allow_ib MCA parameter
+to true.
+
+  Local host:              xena15
+  Local adapter:           mlx4_0
+  Local port:              1
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   xena15
+  Local device: mlx4_0
+--------------------------------------------------------------------------
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=433586.12. Some of your processes may have been killed by the cgroup out-of-memory handler.
+srun: error: xena15: task 0: Out Of Memory
+slurmstepd: error: Detected 2 oom-kill event(s) in StepId=433586.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.

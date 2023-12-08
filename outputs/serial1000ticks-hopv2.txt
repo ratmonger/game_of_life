@@ -1,0 +1,16 @@
+
+The following have been reloaded with a version change:
+  1) openmpi/4.1.5-cxfn => openmpi/4.1.5-rlhv
+
+To request GPUs, add --gpus-per-node X or --gpus X, where X is the desired number of GPUs.
+Job 2159201 running on hopper002
+Dimension: 64, Time: 4.559413e-02
+Dimension: 128, Time: 1.614570e-01
+Dimension: 256, Time: 6.371663e-01
+Dimension: 512, Time: 2.555740e+00
+Dimension: 1024, Time: 1.063645e+01
+Dimension: 2048, Time: 4.266850e+01
+Dimension: 4096, Time: 1.717646e+02
+Dimension: 8192, Time: 6.882122e+02
+Dimension: 16384, Time: 2.656413e+03
+Dimension: 32768, Time: 1.043422e+04

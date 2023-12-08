@@ -1,0 +1,63 @@
+MPI Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 3.948432e-02
+Concurrency Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 3.522590e-02
+Concurrency Naive TESTALL-- Matrix dim: 64, Procs: 4 , Elapsed Time 3.054674e-02
+OpenMP Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 2.757018e-02
+Concurrency with OpenMP Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 2.580028e-02
+
+MPI Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 8.056955e-02
+Concurrency Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 7.353298e-02
+Concurrency Naive TESTALL-- Matrix dim: 128, Procs: 4 , Elapsed Time 7.433399e-02
+OpenMP Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 7.425009e-02
+Concurrency with OpenMP Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 7.381937e-02
+
+MPI Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 2.825009e-01
+Concurrency Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 2.798447e-01
+Concurrency Naive TESTALL-- Matrix dim: 256, Procs: 4 , Elapsed Time 2.805230e-01
+OpenMP Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 2.825709e-01
+Concurrency with OpenMP Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 2.795410e-01
+
+MPI Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 1.104317e+00
+Concurrency Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 1.093092e+00
+Concurrency Naive TESTALL-- Matrix dim: 512, Procs: 4 , Elapsed Time 1.097739e+00
+OpenMP Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 1.099422e+00
+Concurrency with OpenMP Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 1.095852e+00
+
+MPI Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 4.399184e+00
+Concurrency Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 4.354418e+00
+Concurrency Naive TESTALL-- Matrix dim: 1024, Procs: 4 , Elapsed Time 4.343785e+00
+OpenMP Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 4.381260e+00
+Concurrency with OpenMP Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 4.361591e+00
+
+MPI Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 1.745259e+01
+Concurrency Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 1.737793e+01
+Concurrency Naive TESTALL-- Matrix dim: 2048, Procs: 4 , Elapsed Time 1.734992e+01
+OpenMP Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 1.747189e+01
+Concurrency with OpenMP Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 1.739250e+01
+
+MPI Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 6.964307e+01
+Concurrency Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 6.951282e+01
+Concurrency Naive TESTALL-- Matrix dim: 4096, Procs: 4 , Elapsed Time 6.933327e+01
+OpenMP Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 6.968963e+01
+Concurrency with OpenMP Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 6.945972e+01
+
+MPI Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 2.777783e+02
+Concurrency Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 2.770485e+02
+Concurrency Naive TESTALL-- Matrix dim: 8192, Procs: 4 , Elapsed Time 2.769647e+02
+OpenMP Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 2.780781e+02
+Concurrency with OpenMP Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 2.772464e+02
+
+MPI Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 1.112335e+03
+Concurrency Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 1.107572e+03
+Concurrency Naive TESTALL-- Matrix dim: 16384, Procs: 4 , Elapsed Time 1.105454e+03
+OpenMP Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 1.111917e+03
+Concurrency with OpenMP Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 1.107797e+03
+
+MPI Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 4.448045e+03
+Concurrency Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 4.430548e+03
+Concurrency Naive TESTALL-- Matrix dim: 32768, Procs: 4 , Elapsed Time 4.431000e+03
+OpenMP Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 4.449119e+03
+Concurrency with OpenMP Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 4.430444e+03
+
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 641963.10 ON wheeler045 CANCELLED AT 2023-12-07T11:46:59 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 641963 ON wheeler045 CANCELLED AT 2023-12-07T11:46:59 DUE TO TIME LIMIT ***

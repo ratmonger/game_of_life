@@ -1,0 +1,78 @@
+
+The following have been reloaded with a version change:
+  1) openmpi/4.1.5-cxfn => openmpi/4.1.5-rlhv
+
+To request GPUs, add --gpus-per-node X or --gpus X, where X is the desired number of GPUs.
+Job 2159203 running on hopper002
+MPI Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 1.621389e-02
+Concurrency Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 1.183904e-02
+Concurrency Naive TESTALL-- Matrix dim: 64, Procs: 4 , Elapsed Time 1.109872e-02
+OpenMP Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 1.128518e-02
+Concurrency with OpenMP Naive -- Matrix dim: 64, Procs: 4 , Elapsed Time 1.094981e-02
+
+MPI Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 4.246713e-02
+Concurrency Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 3.443664e-02
+Concurrency Naive TESTALL-- Matrix dim: 128, Procs: 4 , Elapsed Time 3.423528e-02
+OpenMP Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 3.426440e-02
+Concurrency with OpenMP Naive -- Matrix dim: 128, Procs: 4 , Elapsed Time 3.439185e-02
+
+MPI Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 1.691845e-01
+Concurrency Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 1.254012e-01
+Concurrency Naive TESTALL-- Matrix dim: 256, Procs: 4 , Elapsed Time 1.251877e-01
+OpenMP Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 1.257793e-01
+Concurrency with OpenMP Naive -- Matrix dim: 256, Procs: 4 , Elapsed Time 1.256225e-01
+
+MPI Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 5.004847e-01
+Concurrency Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 4.853068e-01
+Concurrency Naive TESTALL-- Matrix dim: 512, Procs: 4 , Elapsed Time 4.854359e-01
+OpenMP Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 4.893386e-01
+Concurrency with OpenMP Naive -- Matrix dim: 512, Procs: 4 , Elapsed Time 4.866547e-01
+
+MPI Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 1.994028e+00
+Concurrency Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 1.924606e+00
+Concurrency Naive TESTALL-- Matrix dim: 1024, Procs: 4 , Elapsed Time 1.924725e+00
+OpenMP Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 1.939258e+00
+Concurrency with OpenMP Naive -- Matrix dim: 1024, Procs: 4 , Elapsed Time 1.926703e+00
+
+MPI Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 8.359022e+00
+Concurrency Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 8.260375e+00
+Concurrency Naive TESTALL-- Matrix dim: 2048, Procs: 4 , Elapsed Time 8.268262e+00
+OpenMP Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 8.312646e+00
+Concurrency with OpenMP Naive -- Matrix dim: 2048, Procs: 4 , Elapsed Time 8.258030e+00
+
+MPI Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 3.325435e+01
+Concurrency Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 3.298704e+01
+Concurrency Naive TESTALL-- Matrix dim: 4096, Procs: 4 , Elapsed Time 3.301009e+01
+OpenMP Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 3.322148e+01
+Concurrency with OpenMP Naive -- Matrix dim: 4096, Procs: 4 , Elapsed Time 3.300755e+01
+
+MPI Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 1.336973e+02
+Concurrency Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 1.330073e+02
+Concurrency Naive TESTALL-- Matrix dim: 8192, Procs: 4 , Elapsed Time 1.329657e+02
+OpenMP Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 1.335529e+02
+Concurrency with OpenMP Naive -- Matrix dim: 8192, Procs: 4 , Elapsed Time 1.326643e+02
+
+MPI Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 5.342486e+02
+Concurrency Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 5.304913e+02
+Concurrency Naive TESTALL-- Matrix dim: 16384, Procs: 4 , Elapsed Time 5.367493e+02
+OpenMP Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 5.369856e+02
+Concurrency with OpenMP Naive -- Matrix dim: 16384, Procs: 4 , Elapsed Time 5.349010e+02
+
+MPI Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 2.153743e+03
+Concurrency Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 2.140874e+03
+Concurrency Naive TESTALL-- Matrix dim: 32768, Procs: 4 , Elapsed Time 2.138107e+03
+OpenMP Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 2.150358e+03
+Concurrency with OpenMP Naive -- Matrix dim: 32768, Procs: 4 , Elapsed Time 2.137084e+03
+
+MPI Naive -- Matrix dim: 65536, Procs: 4 , Elapsed Time 8.638863e+03
+Concurrency Naive -- Matrix dim: 65536, Procs: 4 , Elapsed Time 8.558810e+03
+Concurrency Naive TESTALL-- Matrix dim: 65536, Procs: 4 , Elapsed Time 8.554085e+03
+OpenMP Naive -- Matrix dim: 65536, Procs: 4 , Elapsed Time 8.560708e+03
+Concurrency with OpenMP Naive -- Matrix dim: 65536, Procs: 4 , Elapsed Time 8.492531e+03
+
+slurmstepd: error: Detected 3 oom-kill event(s) in StepId=2159203.11. Some of your processes may have been killed by the cgroup out-of-memory handler.
+srun: error: hopper002: task 3: Out Of Memory
+slurmstepd: error: *** STEP 2159203.11 ON hopper002 CANCELLED AT 2023-12-07T11:39:18 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 2159203 ON hopper002 CANCELLED AT 2023-12-07T11:39:18 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: Detected 6 oom-kill event(s) in StepId=2159203.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
