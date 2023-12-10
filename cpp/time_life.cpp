@@ -76,6 +76,17 @@ int main(int argc, char* argv[])
 
     double start, end;
 
+    // firest test: mpi naive communication cost
+    MPI_Barrier(MPI_COMM_WORLD);
+    mpi_naive_comm(A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+
+    // second test: mpi naive computation cost
+    MPI_Barrier(MPI_COMM_WORLD);
+    mpi_naive_calc(A, B, dim, sq_num_procs, rank_row, rank_col, ticks, rank);
+
+    if (rank == 0) printf("\n");
+
+    /*
     // first test: mpi naive
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -126,6 +137,7 @@ int main(int argc, char* argv[])
 
     MPI_Reduce(&end, &start, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0) printf("Concurrency with OpenMP Naive -- Matrix dim: %lu, Procs: %d , Elapsed Time %e\n", N, num_procs,start);
+    */
 
     free(A);
     free(B);
