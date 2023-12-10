@@ -61,5 +61,8 @@ void updateInnerThread(unsigned long dim, char* A, char* B);
 
 void updateOuterThread(unsigned long dim, char* A, char* B);
 
+void mpi_naive_calc(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
+
+void mpi_naive_comm(char* A, char* B, unsigned long dim, int sq_num_procs, int rank_row, int rank_col, int ticks, int rank);
 
 #endif
