@@ -48,7 +48,7 @@ void mpi_naive_comm(char* A, char* B, unsigned long dim, int sq_num_procs, int r
     /*if (rank == 0){
         print_grid(dim, A);
     }*/
-
+    MPI_Barrier(MPI_COMM_WORLD);
     t0 = MPI_Wtime();
     for (int i = 0; i < ticks; i++)
     {
