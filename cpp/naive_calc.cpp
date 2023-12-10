@@ -43,6 +43,7 @@ void mpi_naive_calc(char* A, char* B, unsigned long dim, int sq_num_procs, int r
     MPI_Type_vector(dim, 1, pad_dim, MPI_CHAR, &column_type);
     MPI_Type_commit(&column_type);
 
+    MPI_Barrier(MPI_COMM_WORLD);
     t0 = MPI_Wtime();
     for (int i = 0; i < ticks; i++)
     {
